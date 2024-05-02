@@ -25,13 +25,16 @@ xgboost # Gradient boosting on decision trees
 # statsmodels # Time series analysis
 
 # Deep learning
-# tensorflow # General deep learning
+tensorflow # General deep learning
 # keras # High-level neural networks API
+torch # General deep learning
 
 # Natural language processing
 nltk
 spacy
 googletrans # Google Translate API
+translate # Translate API
+multilingual-translation
 # TextBlob # Simplified text processing
 # gensim # Topic modeling
 # pyLDAvis # Topic modeling visualization
