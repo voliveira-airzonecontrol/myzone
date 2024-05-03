@@ -12,7 +12,7 @@ sqlalchemy # SQL toolkit and Object-Relational Mapping
 # mysqlclient # MySQL connector
 # psycopg2 # PostgreSQL connector
 # cx_Oracle # Oracle connector
-# pyodbc # SQL Server connector
+pyodbc # SQL Server connector
 
 
 # Data visualization
