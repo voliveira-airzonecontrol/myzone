@@ -1,0 +1,58 @@
+# General
+jupyter
+tqdm # Progress bar
+
+# Data handling
+pandas
+numpy
+
+# SQL connector
+sqlalchemy # SQL toolkit and Object-Relational Mapping
+# pymysql # MySQL connector
+# mysqlclient # MySQL connector
+# psycopg2 # PostgreSQL connector
+# cx_Oracle # Oracle connector
+pyodbc # SQL Server connector
+
+
+# Data visualization
+matplotlib # Basic plotting
+seaborn # Statistical data visualization
+PyQt6 # GUI
+# folium # Interactive maps
+
+# Machine learning
+scikit-learn # General machine learning
+xgboost # Gradient boosting on decision trees
+# statsmodels # Time series analysis
+
+# Deep learning
+# tensorflow # General deep learning
+# keras # High-level neural networks API
+# torch # General deep learning
+
+# Natural language processing
+nltk
+# spacy
+# googletrans # Google Translate API
+# translate # Translate API
+# multilingual-translation # Multilingual translation using Facebook's LLM
+deep-translator
+langdetect
+# TextBlob # Simplified text processing
+# gensim # Topic modeling
+# pyLDAvis # Topic modeling visualization
+wordcloud # Word cloud visualization
+
+# Web scraping
+# beautifulsoup4
+# selenium
+
+# Image processing
+# opencv-python # Computer vision
+
+# Geospatial data
+# geopandas   # Geospatial data
+
+
+
