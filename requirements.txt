@@ -1,6 +1,7 @@
 # General
 jupyter
 tqdm # Progress bar
+scipy<1.13 # Scientific computing library | Note: scipy 1.13 is causing conflict with gensim
 
 # Data handling
 pandas
@@ -24,6 +25,7 @@ PyQt6 # GUI
 # Machine learning
 scikit-learn # General machine learning
 xgboost # Gradient boosting on decision trees
+gensim # Topic modeling
 # statsmodels # Time series analysis
 
 # Deep learning
