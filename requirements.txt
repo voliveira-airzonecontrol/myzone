@@ -18,6 +18,7 @@ pyodbc # SQL Server connector
 # Data visualization
 matplotlib # Basic plotting
 seaborn # Statistical data visualization
+PyQt6 # GUI
 # folium # Interactive maps
 
 # Machine learning
@@ -41,7 +42,7 @@ langdetect
 # TextBlob # Simplified text processing
 # gensim # Topic modeling
 # pyLDAvis # Topic modeling visualization
-# wordcloud # Word cloud visualization
+wordcloud # Word cloud visualization
 
 # Web scraping
 # beautifulsoup4
