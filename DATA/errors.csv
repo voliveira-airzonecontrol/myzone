@@ -1,0 +1,76 @@
+DESCRIPCION;ID_ERROR;TODO
+Referencia incorrecta en el pedido;1.1;F
+Instalación cancelada o sobrante de instalación;1.2;F
+No compatible;1.3;F
+Acordado con el comercial;1.4;F
+Error en la confirmación del pedido;2.1;F
+Error en la expedición del pedido;2.2;F
+Error del TCP al dar la información;2.3;F
+Faltan piezas en el pedido;2.4;F
+Devolución interna o de STA. Material NO utilizado;2.5;F
+Termostato bloqueado;3.01;F
+Fallo de comunicaciones;3.02;F
+Fallo de pantalla;3.03;F
+No funciona el táctil;3.04;F
+Error de lectura de temperatura;3.05;F
+Sin diagnóstico - Petición TCP;3.07;F
+Requiere actualización software/hardware;3.08;F
+Otro motivo;3.09;F
+Dispositivo bloqueado;3.21;F
+No se comunica con la central (no lo detecta);3.22;F
+No se conecta a internet o a la red de integración;3.23;F
+Desconexiones de la red;3.24;F
+Sin diagnóstico - Petición TCP;3.27;F
+Requiere actualización software/hardware;3.28;F
+Otro motivo;3.29;F
+Pasarela no alimenta o bloqueada;3.41;F
+Fallo de comunicaciones con la central;3.42;F
+Fallo de comunicaciones con la máquina;3.43;F
+Unidad no arranca ;3.44;F
+Datos de unidad y sistema no coinciden;3.45;F
+Sin diagnóstico - Petición TCP;3.47;F
+Requiere actualización software/hardware;3.48;F
+Otro motivo;3.49;F
+Dispositivo bloqueado;3.61;F
+No es posible cargarle la configuración;3.62;F
+No se conecta a internet o a la red de integración;3.63;F
+Desconexiones de la red;3.64;F
+Sin diagnóstico - Petición TCP;3.67;F
+Requiere actualización software/hardware;3.68;F
+Otro motivo;3.69;F
+Central bloqueada o no alimenta;3.81;F
+Fallo de comunicaciones cableadas;3.82;F
+Fallo de comunicaciones radio;3.83;F
+No da señal a los motores;3.84;F
+Sin diagnóstico - Petición TCP;3.87;F
+Requiere actualización software/hardware;3.88;F
+Otro motivo;3.89;F
+Error estético;4.01;F
+Error apertura/cierre. No muestra error en sistema;4.02;F
+Error del módulo de ionización. Muestra error IAQ;4.03;F
+Ruido del motor;4.04;F
+Error en los cables o conectores;4.05;F
+Sin diagnóstico - Petición TCP;4.07;F
+Otro motivo;4.09;F
+Error estético;4.21;F
+Sin diagnóstico - Petición TCP;4.27;F
+Otro motivo;4.29;F
+Error de alimentación;4.41;F
+Error de funcionamiento;4.42;F
+Error estético;4.43;F
+Sin diagnóstico - Petición TCP;4.47;F
+Otro motivo;4.49;F
+Error de alimentación;4.61;F
+Error de funcionamiento;4.62;F
+Error estético;4.63;F
+Sin diagnóstico - Petición TCP;4.67;F
+Otro motivo;4.69;F
+El cliente rechaza la mercancía por rotura;5.1;F
+Pérdida del pedido;5.2;F
+Contenido roto. Mercancía aceptada por el cliente;5.3;F
+Abono administrativo;6.1;F
+Plan Renove;6.2;F
+Material para STA;7.1;F
+Solución técnica para problema en instalación.;7.2;F
+Pedido DEMO, no habrá devolución;7.3;F
+Prestamo DEMO, espera devolución (Conto Visione);7.4;F

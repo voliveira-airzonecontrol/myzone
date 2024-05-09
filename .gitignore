@@ -185,3 +185,6 @@ fabric.properties
 .idea
 
 DATA/DEFECTOS.jpg
+EDA/teste.ipynb
+DATA/text_to_analyse.csv
+MODELS

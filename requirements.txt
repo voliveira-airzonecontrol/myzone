@@ -1,7 +1,8 @@
 # General
 jupyter
 tqdm # Progress bar
-scipy<1.13 # Scientific computing library | Note: scipy 1.13 is causing conflict with gensim
+scipy<1.13.0 # Scientific computing library | Note: scipy 1.13 is causing conflict with gensim
+testfixtures
 
 # Data handling
 pandas
@@ -9,12 +10,11 @@ numpy
 
 # SQL connector
 sqlalchemy # SQL toolkit and Object-Relational Mapping
+pyodbc # SQL Server connector
 # pymysql # MySQL connector
 # mysqlclient # MySQL connector
 # psycopg2 # PostgreSQL connector
 # cx_Oracle # Oracle connector
-pyodbc # SQL Server connector
-
 
 # Data visualization
 matplotlib # Basic plotting
@@ -26,6 +26,7 @@ PyQt6 # GUI
 scikit-learn # General machine learning
 xgboost # Gradient boosting on decision trees
 gensim # Topic modeling
+statsmodels
 # statsmodels # Time series analysis
 
 # Deep learning
@@ -35,16 +36,18 @@ gensim # Topic modeling
 
 # Natural language processing
 nltk
+thefuzz # Fuzzy string matching
+deep-translator
+langdetect
+wordcloud # Word cloud visualization
 # spacy
 # googletrans # Google Translate API
 # translate # Translate API
 # multilingual-translation # Multilingual translation using Facebook's LLM
-deep-translator
-langdetect
 # TextBlob # Simplified text processing
 # gensim # Topic modeling
 # pyLDAvis # Topic modeling visualization
-wordcloud # Word cloud visualization
+
 
 # Web scraping
 # beautifulsoup4
