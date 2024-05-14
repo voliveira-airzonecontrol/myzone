@@ -40,7 +40,7 @@ thefuzz # Fuzzy string matching
 deep-translator
 langdetect
 wordcloud # Word cloud visualization
-# spacy
+spacy
 # googletrans # Google Translate API
 # translate # Translate API
 # multilingual-translation # Multilingual translation using Facebook's LLM
