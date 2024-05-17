@@ -1,0 +1,115 @@
+﻿Código;CODCAR3;CODCAR2;DESCFAM;Motivo General;DESCRICION
+3.01;91;-;TERMOSTATOS;Termostato bloqueado;El termostato no hace nada. Al quitar y poner alimentación, tampoco reacciona.
+3.02;91;-;TERMOSTATOS;Fallo de comunicaciones;El termostato no comunica con la central o no se puede asociar.
+3.03;91;-;TERMOSTATOS;Fallo de pantalla;Hay un fallo estético en la pantalla, no se representan bien las imágenes.
+3.04;91;-;TERMOSTATOS;No funciona el táctil;El termostato representa imágenes y reacciona cuando se quita y pone alimentación, pero las pulsaciones funcionan mal o no funcionan
+3.05;91;-;TERMOSTATOS;Error de lectura de temperatura;El termostato no mide bien la temperatura.
+3.08;91;-;TERMOSTATOS;Requiere actualización software/hardware;La pieza requiere una actualización de software que no se puede hacer a distancia o hay una revisión hardware que obliga a cambiar la pieza
+3.09;91;-;TERMOSTATOS;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+3.21;93;-;WEB SERVER & INTEGRACION;Dispositivo bloqueado;El dispositivo no hace nada, el único led encendido es el de alimentación, los demás están apagados
+3.22;93;-;WEB SERVER & INTEGRACION;No se comunica con la central (no lo detecta);El dispositivo intenta comunicar con la central, pero no la detecta. Los leds sí que parpadean.
+3.23;93;-;WEB SERVER & INTEGRACION;No se conecta a internet o a la red de integración;El proceso de asociación no finaliza correctamente
+3.24;93;-;WEB SERVER & INTEGRACION;Desconexiones de la red;El dispositivo asocia correctamente, pero sufre desconexiones
+3.28;93;-;WEB SERVER & INTEGRACION;Requiere actualización software/hardware;La pieza requiere una actualización de software que no se puede hacer a distancia o hay una revisión hardware que obliga a cambiar la pieza
+3.29;93;-;WEB SERVER & INTEGRACION;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+3.41;49;-;PASARELAS;Pasarela no alimenta o bloqueada;El dispositivo no hace nada, el único led encendido es el de alimentación, los demás están apagados
+3.42;49;-;PASARELAS;Fallo de comunicaciones con la central;El dispositivo intenta comunicar con la central, pero no la detecta. Los leds sí que parpadean.
+3.43;49;-;PASARELAS;Fallo de comunicaciones con la máquina;El dispositivo intenta comunicar con la maquina, pero no la detecta. Los leds sí que parpadean.
+3.44;49;-;PASARELAS;Unidad no arranca ;Las comunicaciones y los leds son correctos, pero la máquina no arranca.
+3.45;49;-;PASARELAS;Datos de unidad y sistema no coinciden;Las comunicaciones y los leds son correctos, pero la máquina muestra temperatura o velocidades incorrectas.
+3.48;49;-;PASARELAS;Requiere actualización software/hardware;La pieza requiere una actualización de software que no se puede hacer a distancia o hay una revisión hardware que obliga a cambiar la pieza
+3.49;49;-;PASARELAS;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+3.61;85;-;KNX;Dispositivo bloqueado;El dispositivo no hace nada, el único led encendido es el de alimentación, los demás están apagados
+3.62;85;-;KNX;No es posible cargarle la configuración;No es posible cargarle la configuración al aidoo (proyecto KNX, por ejemplo).
+3.63;85;-;KNX;No se conecta a internet o a la red de integración;El Aidoo no se conecta a internet o a la red de integración.
+3.64;85;-;KNX;Desconexiones de la red;El dispositivo asocia correctamente, pero sufre desconexiones
+3.68;85;-;KNX;Requiere actualización software/hardware;La pieza requiere una actualización de software que no se puede hacer a distancia o hay una revisión hardware que obliga a cambiar la pieza
+3.69;85;-;KNX;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+3.61;87;-;WI-FI;Dispositivo bloqueado;El dispositivo no hace nada, el único led encendido es el de alimentación, los demás están apagados
+3.62;87;-;WI-FI;No es posible cargarle la configuración;No es posible cargarle la configuración al aidoo (proyecto KNX, por ejemplo).
+3.63;87;-;WI-FI;No se conecta a internet o a la red de integración;El Aidoo no se conecta a internet o a la red de integración.
+3.64;87;-;WI-FI;Desconexiones de la red;El dispositivo asocia correctamente, pero sufre desconexiones
+3.68;87;-;WI-FI;Requiere actualización software/hardware;La pieza requiere una actualización de software que no se puede hacer a distancia o hay una revisión hardware que obliga a cambiar la pieza
+3.69;87;-;WI-FI;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+3.61;89;-;WI-FI PRO;Dispositivo bloqueado;El dispositivo no hace nada, el único led encendido es el de alimentación, los demás están apagados
+3.62;89;-;WI-FI PRO;No es posible cargarle la configuración;No es posible cargarle la configuración al aidoo (proyecto KNX, por ejemplo).
+3.63;89;-;WI-FI PRO;No se conecta a internet o a la red de integración;El Aidoo no se conecta a internet o a la red de integración.
+3.64;89;-;WI-FI PRO;Desconexiones de la red;El dispositivo asocia correctamente, pero sufre desconexiones
+3.68;89;-;WI-FI PRO;Requiere actualización software/hardware;La pieza requiere una actualización de software que no se puede hacer a distancia o hay una revisión hardware que obliga a cambiar la pieza
+3.69;89;-;WI-FI PRO;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+3.61;99;-;Z-WAVE;Dispositivo bloqueado;El dispositivo no hace nada, el único led encendido es el de alimentación, los demás están apagados
+3.62;99;-;Z-WAVE;No es posible cargarle la configuración;No es posible cargarle la configuración al aidoo (proyecto KNX, por ejemplo).
+3.63;99;-;Z-WAVE;No se conecta a internet o a la red de integración;El Aidoo no se conecta a internet o a la red de integración.
+3.64;99;-;Z-WAVE;Desconexiones de la red;El dispositivo asocia correctamente, pero sufre desconexiones
+3.68;99;-;Z-WAVE;Requiere actualización software/hardware;La pieza requiere una actualización de software que no se puede hacer a distancia o hay una revisión hardware que obliga a cambiar la pieza
+3.69;99;-;Z-WAVE;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+3.61;101;-;ZIGBEE;Dispositivo bloqueado;El dispositivo no hace nada, el único led encendido es el de alimentación, los demás están apagados
+3.62;101;-;ZIGBEE;No es posible cargarle la configuración;No es posible cargarle la configuración al aidoo (proyecto KNX, por ejemplo).
+3.63;101;-;ZIGBEE;No se conecta a internet o a la red de integración;El Aidoo no se conecta a internet o a la red de integración.
+3.64;101;-;ZIGBEE;Desconexiones de la red;El dispositivo asocia correctamente, pero sufre desconexiones
+3.68;101;-;ZIGBEE;Requiere actualización software/hardware;La pieza requiere una actualización de software que no se puede hacer a distancia o hay una revisión hardware que obliga a cambiar la pieza
+3.69;101;-;ZIGBEE;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+3.81;95;-;MODULOS DE ZONA;Central bloqueada o no alimenta;El dispositivo no hace nada, el único led encendido es el de alimentación, los demás están apagados
+3.82;95;-;MODULOS DE ZONA;Fallo de comunicaciones cableadas;La central no comunica con los termostatos u otros dispositivos cableados.
+3.83;95;-;MODULOS DE ZONA;Fallo de comunicaciones radio;La central no comunica con los termostatos radio.
+3.84;95;-;MODULOS DE ZONA;No da señal a los motores;Los leds de los motores se encienden, pero el motor no abre ni cierra. Se cambia el motor y tampoco actúa.
+3.85;95;-;MODULOS DE ZONA;Requiere actualización software/hardware;Actualizacion de software, actualizacion de hardware, necesita actualizar software
+3.89;95;-;MODULOS DE ZONA;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+3.81;94;-;MODULOS DE CONTROL;Central bloqueada o no alimenta;El dispositivo no hace nada, el único led encendido es el de alimentación, los demás están apagados
+3.82;94;-;MODULOS DE CONTROL;Fallo de comunicaciones cableadas;La central no comunica con los termostatos u otros dispositivos cableados.
+3.83;94;-;MODULOS DE CONTROL;Fallo de comunicaciones radio;La central no comunica con los termostatos radio.
+3.84;94;-;MODULOS DE CONTROL;No da señal a los motores;Los leds de los motores se encienden, pero el motor no abre ni cierra. Se cambia el motor y tampoco actúa.
+3.85;94;-;MODULOS DE CONTROL;Requiere actualización software/hardware;Actualizacion de software, actualizacion de hardware, necesita actualizar software
+3.89;94;-;MODULOS DE CONTROL;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+3.81;92;-;CONTROLADORES CENRTALIZADOS;Central bloqueada o no alimenta;El dispositivo no hace nada, el único led encendido es el de alimentación, los demás están apagados
+3.82;92;-;CONTROLADORES CENRTALIZADOS;Fallo de comunicaciones cableadas;La central no comunica con los termostatos u otros dispositivos cableados.
+3.83;92;-;CONTROLADORES CENRTALIZADOS;Fallo de comunicaciones radio;La central no comunica con los termostatos radio.
+3.84;92;-;CONTROLADORES CENRTALIZADOS;No da señal a los motores;Los leds de los motores se encienden, pero el motor no abre ni cierra. Se cambia el motor y tampoco actúa.
+3.85;92;-;CONTROLADORES CENRTALIZADOS;Requiere actualización software/hardware;Actualizacion de software, actualizacion de hardware, necesita actualizar software
+3.89;92;-;CONTROLADORES CENRTALIZADOS;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+3.81;90;-;CENTRALES;Central bloqueada o no alimenta;El dispositivo no hace nada, el único led encendido es el de alimentación, los demás están apagados
+3.82;90;-;CENTRALES;Fallo de comunicaciones cableadas;La central no comunica con los termostatos u otros dispositivos cableados.
+3.83;90;-;CENTRALES;Fallo de comunicaciones radio;La central no comunica con los termostatos radio.
+3.84;90;-;CENTRALES;No da señal a los motores;Los leds de los motores se encienden, pero el motor no abre ni cierra. Se cambia el motor y tampoco actúa.
+3.85;90;-;CENTRALES;Requiere actualización software/hardware;Actualizacion de software, actualizacion de hardware, necesita actualizar software
+3.89;90;-;CENTRALES;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+4.01;31;264;REJILLAS;Error estético;Problema en la estética de la difusión. Está rallada o golpeada. 
+4.02;31;264;REJILLAS;Error apertura/cierre. No muestra error en el sistema;La compuerta o rejilla no abre ni cierra, pero no se muestra ningún error en el sistema.
+4.03;31;264;REJILLAS;Error del módulo de ionización. Muestra error IAQ;El sistema muestra error IAQ porque hay un fallo en el módulo de ionización.
+4.04;31;264;REJILLAS;Ruido del motor;El motor hace mucho ruido.
+4.05;31;264;REJILLAS;Error en los cables o conectores;El cable o el conector está roto o dañado.
+4.09;31;264;REJILLAS;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+4.01;33;264;DIFUSORES;Error estético;Problema en la estética de la difusión. Está rallada o golpeada. 
+4.02;33;264;DIFUSORES;Error apertura/cierre. No muestra error en el sistema;La compuerta o rejilla no abre ni cierra, pero no se muestra ningún error en el sistema.
+4.03;33;264;DIFUSORES;Error del módulo de ionización. Muestra error IAQ;El sistema muestra error IAQ porque hay un fallo en el módulo de ionización.
+4.04;33;264;DIFUSORES;Ruido del motor;El motor hace mucho ruido.
+4.05;33;264;DIFUSORES;Error en los cables o conectores;El cable o el conector está roto o dañado.
+4.09;33;264;DIFUSORES;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+4.01;19;264;COMPUERTAS;Error estético;Problema en la estética de la difusión. Está rallada o golpeada. 
+4.02;19;264;COMPUERTAS;Error apertura/cierre. No muestra error en el sistema;La compuerta o rejilla no abre ni cierra, pero no se muestra ningún error en el sistema.
+4.03;19;264;COMPUERTAS;Error del módulo de ionización. Muestra error IAQ;El sistema muestra error IAQ porque hay un fallo en el módulo de ionización.
+4.04;19;264;COMPUERTAS;Ruido del motor;El motor hace mucho ruido.
+4.05;19;264;COMPUERTAS;Error en los cables o conectores;El cable o el conector está roto o dañado.
+4.09;19;264;COMPUERTAS;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+4.21;38;-;PLENUM DE REJILLA;Error estético;Problema en la estética de la difusión. Está rallada o golpeada. 
+4.29;38;-;PLENUM DE REJILLA;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+4.21;76;-;PLENUM DE RETORNO;Error estético;Problema en la estética de la difusión. Está rallada o golpeada. 
+4.29;76;-;PLENUM DE RETORNO;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+4.21;31;262;REJILLAS;Error estético;Problema en la estética de la difusión. Está rallada o golpeada. 
+4.29;31;262;REJILLAS;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+4.21;33;262;DIFUSORES;Error estético;Problema en la estética de la difusión. Está rallada o golpeada. 
+4.29;33;262;DIFUSORES;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+4.21;19;262;COMPUERTAS;Error estético;Problema en la estética de la difusión. Está rallada o golpeada. 
+4.29;19;262;COMPUERTAS;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+4.21;97;-;BOCAS DE VENTILACION;Error estético;Problema en la estética de la difusión. Está rallada o golpeada. 
+4.29;97;-;BOCAS DE VENTILACION;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+4.21;42;-;ADAPTADORES DE PLENUM;Error estético;Problema en la estética de la difusión. Está rallada o golpeada. 
+4.29;42;-;ADAPTADORES DE PLENUM;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+4.41;100;-;CALIDAD DE AIRE;Error de alimentación;El sistema no se alimenta correctamente.
+4.42;100;-;CALIDAD DE AIRE;Error de funcionamiento;El dispositivo no funciona correctamente o muestra un error.
+4.43;100;-;CALIDAD DE AIRE;Error estético;Hay un fallo estético, golpe o abolladura.
+4.49;100;-;CALIDAD DE AIRE;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.
+4.61;88;-;ACCESORIOS;Error de alimentación;El sistema no se alimenta correctamente.
+4.62;88;-;ACCESORIOS;Error de funcionamiento;El dispositivo no funciona correctamente o muestra un error.
+4.63;88;-;ACCESORIOS;Error estético;Hay un fallo estético, golpe o abolladura.
+4.69;88;-;ACCESORIOS;Otro motivo;Cualquier motivo no recogido en los puntos anteriores.

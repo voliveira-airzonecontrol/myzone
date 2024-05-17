@@ -3,15 +3,17 @@ jupyter
 tqdm # Progress bar
 scipy<1.13.0 # Scientific computing library | Note: scipy 1.13 is causing conflict with gensim
 testfixtures
+gradio
 
 # Data handling
 pandas
 numpy
 
-# SQL connector
+# Database
 sqlalchemy # SQL toolkit and Object-Relational Mapping
 pyodbc # SQL Server connector
-# pymysql # MySQL connector
+pymysql # MySQL connector
+qdrant-client # Vector database client
 # mysqlclient # MySQL connector
 # psycopg2 # PostgreSQL connector
 # cx_Oracle # Oracle connector
@@ -32,7 +34,7 @@ statsmodels
 # Deep learning
 # tensorflow # General deep learning
 # keras # High-level neural networks API
-# torch # General deep learning
+torch # General deep learning
 
 # Natural language processing
 nltk
@@ -41,16 +43,20 @@ deep-translator
 langdetect
 wordcloud # Word cloud visualization
 spacy
+sentence-transformers
+gensim # Topic modeling
 # googletrans # Google Translate API
 # translate # Translate API
 # multilingual-translation # Multilingual translation using Facebook's LLM
 # TextBlob # Simplified text processing
-# gensim # Topic modeling
 # pyLDAvis # Topic modeling visualization
 
+# PDF processing
+PyPDF2 # simple PDF processing
+# PFMiner # complex PDF processing
 
 # Web scraping
-# beautifulsoup4
+beautifulsoup4
 # selenium
 
 # Image processing
@@ -58,6 +64,5 @@ spacy
 
 # Geospatial data
 # geopandas   # Geospatial data
-
 
 

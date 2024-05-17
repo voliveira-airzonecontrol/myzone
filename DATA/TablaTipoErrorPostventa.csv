@@ -1,116 +1,115 @@
-﻿;;;;;
-Artículo;Código;CODCAR3;CODCAR2;DESCFAM;Motivo General
-INTERFACES;3.01;91;-;TERMOSTATOS;Termostato bloqueado
-;3.02;91;-;TERMOSTATOS;Fallo de comunicaciones
-;3.03;91;-;TERMOSTATOS;Fallo de pantalla
-;3.04;91;-;TERMOSTATOS;No funciona el táctil
-;3.05;91;-;TERMOSTATOS;Error de lectura de temperatura
-;3.08;91;-;TERMOSTATOS;Requiere actualización software/hardware
-;3.09;91;-;TERMOSTATOS;Otro motivo
-CONECTIVIDAD E INTEGRACIÓN;3.21;93;-;WEB SERVER & INTEGRACION;Dispositivo bloqueado
-;3.22;93;-;WEB SERVER & INTEGRACION;No se comunica con la central (no lo detecta)
-;3.23;93;-;WEB SERVER & INTEGRACION;No se conecta a internet o a la red de integración
-;3.24;93;-;WEB SERVER & INTEGRACION;Desconexiones de la red
-;3.28;93;-;WEB SERVER & INTEGRACION;Requiere actualización software/hardware
-;3.29;93;-;WEB SERVER & INTEGRACION;Otro motivo
-PASARELAS;3.41;49;-;PASARELAS;Pasarela no alimenta o bloqueada
-;3.42;49;-;PASARELAS;Fallo de comunicaciones con la central
-;3.43;49;-;PASARELAS;Fallo de comunicaciones con la máquina
-;3.44;49;-;PASARELAS;Unidad no arranca 
-;3.45;49;-;PASARELAS;Datos de unidad y sistema no coinciden
-;3.48;49;-;PASARELAS;Requiere actualización software/hardware
-;3.49;49;-;PASARELAS;Otro motivo
-AIDOO;3.61;85;-;KNX;Dispositivo bloqueado
-;3.62;85;-;KNX;No es posible cargarle la configuración
-;3.63;85;-;KNX;No se conecta a internet o a la red de integración
-;3.64;85;-;KNX;Desconexiones de la red
-;3.68;85;-;KNX;Requiere actualización software/hardware
-;3.69;85;-;KNX;Otro motivo
-;3.61;87;-;WI-FI;Dispositivo bloqueado
-;3.62;87;-;WI-FI;No es posible cargarle la configuración
-;3.63;87;-;WI-FI;No se conecta a internet o a la red de integración
-;3.64;87;-;WI-FI;Desconexiones de la red
-;3.68;87;-;WI-FI;Requiere actualización software/hardware
-;3.69;87;-;WI-FI;Otro motivo
-;3.61;89;-;WI-FI PRO;Dispositivo bloqueado
-;3.62;89;-;WI-FI PRO;No es posible cargarle la configuración
-;3.63;89;-;WI-FI PRO;No se conecta a internet o a la red de integración
-;3.64;89;-;WI-FI PRO;Desconexiones de la red
-;3.68;89;-;WI-FI PRO;Requiere actualización software/hardware
-;3.69;89;-;WI-FI PRO;Otro motivo
-;3.61;99;-;Z-WAVE;Dispositivo bloqueado
-;3.62;99;-;Z-WAVE;No es posible cargarle la configuración
-;3.63;99;-;Z-WAVE;No se conecta a internet o a la red de integración
-;3.64;99;-;Z-WAVE;Desconexiones de la red
-;3.68;99;-;Z-WAVE;Requiere actualización software/hardware
-;3.69;99;-;Z-WAVE;Otro motivo
-;3.61;101;-;ZIGBEE;Dispositivo bloqueado
-;3.62;101;-;ZIGBEE;No es posible cargarle la configuración
-;3.63;101;-;ZIGBEE;No se conecta a internet o a la red de integración
-;3.64;101;-;ZIGBEE;Desconexiones de la red
-;3.68;101;-;ZIGBEE;Requiere actualización software/hardware
-;3.69;101;-;ZIGBEE;Otro motivo
-CENTRALES Y OTRA ELECTRÓNICA;3.81;95;-;MODULOS DE ZONA;Central bloqueada o no alimenta
-;3.82;95;-;MODULOS DE ZONA;Fallo de comunicaciones cableadas
-;3.83;95;-;MODULOS DE ZONA;Fallo de comunicaciones radio
-;3.84;95;-;MODULOS DE ZONA;No da señal a los motores
-;3.85;95;-;MODULOS DE ZONA;Requiere actualización software/hardware
-;3.89;95;-;MODULOS DE ZONA;Otro motivo
-;3.81;94;-;MODULOS DE CONTROL;Central bloqueada o no alimenta
-;3.82;94;-;MODULOS DE CONTROL;Fallo de comunicaciones cableadas
-;3.83;94;-;MODULOS DE CONTROL;Fallo de comunicaciones radio
-;3.84;94;-;MODULOS DE CONTROL;No da señal a los motores
-;3.85;94;-;MODULOS DE CONTROL;Requiere actualización software/hardware
-;3.89;94;-;MODULOS DE CONTROL;Otro motivo
-;3.81;92;-;CONTROLADORES CENRTALIZADOS;Central bloqueada o no alimenta
-;3.82;92;-;CONTROLADORES CENRTALIZADOS;Fallo de comunicaciones cableadas
-;3.83;92;-;CONTROLADORES CENRTALIZADOS;Fallo de comunicaciones radio
-;3.84;92;-;CONTROLADORES CENRTALIZADOS;No da señal a los motores
-;3.85;92;-;CONTROLADORES CENRTALIZADOS;Requiere actualización software/hardware
-;3.89;92;-;CONTROLADORES CENRTALIZADOS;Otro motivo
-;3.81;90;-;CENTRALES;Central bloqueada o no alimenta
-;3.82;90;-;CENTRALES;Fallo de comunicaciones cableadas
-;3.83;90;-;CENTRALES;Fallo de comunicaciones radio
-;3.84;90;-;CENTRALES;No da señal a los motores
-;3.85;90;-;CENTRALES;Requiere actualización software/hardware
-;3.89;90;-;CENTRALES;Otro motivo
-DIFUSIÓN MOTORIZADA / MOTORES;4.01;31;264;REJILLAS;Error estético
-;4.02;31;264;REJILLAS;Error apertura/cierre. No muestra error en el sistema
-;4.03;31;264;REJILLAS;Error del módulo de ionización. Muestra error IAQ
-;4.04;31;264;REJILLAS;Ruido del motor
-;4.05;31;264;REJILLAS;Error en los cables o conectores
-;4.09;31;264;REJILLAS;Otro motivo
-;4.01;33;264;DIFUSORES;Error estético
-;4.02;33;264;DIFUSORES;Error apertura/cierre. No muestra error en el sistema
-;4.03;33;264;DIFUSORES;Error del módulo de ionización. Muestra error IAQ
-;4.04;33;264;DIFUSORES;Ruido del motor
-;4.05;33;264;DIFUSORES;Error en los cables o conectores
-;4.09;33;264;DIFUSORES;Otro motivo
-;4.01;19;264;COMPUERTAS;Error estético
-;4.02;19;264;COMPUERTAS;Error apertura/cierre. No muestra error en el sistema
-;4.03;19;264;COMPUERTAS;Error del módulo de ionización. Muestra error IAQ
-;4.04;19;264;COMPUERTAS;Ruido del motor
-;4.05;19;264;COMPUERTAS;Error en los cables o conectores
-;4.09;19;264;COMPUERTAS;Otro motivo
-DIF. NO MOTORIZADA;4.21;38;-;PLENUM DE REJILLA;Error estético
-;4.29;38;-;PLENUM DE REJILLA;Otro motivo
-;4.21;76;-;PLENUM DE RETORNO;Error estético
-;4.29;76;-;PLENUM DE RETORNO;Otro motivo
-;4.21;31;262;REJILLAS;Error estético
-;4.29;31;262;REJILLAS;Otro motivo
-;4.21;33;262;DIFUSORES;Error estético
-;4.29;33;262;DIFUSORES;Otro motivo
-;4.21;19;262;COMPUERTAS;Error estético
-;4.29;19;262;COMPUERTAS;Otro motivo
-;4.21;97;-;BOCAS DE VENTILACION;Error estético
-;4.29;97;-;BOCAS DE VENTILACION;Otro motivo
-;4.21;42;-;ADAPTADORES DE PLENUM;Error estético
-;4.29;42;-;ADAPTADORES DE PLENUM;Otro motivo
-CALIDAD DE AIRE;4.41;100;-;CALIDAD DE AIRE;Error de alimentación
-;4.42;100;-;CALIDAD DE AIRE;Error de funcionamiento
-;4.43;100;-;CALIDAD DE AIRE;Error estético
-;4.49;100;-;CALIDAD DE AIRE;Otro motivo
-ACCESORIOS;4.61;88;-;ACCESORIOS;Error de alimentación
-;4.62;88;-;ACCESORIOS;Error de funcionamiento
-;4.63;88;-;ACCESORIOS;Error estético
-;4.69;88;-;ACCESORIOS;Otro motivo
+﻿Código;CODCAR3;CODCAR2;DESCFAM;Motivo General;DESCRIPCION
+3.01;91;-;TERMOSTATOS;Termostato bloqueado;No funciona nada, ha parado de funcionar, esta bloqueado
+3.02;91;-;TERMOSTATOS;Fallo de comunicaciones;No comunica, no funciona comunicacion, no comunica con central
+3.03;91;-;TERMOSTATOS;Fallo de pantalla;Pantalla no funciona, no se ve nada, pantalla no enscende
+3.04;91;-;TERMOSTATOS;No funciona el táctil;Pantalla no funciona el tactil, pantalla a nivel tactil no funciona, toque falla
+3.05;91;-;TERMOSTATOS;Error de lectura de temperatura;No le temperatura correctamente, no indica temperatura correcta, sensor de temperatura
+3.08;91;-;TERMOSTATOS;Requiere actualización software/hardware;
+3.09;91;-;TERMOSTATOS;Otro motivo;Motivos que no se encajan en otros
+3.21;93;-;WEB SERVER & INTEGRACION;Dispositivo bloqueado;No funciona nada, ha parado de funcionar, esta bloqueado
+3.22;93;-;WEB SERVER & INTEGRACION;No se comunica con la central (no lo detecta);No comunica, no funciona comunicacion, no comunica con central
+3.23;93;-;WEB SERVER & INTEGRACION;No se conecta a internet o a la red de integración;Internet no funciona, sin concección con internet
+3.24;93;-;WEB SERVER & INTEGRACION;Desconexiones de la red;
+3.28;93;-;WEB SERVER & INTEGRACION;Requiere actualización software/hardware;
+3.29;93;-;WEB SERVER & INTEGRACION;Otro motivo;Motivos que no se encajan en otros
+3.41;49;-;PASARELAS;Pasarela no alimenta o bloqueada;
+3.42;49;-;PASARELAS;Fallo de comunicaciones con la central;
+3.43;49;-;PASARELAS;Fallo de comunicaciones con la máquina;
+3.44;49;-;PASARELAS;Unidad no arranca ;
+3.45;49;-;PASARELAS;Datos de unidad y sistema no coinciden;
+3.48;49;-;PASARELAS;Requiere actualización software/hardware;
+3.49;49;-;PASARELAS;Otro motivo;Motivos que no se encajan en otros
+3.61;85;-;KNX;Dispositivo bloqueado;
+3.62;85;-;KNX;No es posible cargarle la configuración;
+3.63;85;-;KNX;No se conecta a internet o a la red de integración;
+3.64;85;-;KNX;Desconexiones de la red;
+3.68;85;-;KNX;Requiere actualización software/hardware;
+3.69;85;-;KNX;Otro motivo;Motivos que no se encajan en otros
+3.61;87;-;WI-FI;Dispositivo bloqueado;
+3.62;87;-;WI-FI;No es posible cargarle la configuración;
+3.63;87;-;WI-FI;No se conecta a internet o a la red de integración;
+3.64;87;-;WI-FI;Desconexiones de la red;
+3.68;87;-;WI-FI;Requiere actualización software/hardware;
+3.69;87;-;WI-FI;Otro motivo;Motivos que no se encajan en otros
+3.61;89;-;WI-FI PRO;Dispositivo bloqueado;
+3.62;89;-;WI-FI PRO;No es posible cargarle la configuración;
+3.63;89;-;WI-FI PRO;No se conecta a internet o a la red de integración;
+3.64;89;-;WI-FI PRO;Desconexiones de la red;
+3.68;89;-;WI-FI PRO;Requiere actualización software/hardware;
+3.69;89;-;WI-FI PRO;Otro motivo;Motivos que no se encajan en otros
+3.61;99;-;Z-WAVE;Dispositivo bloqueado;
+3.62;99;-;Z-WAVE;No es posible cargarle la configuración;
+3.63;99;-;Z-WAVE;No se conecta a internet o a la red de integración;
+3.64;99;-;Z-WAVE;Desconexiones de la red;
+3.68;99;-;Z-WAVE;Requiere actualización software/hardware;
+3.69;99;-;Z-WAVE;Otro motivo;Motivos que no se encajan en otros
+3.61;101;-;ZIGBEE;Dispositivo bloqueado;
+3.62;101;-;ZIGBEE;No es posible cargarle la configuración;
+3.63;101;-;ZIGBEE;No se conecta a internet o a la red de integración;
+3.64;101;-;ZIGBEE;Desconexiones de la red;
+3.68;101;-;ZIGBEE;Requiere actualización software/hardware;
+3.69;101;-;ZIGBEE;Otro motivo;Motivos que no se encajan en otros
+3.81;95;-;MODULOS DE ZONA;Central bloqueada o no alimenta;
+3.82;95;-;MODULOS DE ZONA;Fallo de comunicaciones cableadas;
+3.83;95;-;MODULOS DE ZONA;Fallo de comunicaciones radio;
+3.84;95;-;MODULOS DE ZONA;No da señal a los motores;
+3.85;95;-;MODULOS DE ZONA;Requiere actualización software/hardware;
+3.89;95;-;MODULOS DE ZONA;Otro motivo;Motivos que no se encajan en otros
+3.81;94;-;MODULOS DE CONTROL;Central bloqueada o no alimenta;
+3.82;94;-;MODULOS DE CONTROL;Fallo de comunicaciones cableadas;
+3.83;94;-;MODULOS DE CONTROL;Fallo de comunicaciones radio;
+3.84;94;-;MODULOS DE CONTROL;No da señal a los motores;
+3.85;94;-;MODULOS DE CONTROL;Requiere actualización software/hardware;
+3.89;94;-;MODULOS DE CONTROL;Otro motivo;Motivos que no se encajan en otros
+3.81;92;-;CONTROLADORES CENRTALIZADOS;Central bloqueada o no alimenta;
+3.82;92;-;CONTROLADORES CENRTALIZADOS;Fallo de comunicaciones cableadas;
+3.83;92;-;CONTROLADORES CENRTALIZADOS;Fallo de comunicaciones radio;
+3.84;92;-;CONTROLADORES CENRTALIZADOS;No da señal a los motores;
+3.85;92;-;CONTROLADORES CENRTALIZADOS;Requiere actualización software/hardware;
+3.89;92;-;CONTROLADORES CENRTALIZADOS;Otro motivo;Motivos que no se encajan en otros
+3.81;90;-;CENTRALES;Central bloqueada o no alimenta;
+3.82;90;-;CENTRALES;Fallo de comunicaciones cableadas;
+3.83;90;-;CENTRALES;Fallo de comunicaciones radio;
+3.84;90;-;CENTRALES;No da señal a los motores;
+3.85;90;-;CENTRALES;Requiere actualización software/hardware;
+3.89;90;-;CENTRALES;Otro motivo;Motivos que no se encajan en otros
+4.01;31;264;REJILLAS;Error estético;
+4.02;31;264;REJILLAS;Error apertura/cierre. No muestra error en el sistema;
+4.03;31;264;REJILLAS;Error del módulo de ionización. Muestra error IAQ;
+4.04;31;264;REJILLAS;Ruido del motor;
+4.05;31;264;REJILLAS;Error en los cables o conectores;
+4.09;31;264;REJILLAS;Otro motivo;Motivos que no se encajan en otros
+4.01;33;264;DIFUSORES;Error estético;
+4.02;33;264;DIFUSORES;Error apertura/cierre. No muestra error en el sistema;
+4.03;33;264;DIFUSORES;Error del módulo de ionización. Muestra error IAQ;
+4.04;33;264;DIFUSORES;Ruido del motor;
+4.05;33;264;DIFUSORES;Error en los cables o conectores;
+4.09;33;264;DIFUSORES;Otro motivo;Motivos que no se encajan en otros
+4.01;19;264;COMPUERTAS;Error estético;
+4.02;19;264;COMPUERTAS;Error apertura/cierre. No muestra error en el sistema;
+4.03;19;264;COMPUERTAS;Error del módulo de ionización. Muestra error IAQ;
+4.04;19;264;COMPUERTAS;Ruido del motor;
+4.05;19;264;COMPUERTAS;Error en los cables o conectores;
+4.09;19;264;COMPUERTAS;Otro motivo;Motivos que no se encajan en otros
+4.21;38;-;PLENUM DE REJILLA;Error estético;
+4.29;38;-;PLENUM DE REJILLA;Otro motivo;Motivos que no se encajan en otros
+4.21;76;-;PLENUM DE RETORNO;Error estético;
+4.29;76;-;PLENUM DE RETORNO;Otro motivo;Motivos que no se encajan en otros
+4.21;31;262;REJILLAS;Error estético;
+4.29;31;262;REJILLAS;Otro motivo;Motivos que no se encajan en otros
+4.21;33;262;DIFUSORES;Error estético;
+4.29;33;262;DIFUSORES;Otro motivo;Motivos que no se encajan en otros
+4.21;19;262;COMPUERTAS;Error estético;
+4.29;19;262;COMPUERTAS;Otro motivo;Motivos que no se encajan en otros
+4.21;97;-;BOCAS DE VENTILACION;Error estético;
+4.29;97;-;BOCAS DE VENTILACION;Otro motivo;Motivos que no se encajan en otros
+4.21;42;-;ADAPTADORES DE PLENUM;Error estético;
+4.29;42;-;ADAPTADORES DE PLENUM;Otro motivo;Motivos que no se encajan en otros
+4.41;100;-;CALIDAD DE AIRE;Error de alimentación;
+4.42;100;-;CALIDAD DE AIRE;Error de funcionamiento;
+4.43;100;-;CALIDAD DE AIRE;Error estético;
+4.49;100;-;CALIDAD DE AIRE;Otro motivo;Motivos que no se encajan en otros
+4.61;88;-;ACCESORIOS;Error de alimentación;
+4.62;88;-;ACCESORIOS;Error de funcionamiento;
+4.63;88;-;ACCESORIOS;Error estético;
+4.69;88;-;ACCESORIOS;Otro motivo;Motivos que no se encajan en otros
