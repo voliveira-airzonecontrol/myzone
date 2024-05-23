@@ -16,7 +16,7 @@ pymysql # MySQL connector
 qdrant-client # Vector database client
 # mysqlclient # MySQL connector
 # psycopg2 # PostgreSQL connector
-# cx_Oracle # Oracle connector
+cx_Oracle # Oracle connector
 
 # Data visualization
 matplotlib # Basic plotting
