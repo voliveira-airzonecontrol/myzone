@@ -4,10 +4,14 @@ tqdm # Progress bar
 scipy<1.13.0 # Scientific computing library | Note: scipy 1.13 is causing conflict with gensim
 testfixtures
 gradio
+black
 
 # Data handling
 pandas
 numpy
+
+# MLOps
+mlflow
 
 # Database
 sqlalchemy # SQL toolkit and Object-Relational Mapping
