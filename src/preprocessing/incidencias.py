@@ -69,7 +69,7 @@ class Incidencias:
         )
 
         # Fill NA with 0 for the CODART_A3
-        self.data['CODART_A3'].fillna("0", inplace=True)
+        self.data["CODART_A3"].fillna("0", inplace=True)
 
         return self
 

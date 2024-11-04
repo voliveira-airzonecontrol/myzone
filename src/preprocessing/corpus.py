@@ -23,7 +23,7 @@ class Corpus:
         self.faq = None
         self.products_docs = None
         self.catalogo = None
-
+        self.data = None
         self.data_folder = data_folder
 
     def create_corpus(self) -> "Corpus":
@@ -31,16 +31,47 @@ class Corpus:
         Create the corpus
         :return: Self object
         """
-        self.prepare_incidencias()
-        self.prepare_faq()
-        self.prepare_products_docs()
-        self.prepare_catalogo()
-        return self
+        try:
+            self.prepare_incidencias()
+            self.prepare_faq()
+            self.prepare_products_docs()
+            self.prepare_catalogo()
+        except Exception as e:
+            print(f"Error creating corpus: {e}")
+            raise e
 
-    def get_corpus(self) -> pd.DataFrame:
-        return pd.concat(
+        self.data = pd.concat(
             [self.incidencias, self.faq, self.products_docs, self.catalogo]
         )
+
+        return self
+
+    def load_corpus(
+            self,
+            file_path: str) -> "Corpus":
+        """
+        Load the corpus from a file
+        :param file_path: File path
+        :return: Self object
+        """
+        self.data = pd.read_csv(file_path)
+
+        return self
+
+    def save_corpus(
+            self,
+            file_path: str) -> None:
+        """
+        Save the corpus to a file
+        :param file_path: File path
+        :return: None
+        """
+        if self.data is None:
+            raise ValueError("No data to save")
+
+        self.data.to_csv(file_path, index=False, quoting=1)
+
+
 
     def prepare_incidencias(self, translation_date: str = "2024-05-09") -> "Corpus":
         """

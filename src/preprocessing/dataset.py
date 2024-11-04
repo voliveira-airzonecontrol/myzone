@@ -37,44 +37,49 @@ MEANLESS_FAMILIES = [
     "OBS_DIFUSOR MOTORIZADO",
     "OBS_CAJA DE MEZCLA",
     "OBS_ANTREE",
+    None,
+    "",
 ]
+
 
 class Dataset:
 
-    def __init__(
-            self,
-            incidencias: pd.DataFrame,
-            articulos: pd.DataFrame
-    ):
+    def __init__(self, incidencias: pd.DataFrame, articulos: pd.DataFrame):
         self.data = None
         self.incidencias = incidencias
         self.articulos = articulos
 
-
     def generate_dataset(self, threshold: float = 85):
 
         self.data = self.incidencias.merge(
-            self.articulos,
-            left_on="CODART_A3",
-            right_on="CODART",
-            how="left"
+            self.articulos, left_on="CODART_A3", right_on="CODART", how="left"
         )
 
         # Generate the text to analyse
-        self.data['text_to_analyse'] = self.data[[
-            "desc_problema_translated",
-            "descripcion_translated",
-            "problema_translated"
-        ]].apply(lambda x: " ".join(x), axis=1)
+        self.data["text_to_analyse"] = self.data[
+            [
+                "desc_problema_translated",
+                "descripcion_translated",
+                "problema_translated",
+            ]
+        ].apply(lambda x: " ".join(x), axis=1)
+
+        # Fill na values
+        self.data["DESCCAR3"].fillna("", inplace=True)
+        self.data["DESCCAR2"].fillna("", inplace=True)
 
         # Remove the meanless families
         self.data = self.data[~self.data["DESCCAR3"].isin(MEANLESS_FAMILIES)]
         # Remove the special families
         self.data = self.data[~self.data["DESCCAR3"].isin(SPECIAL_FAMILIES)]
 
-        # Clean low similariy scores
+        # Remove tiny descriptions
+        self.data = self.data[self.data["text_to_analyse"].str.len() > 25]
         self.data = self.data[
-            self.data["Fuzzy_Score"] >= threshold
+            self.data["text_to_analyse"].str.replace("NO FUNCIONA", "").str.len() > 25
         ]
+
+        # Clean low similariy scores
+        self.data = self.data[self.data["Fuzzy_Score"] >= threshold]
 
         return self
