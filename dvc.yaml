@@ -4,6 +4,7 @@ stages:
     deps:
     - src/data_injection/fetch_data.py
     outs:
+    - raw_data/prod/articulos.csv
     - raw_data/prod/estados.csv
     - raw_data/prod/incidencias.csv
     - raw_data/prod/incidencias_tipo.csv
@@ -18,3 +19,15 @@ stages:
     - raw_data/prod/incidencias_tipo.csv
     - raw_data/prod/piezas.csv
     - src/preprocessing/translation.py
+    outs:
+    - output_data/prod/desc_problema_translated.csv
+    - output_data/prod/descripcion_translated.csv
+    - output_data/prod/problema_translated.csv
+  find_best_matches:
+    cmd: python -m src.preprocessing.find_best_matches --env prod --input-piezas raw_data/prod/piezas.csv
+      --input-articulos raw_data/prod/articulos.csv --output-best-matches output_data/prod/fuzzy_matches_w_scores.csv
+    deps:
+    - raw_data/prod/articulos.csv
+    - raw_data/prod/piezas.csv
+    outs:
+    - output_data/prod/fuzzy_matches_w_scores.csv

@@ -1,10 +1,4 @@
 import argparse
-import concurrent.futures
-import csv
-import os
-import time
-import multiprocessing
-
 import pandas as pd
 import spacy
 import gensim.models.doc2vec

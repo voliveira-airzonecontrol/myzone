@@ -1,27 +1,37 @@
 import os
 from src.db.connections import MySQLConnector
 import pandas as pd
+from omegaconf import DictConfig
 from typing import Optional
 
 from src.preprocessing.utils import find_best_match
+from src.utils import load_config, get_logger, load_data
 
 
 class Incidencias:
-    def __init__(self, data_folder: str = "../DATA/"):
-
-        self.myzone_conn = MySQLConnector(
-            user="readmyzone",
-            password=os.environ.get("MYSQL_PASSWORD"),
-            host="192.168.2.7",
-            port="3306",
-        )
+    def __init__(self, translation_data_folder: str, raw_data_folder: str, config: DictConfig):
 
         self.data = None
-        self.data_folder = data_folder
+        self.config = config
+        self.translation_data_folder = translation_data_folder
+        self.raw_data_folder = raw_data_folder
+
+        self.tables = [
+            "incidencias",
+            "piezas",
+            "estados",
+            "incidencias_tipo",
+        ]
+
+        self.translations_tables = [
+            "desc_problema",
+            "descripcion",
+            "problema",
+        ]
 
     def get_incidencias(self, limit_date: str = "2024-05-09") -> "Incidencias":
 
-        self.__get_incidencia_data(limit_date=limit_date)
+        self.__get_incidencia_data(limit_date=limit_date, raw_data_folder=self.raw_data_folder)
 
         return self
 
@@ -42,7 +52,7 @@ class Incidencias:
 
         if save_to_disk:
             self.data[["cod_articulo", "CODART_A3", "Fuzzy_Score"]].to_csv(
-                os.path.join(self.data_folder, "fuzzy_matches_w_scores.csv"),
+                os.path.join(self.translation_data_folder, "fuzzy_matches_w_scores.csv"),
                 quoting=1,
                 index=False,
             )
@@ -75,20 +85,18 @@ class Incidencias:
 
     def __load_incidencias_data(
         self,
+        raw_data_folder: str,
     ) -> tuple[Optional[pd.DataFrame], ...]:
         """
         Get the data from the tables sav_incidencias, sav_piezas, sav_estados, and sav_incidencias_tipo
         :return: Tuple with the data from the tables
         """
-        tables = [
-            "sav_incidencias",
-            "sav_piezas",
-            "sav_estados",
-            "sav_incidencias_tipo",
-        ]
         return tuple(
-            self.myzone_conn.query_data(f"SELECT * FROM {table}", database="myzone")
-            for table in tables
+            load_data(
+                data_path=os.path.join(raw_data_folder, f"{table}.csv"),
+                step_config=self.config.processing[table],
+            )
+            for table in self.tables
         )
 
     def __load_text_to_translate(self, data_folder: str) -> dict:
@@ -98,9 +106,9 @@ class Incidencias:
         :param data_folder: Directory containing the translation CSV files
         :return: Dictionary with translation dataframes
         """
-        fields_to_translate = ["desc_problema", "problema", "descripcion"]
+        # fields_to_translate = ["desc_problema", "descripcion", "problema"]
         text_to_translate = {}
-        for text in fields_to_translate:
+        for text in self.translations_tables:
             text_to_translate[text] = pd.read_csv(
                 os.path.join(data_folder, f"{text}.csv"), sep="¬", encoding="utf-8-sig"
             )
@@ -112,38 +120,38 @@ class Incidencias:
         :param data_folder: Directory containing the translated CSV files
         :return: Dictionary with cleaned translated dataframes
         """
-        translations = [
-            "desc_problema_translated",
-            "descripcion_translated",
-            "problema_translated",
-        ]
+
         cleaned_data = {}
 
-        for trans in translations:
-            df = pd.read_csv(
+        for trans in self.translations_tables:
+            """df = pd.read_csv(
                 os.path.join(data_folder, f"{trans}.csv"),
                 sep="¬",
                 encoding="utf-8-sig",
                 engine="python",
+            )"""
+            df = load_data(
+                data_path=os.path.join(data_folder, f"{trans}_translated.csv"),
+                step_config=self.config.processing[f"{trans}_translated"]
             )
-            df = df[~df[trans].isin([trans])]
-            cleaned_data[trans] = df
+            # df = df[~df[trans].isin([trans])]
+            cleaned_data[f"{trans}_translated"] = df
 
         return cleaned_data
 
-    def __get_incidencia_data(self, limit_date: str = "2024-05-09") -> "Incidencias":
+    def __get_incidencia_data(self, limit_date: str, raw_data_folder: str) -> "Incidencias":
         """
         Get the incidencias data
         :return: Data from the incidencias table
         """
         # Get the data
-        sav_incidencias, sav_piezas, sav_estados, sav_incidencias_tipo = (
-            self.__load_incidencias_data()
+        incidencias, piezas, estados, incidencias_tipo = (
+            self.__load_incidencias_data(raw_data_folder=raw_data_folder)
         )
 
         # Merge the data
-        dataset = sav_incidencias.merge(
-            sav_piezas,
+        dataset = incidencias.merge(
+            piezas,
             left_on="codigo",
             right_on="codigo_incidencia",
             how="left",
@@ -151,7 +159,7 @@ class Incidencias:
         )
 
         dataset = dataset.merge(
-            sav_estados,
+            estados,
             left_on="estado",
             right_on="id",
             how="left",
@@ -159,7 +167,7 @@ class Incidencias:
         )
 
         dataset = dataset.merge(
-            sav_incidencias_tipo,
+            incidencias_tipo,
             left_on="tipo",
             right_on="id",
             how="left",
@@ -182,18 +190,18 @@ class Incidencias:
         ]
 
         # Load from disk the text to translate dictionary
-        translation_data = self.__load_translation_data(self.data_folder)
+        translation_data = self.__load_translation_data(self.translation_data_folder)
 
         # Merge the translated text with the original dataset
-        for field in ["desc_problema", "descripcion", "problema"]:
+        for field in self.translations_tables:
             clean_dataset = clean_dataset.merge(
-                translation_data[field + "_translated"],
+                translation_data[f"{field}_translated"],
                 left_on=field,
                 right_on=field,
                 how="left",
             )
             clean_dataset.fillna(
-                {field + "_translated": clean_dataset[field]}, inplace=True
+                {f"{field}_translated": clean_dataset[field]}, inplace=True
             )
 
         # Create final dataset

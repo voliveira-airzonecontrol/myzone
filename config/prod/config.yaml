@@ -12,8 +12,8 @@ database:
 
 
   a3:
-    host: MORTADELO
-    port: 65324
+    host: BRUTUS
+    port: 49335
     user: lectura
     password: ${oc.env:SQL_PASSWORD_PROD}
 

@@ -5,25 +5,29 @@ stages:
     deps:
     - path: src/data_injection/fetch_data.py
       hash: md5
-      md5: 894b55375415f50150b0724b5c8aa55b
-      size: 1918
+      md5: a63d81ea8b3e4e7706fc57c31978d21e
+      size: 2827
     outs:
+    - path: raw_data/prod/articulos.csv
+      hash: md5
+      md5: 08ce4d3eefebadcb42e9c45c00cd8ece
+      size: 8671729
     - path: raw_data/prod/estados.csv
       hash: md5
       md5: 2ff4c4cc55108bf413f8037ebcd63024
       size: 635
     - path: raw_data/prod/incidencias.csv
       hash: md5
-      md5: e1b54eedf4d41569b2ed7d4d530e36d4
-      size: 14890503
+      md5: 631cf5ece12d219e539dbf91cae8e779
+      size: 9842404
     - path: raw_data/prod/incidencias_tipo.csv
       hash: md5
       md5: b026a6c3874000996c2fab945740cf03
       size: 177
     - path: raw_data/prod/piezas.csv
       hash: md5
-      md5: 6247abddbe70941f1bce497ed1f82c16
-      size: 15861718
+      md5: 80f20a0b2cde00fa6fc7a9ed700e9c06
+      size: 10847074
   translate_data:
     cmd: python -m src.preprocessing.translation --env prod --input-incidencias raw_data/prod/incidencias.csv
       --input-piezas raw_data/prod/piezas.csv --input-estados raw_data/prod/estados.csv
@@ -35,17 +39,47 @@ stages:
       size: 635
     - path: raw_data/prod/incidencias.csv
       hash: md5
-      md5: e1b54eedf4d41569b2ed7d4d530e36d4
-      size: 14890503
+      md5: 631cf5ece12d219e539dbf91cae8e779
+      size: 9842404
     - path: raw_data/prod/incidencias_tipo.csv
       hash: md5
       md5: b026a6c3874000996c2fab945740cf03
       size: 177
     - path: raw_data/prod/piezas.csv
       hash: md5
-      md5: 6247abddbe70941f1bce497ed1f82c16
-      size: 15861718
+      md5: 80f20a0b2cde00fa6fc7a9ed700e9c06
+      size: 10847074
     - path: src/preprocessing/translation.py
       hash: md5
       md5: 5f16bdcc415b2d34dd991d380d13c80e
       size: 7461
+    outs:
+    - path: output_data/prod/desc_problema_translated.csv
+      hash: md5
+      md5: aad85c78210027e8b598ed74907c47e9
+      size: 2700584
+    - path: output_data/prod/descripcion_translated.csv
+      hash: md5
+      md5: 74df7f95474cc7e1eed8ad2bff3caf06
+      size: 670371
+    - path: output_data/prod/problema_translated.csv
+      hash: md5
+      md5: dd00b03c2ee1bb3296fae0a558e58f7c
+      size: 2083721
+  find_best_matches:
+    cmd: python -m src.preprocessing.find_best_matches --env prod --input-piezas raw_data/prod/piezas.csv
+      --input-articulos raw_data/prod/articulos.csv --output-best-matches output_data/prod/fuzzy_matches_w_scores.csv
+    deps:
+    - path: raw_data/prod/articulos.csv
+      hash: md5
+      md5: 08ce4d3eefebadcb42e9c45c00cd8ece
+      size: 8671729
+    - path: raw_data/prod/piezas.csv
+      hash: md5
+      md5: 80f20a0b2cde00fa6fc7a9ed700e9c06
+      size: 10847074
+    outs:
+    - path: output_data/prod/fuzzy_matches_w_scores.csv
+      hash: md5
+      md5: e6160a0c3920a96fd821e6acc9e557fb
+      size: 2365187

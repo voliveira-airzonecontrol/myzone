@@ -11,9 +11,28 @@ data:
     - estados
     - incidencias_tipo
 
+  a3_data_to_fetch:
+    - articulos
+
+  articulos:
+    instance: ALTRA
+    database: Altra
+    table_name: ARTICULO
+    columns:
+      - CODART
+      - DESCART
+      - CAR1
+      - CAR2
+      - CAR3
+      - CAR4
+    output_file: ${data.data_path}\\articulos.csv
+
   incidencias:
     database: myzone
     table_name: sav_incidencias
+    filter_date_start: 2020-01-01
+    filter_date_end: 2024-10-01
+    filter_date_column: creation_date
     columns:
       - id
       - web_id
@@ -47,6 +66,9 @@ data:
   piezas:
     database: myzone
     table_name: sav_piezas
+    filter_date_start: 2020-01-01
+    filter_date_end: 2024-10-01
+    filter_date_column: creation_date
     columns:
       - codigo_incidencia
       - id

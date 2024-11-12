@@ -64,6 +64,30 @@ processing:
       titulo_it: str
       titulo_pt: str
 
+  desc_problema_translated:
+    dtypes:
+      desc_problema: str
+      desc_problema_translated: str
+
+  description_translated:
+    dtypes:
+      description: str
+      description_translated: str
+
+  problema_translated:
+    dtypes:
+      problema: str
+      problema_translated: str
+
+  articulos:
+    dtypes:
+      CODART: str
+      DESCART: str
+      CAR1: str
+      CAR2: str
+      CAR3: str
+      CAR4: str
+
   words_to_remove:
     - "averia"
     - "averías"

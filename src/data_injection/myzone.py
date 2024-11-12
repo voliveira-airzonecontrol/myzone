@@ -17,10 +17,16 @@ def load_myzone_data(
     :return: DataFrame
     """
 
-    query = ', '.join(config.data[data].columns)
+    columns = ', '.join(config.data[data].columns)
+
+    query = f"SELECT {columns} " \
+            f"FROM {config.data[data].table_name}"
+
+    if "filter_date_column" in config.data[data]:
+        query += (f" WHERE {config.data[data].filter_date_column} between "
+                  f"'{config.data[data].filter_date_start}' and '{config.data[data].filter_date_end}'")
 
     return conn.query_data(
-        query= f"SELECT {query} "
-               f"FROM {config.data[data].table_name}",
+        query=query,
         database=config.data[data].database
     )
