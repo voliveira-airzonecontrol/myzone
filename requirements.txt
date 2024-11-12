@@ -5,6 +5,7 @@ scipy<1.13.0 # Scientific computing library | Note: scipy 1.13 is causing confli
 testfixtures
 gradio
 black
+omegaconf
 
 # Data handling
 pandas
@@ -18,8 +19,8 @@ sqlalchemy # SQL toolkit and Object-Relational Mapping
 pyodbc # SQL Server connector
 pymysql # MySQL connector
 qdrant-client # Vector database client
-# mysqlclient # MySQL connector
-# psycopg2 # PostgreSQL connector
+jaydebeapi # JDBC connector
+clickhouse_connect # ClickHouse connector
 cx_Oracle # Oracle connector
 
 # Data visualization

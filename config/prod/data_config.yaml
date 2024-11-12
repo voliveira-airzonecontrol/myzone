@@ -1,0 +1,89 @@
+environment: prod
+
+# Raw data configuration section
+data:
+  data_path_root: ".\\raw_data\\"
+  data_path: ${data.data_path_root}${environment}
+
+  myzone_data_to_fetch:
+    - incidencias
+    - piezas
+    - estados
+    - incidencias_tipo
+
+  incidencias:
+    database: myzone
+    table_name: sav_incidencias
+    columns:
+      - id
+      - web_id
+      - codigo
+      - creation_date
+      - modification_date
+      - company_id
+      - user_id
+      - ref_cliente
+      - portes_airzone
+      - devaluacion
+      - pedido_sage
+      - abono_sage
+      - pedido_a3
+      - abono_a3
+      - tipo
+      - estado
+      - personaaz
+      - dire_envio_id
+      - dire_recogida_id
+      - peso3
+      - volumen3
+      - estadofr
+      - c_mail
+      - c_tel
+      - c_obs
+      - accepted_client
+      - desc_problema
+    output_file: ${data.data_path}\\incidencias.csv
+
+  piezas:
+    database: myzone
+    table_name: sav_piezas
+    columns:
+      - codigo_incidencia
+      - id
+      - user_id
+      - cod_articulo
+      - descripcion
+      - num_serie
+      - factura_albaran
+      - problema
+      - is_replacement
+      - creation_date
+      - modification_date
+    output_file: ${data.data_path}\\piezas.csv
+
+  estados:
+    database: myzone
+    table_name: sav_estados
+    columns:
+      - id
+      - ref
+      - color
+      - valor
+      - titulo_es
+      - titulo_en
+      - titulo_fr
+      - titulo_it
+      - titulo_pt
+    output_file: ${data.data_path}\\estados.csv
+
+  incidencias_tipo:
+    database: myzone
+    table_name: sav_incidencias_tipo
+    columns:
+      - id
+      - titulo_es
+      - titulo_en
+      - titulo_fr
+      - titulo_it
+      - titulo_pt
+    output_file: ${data.data_path}\\incidencias_tipo.csv

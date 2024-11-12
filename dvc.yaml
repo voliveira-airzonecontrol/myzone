@@ -1,0 +1,20 @@
+stages:
+  fetch_data:
+    cmd: python -m src.data_injection.fetch_data --env prod
+    deps:
+    - src/data_injection/fetch_data.py
+    outs:
+    - raw_data/prod/estados.csv
+    - raw_data/prod/incidencias.csv
+    - raw_data/prod/incidencias_tipo.csv
+    - raw_data/prod/piezas.csv
+  translate_data:
+    cmd: python -m src.preprocessing.translation --env prod --input-incidencias raw_data/prod/incidencias.csv
+      --input-piezas raw_data/prod/piezas.csv --input-estados raw_data/prod/estados.csv
+      --input-incidencias-tipo raw_data/prod/incidencias_tipo.csv --output-path output_data/prod
+    deps:
+    - raw_data/prod/estados.csv
+    - raw_data/prod/incidencias.csv
+    - raw_data/prod/incidencias_tipo.csv
+    - raw_data/prod/piezas.csv
+    - src/preprocessing/translation.py

@@ -1,0 +1,83 @@
+processing:
+  incidencias:
+    dtypes:
+        id: int
+        web_id: int
+        codigo: str
+        creation_date: datetime64
+        modification_date: datetime64
+        company_id: int
+        user_id: int
+        ref_cliente: str
+        portes_airzone: str
+        devaluacion: str
+        pedido_sage: str
+        abono_sage: str
+        pedido_a3: str
+        abono_a3: str
+        tipo: int
+        estado: int
+        personaaz: str
+        dire_envio_id: int
+        dire_recogida_id: int
+        peso3: float
+        volumen3: float
+        estadofr: int
+        c_mail: str
+        c_tel: str
+        c_obs: str
+        accepted_client: str
+        desc_problema: str
+
+  piezas:
+    dtypes:
+      codigo_incidencia: str
+      id: int
+      user_id: int
+      cod_articulo: str
+      descripcion: str
+      num_serie: str
+      factura_albaran: str
+      problema: str
+      is_replacement: str
+      creation_date: datetime64
+      modification_date: datetime64
+
+  estados:
+    dtypes:
+      id: int
+      ref: str
+      color: str
+      valor: str
+      titulo_es: str
+      titulo_en: str
+      titulo_fr: str
+      titulo_it: str
+      titulo_pt: str
+
+  incidencias_tipo:
+    dtypes:
+      id: int
+      titulo_es: str
+      titulo_en: str
+      titulo_fr: str
+      titulo_it: str
+      titulo_pt: str
+
+  words_to_remove:
+    - "averia"
+    - "averías"
+    - "avería"
+    - "defecto"
+    - "defectos"
+    - "error"
+    - "errores"
+    - "fallo"
+    - "fallos"
+    - "falla"
+    - "motivo"
+    - "motivos"
+    - "proble"
+    - "problema"
+    - "problemas"
+

@@ -1,0 +1,51 @@
+schema: '2.0'
+stages:
+  fetch_data:
+    cmd: python -m src.data_injection.fetch_data --env prod
+    deps:
+    - path: src/data_injection/fetch_data.py
+      hash: md5
+      md5: 894b55375415f50150b0724b5c8aa55b
+      size: 1918
+    outs:
+    - path: raw_data/prod/estados.csv
+      hash: md5
+      md5: 2ff4c4cc55108bf413f8037ebcd63024
+      size: 635
+    - path: raw_data/prod/incidencias.csv
+      hash: md5
+      md5: e1b54eedf4d41569b2ed7d4d530e36d4
+      size: 14890503
+    - path: raw_data/prod/incidencias_tipo.csv
+      hash: md5
+      md5: b026a6c3874000996c2fab945740cf03
+      size: 177
+    - path: raw_data/prod/piezas.csv
+      hash: md5
+      md5: 6247abddbe70941f1bce497ed1f82c16
+      size: 15861718
+  translate_data:
+    cmd: python -m src.preprocessing.translation --env prod --input-incidencias raw_data/prod/incidencias.csv
+      --input-piezas raw_data/prod/piezas.csv --input-estados raw_data/prod/estados.csv
+      --input-incidencias-tipo raw_data/prod/incidencias_tipo.csv --output-path output_data/prod
+    deps:
+    - path: raw_data/prod/estados.csv
+      hash: md5
+      md5: 2ff4c4cc55108bf413f8037ebcd63024
+      size: 635
+    - path: raw_data/prod/incidencias.csv
+      hash: md5
+      md5: e1b54eedf4d41569b2ed7d4d530e36d4
+      size: 14890503
+    - path: raw_data/prod/incidencias_tipo.csv
+      hash: md5
+      md5: b026a6c3874000996c2fab945740cf03
+      size: 177
+    - path: raw_data/prod/piezas.csv
+      hash: md5
+      md5: 6247abddbe70941f1bce497ed1f82c16
+      size: 15861718
+    - path: src/preprocessing/translation.py
+      hash: md5
+      md5: 5f16bdcc415b2d34dd991d380d13c80e
+      size: 7461
