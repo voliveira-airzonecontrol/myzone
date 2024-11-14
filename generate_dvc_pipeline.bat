@@ -41,3 +41,23 @@ dvc stage add --force -n find_best_matches ^
         --input-piezas raw_data/%ENV%/piezas.csv ^
         --input-articulos raw_data/%ENV%/articulos.csv ^
         --output-best-matches output_data/%ENV%/fuzzy_matches_w_scores.csv
+
+
+REM Step 4: PREPROCESSING
+dvc stage add --force -n preprocessing ^
+    -d output_data/%ENV%/desc_problema_translated.csv ^
+    -d output_data/%ENV%/problema_translated.csv ^
+    -d output_data/%ENV%/descripcion_translated.csv ^
+    -d output_data/%ENV%/fuzzy_matches_w_scores.csv ^
+    -d raw_data/%ENV%/incidencias.csv ^
+    -d raw_data/%ENV%/piezas.csv ^
+    -d raw_data/%ENV%/estados.csv ^
+    -d raw_data/%ENV%/incidencias_tipo.csv ^
+    -d raw_data/%ENV%/articulos.csv ^
+    -o output_data/%ENV%/preprocessed_data.csv ^
+    python -m src.preprocessing.preprocessing --env %ENV% ^
+        --translation-data-folder output_data/%ENV% ^
+        --raw-data-folder raw_data/%ENV% ^
+        --input-best-matches output_data/%ENV%/fuzzy_matches_w_scores.csv ^
+        --input-articulos raw_data/%ENV%/articulos.csv ^
+        --output-path output_data/%ENV%/preprocessed_data.csv

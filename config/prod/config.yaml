@@ -2,20 +2,11 @@ environment: prod
 
 # Data sources configuration section
 database:
-  orazone:
-    host: 192.168.1.170
-    port: 1521
-    user: lectura
-    password: ${oc.env:ORACLE_PROD_PASSWORD}
-    environment: ${environment}
-    driver_path: ""
-
-
   a3:
-    host: BRUTUS
+    host: POPEYE
     port: 49335
     user: lectura
-    password: ${oc.env:SQL_PASSWORD_PROD}
+    password: ${oc.env:SQL_PASSWORD_DEV}
 
 
   myzone:

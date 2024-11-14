@@ -18,10 +18,10 @@ mlflow
 sqlalchemy # SQL toolkit and Object-Relational Mapping
 pyodbc # SQL Server connector
 pymysql # MySQL connector
-qdrant-client # Vector database client
-jaydebeapi # JDBC connector
-clickhouse_connect # ClickHouse connector
-cx_Oracle # Oracle connector
+# qdrant-client # Vector database client
+# jaydebeapi # JDBC connector
+# clickhouse_connect # ClickHouse connector
+# cx_Oracle # Oracle connector
 
 # Data visualization
 matplotlib # Basic plotting
@@ -31,15 +31,15 @@ PyQt6 # GUI
 
 # Machine learning
 scikit-learn # General machine learning
-xgboost # Gradient boosting on decision trees
+# xgboost # Gradient boosting on decision trees
 gensim # Topic modeling
-statsmodels
+# statsmodels
 # statsmodels # Time series analysis
 
 # Deep learning
 # tensorflow # General deep learning
 # keras # High-level neural networks API
-torch # General deep learning
+# torch # General deep learning
 
 # Natural language processing
 nltk
@@ -57,11 +57,11 @@ gensim # Topic modeling
 # pyLDAvis # Topic modeling visualization
 
 # PDF processing
-PyPDF2 # simple PDF processing
+# PyPDF2 # simple PDF processing
 # PFMiner # complex PDF processing
 
 # Web scraping
-beautifulsoup4
+# beautifulsoup4
 # selenium
 
 # Image processing

@@ -68,9 +68,7 @@ class Incidencias:
         if self.data is None:
             raise ValueError("Data is empty")
 
-        best_match_data = pd.read_csv(
-            best_match_file, sep="¬", encoding="utf-8-sig", engine="python"
-        )
+        best_match_data = pd.read_csv(best_match_file)
 
         best_match_data.drop_duplicates(inplace=True)
 
@@ -79,7 +77,8 @@ class Incidencias:
         )
 
         # Fill NA with 0 for the CODART_A3
-        self.data["CODART_A3"].fillna("0", inplace=True)
+        # self.data["CODART_A3"].fillna("0", inplace=True)
+        self.data["CODART_A3"] = self.data["CODART_A3"].fillna("0")
 
         return self
 
@@ -201,11 +200,16 @@ class Incidencias:
                 how="left",
             )
             clean_dataset.fillna(
-                {f"{field}_translated": clean_dataset[field]}, inplace=True
+                {field + "_translated": clean_dataset[field]}, inplace=True
             )
 
-        # Create final dataset
-        clean_dataset.fillna("", inplace=True)
+        # Separate numeric and non-numeric columns
+        numeric_cols = clean_dataset.select_dtypes(include=["number"]).columns
+        non_numeric_cols = clean_dataset.select_dtypes(exclude=["number"]).columns
+
+        # Fill NaN values separately based on column types
+        clean_dataset[numeric_cols] = clean_dataset[numeric_cols].fillna(0)
+        clean_dataset[non_numeric_cols] = clean_dataset[non_numeric_cols].fillna("")
 
         # The text_to_analyse field will be defined by the usecase (dependent on the model)
         """clean_dataset["text_to_analyse"] = clean_dataset[[

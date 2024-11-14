@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 import logging.config
 import os
 from typing import Dict, Optional
@@ -77,7 +78,7 @@ def save_data(data: pd.DataFrame, output_path: str) -> None:
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    data.to_csv(output_path, index=False)
+    data.to_csv(output_path, index=False, quoting=csv.QUOTE_NONNUMERIC)
 
 
 def get_logger(config: DictConfig, path: Optional[str] = None) -> logging.Logger:

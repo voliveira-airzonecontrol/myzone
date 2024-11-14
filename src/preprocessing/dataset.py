@@ -1,44 +1,13 @@
 import pandas as pd
 
 # Define the families to remove
-SPECIAL_FAMILIES = ["REEMPLAZOS", "PACKS"]
-MEANLESS_FAMILIES = [
-    "DOCUMENTACION",
-    "EXPOSITORES",
-    "TOBERAS",
-    "MP_CONSUMIBLES",
-    "OBS_CENTRALIZADO",
-    "MP_ELECTRONICA",
-    "MP_TERMINADOS/SEMI",
-    "MP_MECANICOS",
-    "OBS_REJILLA MOTORIZADA",
-    "OBS_COMUNES",
-    "OBS_DISTRIBUIDO",
-    "DOCUMENTACION",
-    "OBS_DIFUSOR SIN REGULACIÓN",
-    "EXPOSITORES",
-    "OBS_OTROS",
-    "MP_SERVICIOS",
-    "MP_I+D",
-    "OBS_REJILLA SIN REGULACIÓN",
-    "OBS_PANTALLAS GRAFICAS",
-    "OBS_IB PRO USA",
-    "Soporte técnico",
-    "PUESTA EN MARCHA",
-    "MP_DIFUSION",
-    "OBS_ALARMAS TÉCNICAS",
-    "MP_CHAPAS",
-    "MP_CABLE",
-    "OBS_CABLE",
-    "MP_MOTORES",
-    "MERCHANDISING",
-    "OBS_ZONEPAD",
-    "OBS_COMUNICACIONES",
-    "OBS_DIFUSOR MOTORIZADO",
-    "OBS_CAJA DE MEZCLA",
-    "OBS_ANTREE",
-    None,
-    "",
+SPECIAL_FAMILIES = [80, 98]
+MEANINGLESS_FAMILIES = [
+    79, 78, 96, 71, 25, 73, 75, 61,
+    18, 27, 26, 79, 34, 78, 30, 54,
+    72, 32, 44, 29, 82, 81, 62, 51,
+    65, 59, 21, 60, 77, 43, 48, 20,
+    41, 28, None, "",
 ]
 
 
@@ -49,7 +18,12 @@ class Dataset:
         self.incidencias = incidencias
         self.articulos = articulos
 
-    def generate_dataset(self, threshold: float = 85):
+    def generate_dataset(self, threshold: float = 85) -> "Dataset":
+        """
+        Generate the dataset
+        :param threshold: Threshold to filter the fuzzy score
+        :return: self
+        """
 
         self.data = self.incidencias.merge(
             self.articulos, left_on="CODART_A3", right_on="CODART", how="left"
@@ -65,15 +39,19 @@ class Dataset:
         ].apply(lambda x: " ".join(x), axis=1)
 
         # Fill na values
-        self.data["DESCCAR3"].fillna("", inplace=True)
-        self.data["DESCCAR2"].fillna("", inplace=True)
+        self.data.loc[:, "CAR3"] = self.data["CAR3"].fillna("")
+        self.data.loc[:, "CAR2"] = self.data["CAR2"].fillna("")
 
         # Remove the meanless families
-        self.data = self.data[~self.data["DESCCAR3"].isin(MEANLESS_FAMILIES)]
+        self.data = self.data[~self.data["CAR3"].isin(MEANINGLESS_FAMILIES)]
         # Remove the special families
-        self.data = self.data[~self.data["DESCCAR3"].isin(SPECIAL_FAMILIES)]
+        self.data = self.data[~self.data["CAR3"].isin(SPECIAL_FAMILIES)]
 
         # Remove tiny descriptions
+        """
+            descriptions with less than 25 characters are removed
+            descriptions with less than 25 characters after removing the "NO FUNCIONA" string are removed
+        """
         self.data = self.data[self.data["text_to_analyse"].str.len() > 25]
         self.data = self.data[
             self.data["text_to_analyse"].str.replace("NO FUNCIONA", "").str.len() > 25

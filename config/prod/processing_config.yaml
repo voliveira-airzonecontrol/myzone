@@ -69,10 +69,10 @@ processing:
       desc_problema: str
       desc_problema_translated: str
 
-  description_translated:
+  descripcion_translated:
     dtypes:
-      description: str
-      description_translated: str
+      descripcion: str
+      descripcion_translated: str
 
   problema_translated:
     dtypes:
@@ -104,4 +104,14 @@ processing:
     - "proble"
     - "problema"
     - "problemas"
+
+  tokenizer:
+    lower_case: True
+    stop_words: True
+    punctuation: True
+    lemma: False
+    stemmer: False
+    custom_stopwords:
+    md: False
+
 

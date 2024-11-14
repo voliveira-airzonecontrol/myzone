@@ -31,3 +31,19 @@ stages:
     - raw_data/prod/piezas.csv
     outs:
     - output_data/prod/fuzzy_matches_w_scores.csv
+  preprocessing:
+    cmd: python -m src.preprocessing.preprocessing --env prod --translation-data-folder
+      output_data/prod --raw-data-folder raw_data/prod --input-best-matches output_data/prod/fuzzy_matches_w_scores.csv
+      --input-articulos raw_data/prod/articulos.csv --output-path output_data/prod/preprocessed_data.csv
+    deps:
+    - output_data/prod/desc_problema_translated.csv
+    - output_data/prod/descripcion_translated.csv
+    - output_data/prod/fuzzy_matches_w_scores.csv
+    - output_data/prod/problema_translated.csv
+    - raw_data/prod/articulos.csv
+    - raw_data/prod/estados.csv
+    - raw_data/prod/incidencias.csv
+    - raw_data/prod/incidencias_tipo.csv
+    - raw_data/prod/piezas.csv
+    outs:
+    - output_data/prod/preprocessed_data.csv

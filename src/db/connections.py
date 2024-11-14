@@ -2,13 +2,10 @@ import logging
 from abc import abstractmethod, ABC
 from typing import Union
 
-import cx_Oracle
 import pyodbc
 from sqlalchemy import create_engine
 import pandas as pd
 from sqlalchemy.exc import SQLAlchemyError
-import jaydebeapi
-import clickhouse_connect
 
 # Configure logging
 logging.basicConfig(
@@ -42,7 +39,7 @@ class SqlServerConnector(Connector):
         super().__init__(user, password, host, port)
 
     def query_data(
-        self, query: str, database: str, instance: str = None
+            self, query: str, database: str, instance: str = None
     ) -> Union[pd.DataFrame, None]:
         """
         Query the data from the SQL Server database
@@ -109,6 +106,7 @@ class MySQLConnector(Connector):
         return data
 
 
+'''
 class OracleConnector:
     """
     Connector class for the Oracle databases
@@ -215,3 +213,4 @@ class ClickHouseConnector(Connector):
         except Exception as e:
             logging.error(f"Error: {e}")
             return None
+'''

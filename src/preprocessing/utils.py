@@ -1,10 +1,10 @@
 from typing import Union
 import numpy as np
 from thefuzz import process, fuzz
-# from sklearn.metrics.pairwise import cosine_similarity
-# import nltk
-# from nltk.tokenize import word_tokenize
-# import spacy
+from sklearn.metrics.pairwise import cosine_similarity
+import nltk
+from nltk.tokenize import word_tokenize
+import spacy
 import string
 
 
@@ -23,12 +23,12 @@ def find_best_match(
 
     return (best_match, score) if return_score else best_match
 
-"""
+
 def calculate_cosine_score(vector: np.ndarray, vector_error: np.ndarray) -> float:
     return cosine_similarity(vector.reshape(1, -1), vector_error.reshape(1, -1))[0][0]
-"""
 
-'''def calculate_mean_cosine_score(vector, vector_error, n=5) -> float:
+
+def calculate_mean_cosine_score(vector, vector_error, n=5) -> float:
     """
     Calculate the mean cosine similarity between two vectors
     :param vector: Vector
@@ -43,7 +43,7 @@ def calculate_cosine_score(vector: np.ndarray, vector_error: np.ndarray) -> floa
     for i in range(n):
         cosine_scores.append(calculate_cosine_score(vector, vector_error))
     return np.mean(cosine_scores)
-'''
+
 '''
 def pre_process_text_nltk(
     text: str,
@@ -94,7 +94,7 @@ def pre_process_text_nltk(
         tokens = [stemmer.stem(word) for word in tokens]
 
     return " ".join(tokens)
-
+'''
 
 def pre_process_text_spacy(
     docs: list[str],
@@ -151,4 +151,4 @@ def pre_process_text_spacy(
 
         processed_texts.append(" ".join(tokens))
 
-    return processed_texts'''
+    return processed_texts
