@@ -95,6 +95,60 @@ def create_dvc_pipeline(env="dev"):
         f"--output-corpus output_data/{env}/corpus.csv"
     )
 
+    # Step 6: TF-IDF encoding
+    run_dvc_command(
+        f"dvc stage add --force -n tfidf_encoding "
+        f"-d output_data/{env}/preprocessed_data.csv "
+        f"-d src/encoding/tfidf_encoding.py "
+        f"-o output_data/{env}/tfidf_encoded_data.csv "
+        f"python -m src.encoding.tfidf_encoding --env {env} "
+        f"--input-data output_data/{env}/preprocessed_data.csv "
+        f"--output-tfidf-encoded-data output_data/{env}/tfidf_encoded_data.csv"
+    )
+
+    # Step 7: Doc2Vec encoding
+    run_dvc_command(
+        f"dvc stage add --force -n doc2vec_encoding "
+        f"-d output_data/{env}/corpus.csv "
+        f"-d src/encoding/doc2vec_encoding.py "
+        f"-o output_data/{env}/doc2vec_encoded_data.csv "
+        f"python -m src.encoding.doc2vec_encoding --env {env} "
+        f"--input-corpus output_data/{env}/corpus.csv "
+        f"--output-doc2vec-encoded-data output_data/{env}/doc2vec_encoded_data.csv"
+    )
+
+    # Step 8: SentenceTransformer encoding
+    run_dvc_command(
+        f"dvc stage add --force -n sentence_transformer_encoding "
+        f"-d output_data/{env}/preprocessed_data.csv "
+        f"-d src/encoding/sentence_transformer_encoding.py "
+        f"-o output_data/{env}/sentence_transformer_encoded_data.csv "
+        f"python -m src.encoding.sentence_transformer_encoding --env {env} "
+        f"--input-data output_data/{env}/preprocessed_data.csv "
+        f"--output-sentence-transformer-encoded-data output_data/{env}/sentence_transformer_encoded_data.csv"
+    )
+
+    # Step 9: Generate unsupervised dataset
+    run_dvc_command(
+        f"dvc stage add --force -n generate_unsupervised_dataset "
+        f"-d output_data/{env}/tfidf_encoded_data.csv "
+        f"-d output_data/{env}/doc2vec_encoded_data.csv "
+        f"-d output_data/{env}/sentence_transformer_encoded_data.csv "
+        f"-d output_data/{env}/preprocessed_data.csv "
+        f"-d src/encoding/generate_unsupervised_dataset.py "
+        f"-o output_data/{env}/unsupervised_tfidf_dataset.csv "
+        f"-o output_data/{env}/unsupervised_doc2vec_dataset.csv "
+        f"-o output_data/{env}/unsupervised_sentence_transformer_dataset.csv "
+        f"python -m src.encoding.generate_unsupervised_dataset --env {env} "
+        f"--input-tfidf-encoded-data output_data/{env}/tfidf_encoded_data.csv "
+        f"--input-doc2vec-encoded-data output_data/{env}/doc2vec_encoded_data.csv "
+        f"--input-sentence-transformer-encoded-data output_data/{env}/sentence_transformer_encoded_data.csv "
+        f"--input-preprocessed-data output_data/{env}/preprocessed_data.csv "
+        f"--output-unsupervised-dataset output_data/{env}/unsupervised_dataset.csv "
+        f"--output-unsupervised-tfidf-dataset output_data/{env}/unsupervised_tfidf_dataset.csv "
+        f"--output-unsupervised-doc2vec-dataset output_data/{env}/unsupervised_doc2vec_dataset.csv"
+    )
+
 
 if __name__ == "__main__":
     # Set the environment (e.g., 'dev' or 'prod')

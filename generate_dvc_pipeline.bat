@@ -79,7 +79,7 @@ dvc stage add --force -n generate_corpus ^
 REM Step 6: TF-IDF encoding
 dvc stage add --force -n tfidf_encoding ^
     -d output_data/%ENV%/corpus.csv ^
-    -d src/preprocessing/tfidf_encoding.py ^
+    -d src/encoding/tfidf_encoding.py ^
     -o output_data/%ENV%/tfidf_encoded_data.csv ^
     python -m src.preprocessing.tfidf_encoding --env %ENV% ^
         --input-corpus output_data/%ENV%/corpus.csv ^
@@ -88,7 +88,7 @@ dvc stage add --force -n tfidf_encoding ^
 REM Step 7: Doc2Vec encoding
 dvc stage add --force -n doc2vec_encoding ^
     -d output_data/%ENV%/corpus.csv ^
-    -d src/preprocessing/doc2vec_encoding.py ^
+    -d src/encoding/doc2vec_encoding.py ^
     -o output_data/%ENV%/doc2vec_encoded_data.csv ^
     python -m src.preprocessing.doc2vec_encoding --env %ENV% ^
         --input-corpus output_data/%ENV%/corpus.csv ^
@@ -97,8 +97,27 @@ dvc stage add --force -n doc2vec_encoding ^
 REM Step 8: SentenceTransformer encoding
 dvc stage add --force -n sentence_transformer_encoding ^
     -d output_data/%ENV%/corpus.csv ^
-    -d src/preprocessing/sentence_transformer_encoding.py ^
+    -d src/encoding/sentence_transformer_encoding.py ^
     -o output_data/%ENV%/sentence_transformer_encoded_data.csv ^
     python -m src.preprocessing.sentence_transformer_encoding --env %ENV% ^
         --input-corpus output_data/%ENV%/corpus.csv ^
         --output-sentence-transformer-encoded-data output_data/%ENV%/sentence_transformer_encoded_data.csv
+
+REM Step 9: Generate unsupervised dataset
+dvc stage add --force -n generate_unsupervised_dataset ^
+    -d output_data/%ENV%/tfidf_encoded_data.csv ^
+    -d output_data/%ENV%/doc2vec_encoded_data.csv ^
+    -d output_data/%ENV%/sentence_transformer_encoded_data.csv ^
+    -d output_data/%ENV%/preprocessed_data.csv ^
+    -d src/encoding/generate_unsupervised_dataset.py ^
+    -o output_data/%ENV%/unsupervised_tfidf_dataset.csv ^
+    -o output_data/%ENV%/unsupervised_doc2vec_dataset.csv ^
+    -o output_data/%ENV%/unsupervised_sentence_transformer_dataset.csv ^
+    python -m src.preprocessing.generate_unsupervised_dataset --env %ENV% ^
+        --input-tfidf-encoded-data output_data/%ENV%/tfidf_encoded_data.csv ^
+        --input-doc2vec-encoded-data output_data/%ENV%/doc2vec_encoded_data.csv ^
+        --input-sentence-transformer-encoded-data output_data/%ENV%/sentence_transformer_encoded_data.csv ^
+        --input-preprocessed-data output_data/%ENV%/preprocessed_data.csv ^
+        --output-unsupervised-dataset output_data/%ENV%/unsupervised_dataset.csv ^
+        --output-unsupervised-tfidf-dataset output_data/%ENV%/unsupervised_tfidf_dataset.csv ^
+        --output-unsupervised-doc2vec-dataset output_data/%ENV%/unsupervised_doc2vec_dataset.csv

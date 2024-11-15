@@ -153,3 +153,20 @@ stages:
       hash: md5
       md5: d312a39c2ea823c1531e7d2a21eb176a
       size: 26559624
+  tfidf_encoding:
+    cmd: python -m src.encoding.tfidf_encoding --env prod --input-data output_data/prod/preprocessed_data.csv
+      --output-tfidf-encoded-data output_data/prod/tfidf_encoded_data.csv
+    deps:
+    - path: output_data/prod/preprocessed_data.csv
+      hash: md5
+      md5: fe9bc6ab505164064602ffe1a9f80853
+      size: 10908505
+    - path: src/encoding/tfidf_encoding.py
+      hash: md5
+      md5: 741b2909a2dc321ce2bde438080a9276
+      size: 4297
+    outs:
+    - path: output_data/prod/tfidf_encoded_data.csv
+      hash: md5
+      md5: bb9a59243677689e58d1a4efb29e84d9
+      size: 3386039

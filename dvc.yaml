@@ -59,3 +59,46 @@ stages:
     - src/preprocessing/generate_corpus.py
     outs:
     - output_data/prod/corpus.csv
+  tfidf_encoding:
+    cmd: python -m src.encoding.tfidf_encoding --env prod --input-data output_data/prod/preprocessed_data.csv
+      --output-tfidf-encoded-data output_data/prod/tfidf_encoded_data.csv
+    deps:
+    - output_data/prod/preprocessed_data.csv
+    - src/encoding/tfidf_encoding.py
+    outs:
+    - output_data/prod/tfidf_encoded_data.csv
+  doc2vec_encoding:
+    cmd: python -m src.encoding.doc2vec_encoding --env prod --input-corpus output_data/prod/corpus.csv
+      --output-doc2vec-encoded-data output_data/prod/doc2vec_encoded_data.csv
+    deps:
+    - output_data/prod/corpus.csv
+    - src/encoding/doc2vec_encoding.py
+    outs:
+    - output_data/prod/doc2vec_encoded_data.csv
+  sentence_transformer_encoding:
+    cmd: python -m src.encoding.sentence_transformer_encoding --env prod --input-data
+      output_data/prod/preprocessed_data.csv --output-sentence-transformer-encoded-data
+      output_data/prod/sentence_transformer_encoded_data.csv
+    deps:
+    - output_data/prod/preprocessed_data.csv
+    - src/encoding/sentence_transformer_encoding.py
+    outs:
+    - output_data/prod/sentence_transformer_encoded_data.csv
+  generate_unsupervised_dataset:
+    cmd: python -m src.encoding.generate_unsupervised_dataset --env prod --input-tfidf-encoded-data
+      output_data/prod/tfidf_encoded_data.csv --input-doc2vec-encoded-data output_data/prod/doc2vec_encoded_data.csv
+      --input-sentence-transformer-encoded-data output_data/prod/sentence_transformer_encoded_data.csv
+      --input-preprocessed-data output_data/prod/preprocessed_data.csv --output-unsupervised-dataset
+      output_data/prod/unsupervised_dataset.csv --output-unsupervised-tfidf-dataset
+      output_data/prod/unsupervised_tfidf_dataset.csv --output-unsupervised-doc2vec-dataset
+      output_data/prod/unsupervised_doc2vec_dataset.csv
+    deps:
+    - output_data/prod/doc2vec_encoded_data.csv
+    - output_data/prod/preprocessed_data.csv
+    - output_data/prod/sentence_transformer_encoded_data.csv
+    - output_data/prod/tfidf_encoded_data.csv
+    - src/encoding/generate_unsupervised_dataset.py
+    outs:
+    - output_data/prod/unsupervised_doc2vec_dataset.csv
+    - output_data/prod/unsupervised_sentence_transformer_dataset.csv
+    - output_data/prod/unsupervised_tfidf_dataset.csv

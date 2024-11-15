@@ -1,0 +1,24 @@
+environment: prod
+
+# MLFlow configuration section
+mlflow:
+  tracking_uri: "http://192.168.2.241:5000"
+
+# Training configuration section
+training:
+  random_state: 42
+  tfidf:
+    processor: TfidfVectorizer
+    model: KMeans
+    min_df:
+      - 0.01
+      - 0.05
+    max_df:
+      - 0.95
+      - 0.99
+    n_clusters:
+      - 50
+      - 150
+      - 250
+      - 350
+      - 450
