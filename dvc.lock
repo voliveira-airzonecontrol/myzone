@@ -124,8 +124,32 @@ stages:
       hash: md5
       md5: 80f20a0b2cde00fa6fc7a9ed700e9c06
       size: 10847074
+    - path: src/preprocessing/preprocessing.py
+      hash: md5
+      md5: 38329159dcf9f063d2e02321789ac420
+      size: 4056
     outs:
     - path: output_data/prod/preprocessed_data.csv
       hash: md5
-      md5: 9d94c66fba12d971a501cb653025a03b
-      size: 19204483
+      md5: fe9bc6ab505164064602ffe1a9f80853
+      size: 10908505
+  generate_corpus:
+    cmd: python -m src.preprocessing.generate_corpus --env prod --input-preprocessed-data
+      output_data/prod/preprocessed_data.csv --input-documentation-path 
+      \\central4\Publica\Product_technical_documentation-Documentación_técnica_producto
+      --input-training-data-path "C:/Users/voliveira/OneDrive - Corporacion Empresarial
+      Altra SL/00-Proyectos/Datos - Myzone/TrainningData" --output-corpus output_data/prod/corpus.csv
+    deps:
+    - path: output_data/prod/preprocessed_data.csv
+      hash: md5
+      md5: fe9bc6ab505164064602ffe1a9f80853
+      size: 10908505
+    - path: src/preprocessing/generate_corpus.py
+      hash: md5
+      md5: e9acb2a9dfd59ab993259fabf11c440e
+      size: 4995
+    outs:
+    - path: output_data/prod/corpus.csv
+      hash: md5
+      md5: d312a39c2ea823c1531e7d2a21eb176a
+      size: 26559624

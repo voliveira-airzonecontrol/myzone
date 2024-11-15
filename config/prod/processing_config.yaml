@@ -88,6 +88,30 @@ processing:
       CAR3: str
       CAR4: str
 
+  preprocessed_data:
+    dtypes:
+      codigo: str
+      id_pieza: int
+      cod_articulo: str
+      desc_problema_translated: str
+      descripcion_translated: str
+      problema_translated: str
+      CODART_A3: str
+      Fuzzy_Score: float
+      CODART: str
+      DESCART: str
+      CAR1: str
+      CAR2: str
+      CAR3: str
+      CAR4: str
+      text_to_analyse: str
+      processed_text_to_analyse: str
+
+  corpus:
+    dtypes:
+      text_to_analyse: str
+      language: str
+
   words_to_remove:
     - "averia"
     - "averías"

@@ -57,11 +57,11 @@ gensim # Topic modeling
 # pyLDAvis # Topic modeling visualization
 
 # PDF processing
-# PyPDF2 # simple PDF processing
+PyPDF2 # simple PDF processing
 # PFMiner # complex PDF processing
 
 # Web scraping
-# beautifulsoup4
+beautifulsoup4
 # selenium
 
 # Image processing

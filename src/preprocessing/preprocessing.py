@@ -79,6 +79,10 @@ def preprocess(
         **processing_config.processing['tokenizer']
     )
 
+    # Select only the columns to save
+    columns_to_save = processing_config.processing.preprocessed_data.dtypes.keys()
+    clean_dataset = clean_dataset[columns_to_save]
+
     logger.info(f"Save preprocessed data with shape {clean_dataset.shape}")
     save_data(clean_dataset, output_path)
 

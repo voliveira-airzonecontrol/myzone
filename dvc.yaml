@@ -45,5 +45,17 @@ stages:
     - raw_data/prod/incidencias.csv
     - raw_data/prod/incidencias_tipo.csv
     - raw_data/prod/piezas.csv
+    - src/preprocessing/preprocessing.py
     outs:
     - output_data/prod/preprocessed_data.csv
+  generate_corpus:
+    cmd: python -m src.preprocessing.generate_corpus --env prod --input-preprocessed-data
+      output_data/prod/preprocessed_data.csv --input-documentation-path 
+      \\central4\Publica\Product_technical_documentation-Documentación_técnica_producto
+      --input-training-data-path "C:/Users/voliveira/OneDrive - Corporacion Empresarial
+      Altra SL/00-Proyectos/Datos - Myzone/TrainningData" --output-corpus output_data/prod/corpus.csv
+    deps:
+    - output_data/prod/preprocessed_data.csv
+    - src/preprocessing/generate_corpus.py
+    outs:
+    - output_data/prod/corpus.csv

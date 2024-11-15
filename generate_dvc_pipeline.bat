@@ -54,6 +54,7 @@ dvc stage add --force -n preprocessing ^
     -d raw_data/%ENV%/estados.csv ^
     -d raw_data/%ENV%/incidencias_tipo.csv ^
     -d raw_data/%ENV%/articulos.csv ^
+    -d src/preprocessing/preprocessing.py ^
     -o output_data/%ENV%/preprocessed_data.csv ^
     python -m src.preprocessing.preprocessing --env %ENV% ^
         --translation-data-folder output_data/%ENV% ^
@@ -61,3 +62,43 @@ dvc stage add --force -n preprocessing ^
         --input-best-matches output_data/%ENV%/fuzzy_matches_w_scores.csv ^
         --input-articulos raw_data/%ENV%/articulos.csv ^
         --output-path output_data/%ENV%/preprocessed_data.csv
+
+
+REM Step 5: CREATING CORPUS
+dvc stage add --force -n generate_corpus ^
+    -d output_data/%ENV%/preprocessed_data.csv ^
+    -d src/preprocessing/generate_corpus.py ^
+    -o output_data/%ENV%/corpus.csv ^
+    python -m src.preprocessing.generate_corpus --env %ENV% ^
+        --input-preprocessed-data output_data/%ENV%/preprocessed_data.csv ^
+        --input-documentation-path "\\central4\Publica\Product_technical_documentation-Documentación_técnica_producto" ^
+        --input-training-data-path "C:/Users/voliveira/OneDrive - Corporacion Empresarial Altra SL/00-Proyectos/Datos - Myzone/TrainningData" ^
+        --output-corpus output_data/%ENV%/corpus.csv
+
+
+REM Step 6: TF-IDF encoding
+dvc stage add --force -n tfidf_encoding ^
+    -d output_data/%ENV%/corpus.csv ^
+    -d src/preprocessing/tfidf_encoding.py ^
+    -o output_data/%ENV%/tfidf_encoded_data.csv ^
+    python -m src.preprocessing.tfidf_encoding --env %ENV% ^
+        --input-corpus output_data/%ENV%/corpus.csv ^
+        --output-tfidf-encoded-data output_data/%ENV%/tfidf_encoded_data.csv
+
+REM Step 7: Doc2Vec encoding
+dvc stage add --force -n doc2vec_encoding ^
+    -d output_data/%ENV%/corpus.csv ^
+    -d src/preprocessing/doc2vec_encoding.py ^
+    -o output_data/%ENV%/doc2vec_encoded_data.csv ^
+    python -m src.preprocessing.doc2vec_encoding --env %ENV% ^
+        --input-corpus output_data/%ENV%/corpus.csv ^
+        --output-doc2vec-encoded-data output_data/%ENV%/doc2vec_encoded_data.csv
+
+REM Step 8: SentenceTransformer encoding
+dvc stage add --force -n sentence_transformer_encoding ^
+    -d output_data/%ENV%/corpus.csv ^
+    -d src/preprocessing/sentence_transformer_encoding.py ^
+    -o output_data/%ENV%/sentence_transformer_encoded_data.csv ^
+    python -m src.preprocessing.sentence_transformer_encoding --env %ENV% ^
+        --input-corpus output_data/%ENV%/corpus.csv ^
+        --output-sentence-transformer-encoded-data output_data/%ENV%/sentence_transformer_encoded_data.csv
