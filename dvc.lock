@@ -5,8 +5,8 @@ stages:
     deps:
     - path: src/data_injection/fetch_data.py
       hash: md5
-      md5: a63d81ea8b3e4e7706fc57c31978d21e
-      size: 2827
+      md5: 3a77c73df82e99c69c97d4047db96fde
+      size: 2791
     outs:
     - path: raw_data/prod/articulos.csv
       hash: md5
@@ -51,8 +51,8 @@ stages:
       size: 10847074
     - path: src/preprocessing/translation.py
       hash: md5
-      md5: 5f16bdcc415b2d34dd991d380d13c80e
-      size: 7461
+      md5: 91fef21391f2e44e84c17368af0961ae
+      size: 7493
     outs:
     - path: output_data/prod/desc_problema_translated.csv
       hash: md5
@@ -126,8 +126,8 @@ stages:
       size: 10847074
     - path: src/preprocessing/preprocessing.py
       hash: md5
-      md5: 38329159dcf9f063d2e02321789ac420
-      size: 4056
+      md5: da7380610822ceffdd2d814e468398a9
+      size: 4035
     outs:
     - path: output_data/prod/preprocessed_data.csv
       hash: md5
@@ -146,8 +146,8 @@ stages:
       size: 10908505
     - path: src/preprocessing/generate_corpus.py
       hash: md5
-      md5: e9acb2a9dfd59ab993259fabf11c440e
-      size: 4995
+      md5: 1daf1d56a6179f5943e4c3056a4a69d4
+      size: 4922
     outs:
     - path: output_data/prod/corpus.csv
       hash: md5
@@ -163,10 +163,27 @@ stages:
       size: 10908505
     - path: src/encoding/tfidf_encoding.py
       hash: md5
-      md5: f36923b3407464c04e40cc54e7282fd3
-      size: 4630
+      md5: 18b7b82993a3a8d583ad83905cf66a92
+      size: 4715
     outs:
     - path: output_data/prod/tfidf_encoded_data.csv
       hash: md5
       md5: bb9a59243677689e58d1a4efb29e84d9
       size: 3386039
+  doc2vec_encoding:
+    cmd: python -m src.encoding.doc2vec_encoding --env prod --input-data output_data/prod/preprocessed_data.csv
+      --input-corpus output_data/prod/corpus.csv --output-doc2vec-encoded-data output_data/prod/doc2vec_encoded_data.csv
+    deps:
+    - path: output_data/prod/corpus.csv
+      hash: md5
+      md5: d312a39c2ea823c1531e7d2a21eb176a
+      size: 26559624
+    - path: src/encoding/doc2vec_encoding.py
+      hash: md5
+      md5: 08eea650848e802341c9d845bf0bdab2
+      size: 5958
+    outs:
+    - path: output_data/prod/doc2vec_encoded_data.csv
+      hash: md5
+      md5: f96726562526cd185226f898447389bc
+      size: 729454233

@@ -86,6 +86,8 @@ def log_to_mlflow(
                 mlflow.pytorch.log_model(model, artifact_path=model_type)
             elif model_type == "xgboost":
                 mlflow.xgboost.log_model(model, artifact_path=model_type)
+            else:
+                raise ValueError(f"Model type {model_type} not supported")
 
             # Register the model in the Model Registry with a specific name
             model_uri = f"runs:/{run.info.run_id}/{model_type}"
@@ -121,6 +123,9 @@ def generate_unsupervised_report(
 
     report_folder_path = f"reports/{env}/{model_name}"
     os.makedirs(report_folder_path, exist_ok=True)
+
+    if most_common_words:
+        raise NotImplementedError("Most common words not implemented yet")
 
     if clustering:
         vector_df = data.drop(columns=["cluster", "codigo", "id_pieza"])

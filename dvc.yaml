@@ -68,8 +68,8 @@ stages:
     outs:
     - output_data/prod/tfidf_encoded_data.csv
   doc2vec_encoding:
-    cmd: python -m src.encoding.doc2vec_encoding --env prod --input-corpus output_data/prod/corpus.csv
-      --output-doc2vec-encoded-data output_data/prod/doc2vec_encoded_data.csv
+    cmd: python -m src.encoding.doc2vec_encoding --env prod --input-data output_data/prod/preprocessed_data.csv
+      --input-corpus output_data/prod/corpus.csv --output-doc2vec-encoded-data output_data/prod/doc2vec_encoded_data.csv
     deps:
     - output_data/prod/corpus.csv
     - src/encoding/doc2vec_encoding.py

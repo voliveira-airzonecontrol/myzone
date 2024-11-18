@@ -119,6 +119,7 @@ def create_dvc_pipeline(env="dev"):
         f"-d src/encoding/doc2vec_encoding.py "
         f"-o output_data/{env}/doc2vec_encoded_data.csv "
         f"python -m src.encoding.doc2vec_encoding --env {env} "
+        f"--input-data output_data/{env}/preprocessed_data.csv "
         f"--input-corpus output_data/{env}/corpus.csv "
         f"--output-doc2vec-encoded-data output_data/{env}/doc2vec_encoded_data.csv"
     )
