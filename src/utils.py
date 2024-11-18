@@ -86,7 +86,9 @@ def get_logger(config: DictConfig, path: Optional[str] = None) -> logging.Logger
     Get the logger object
     """
 
-    config_path = path if path else os.path.join("config", config.environment, "config.yaml")
+    config_path = (
+        path if path else os.path.join("config", config.environment, "config.yaml")
+    )
 
     # Load and configure the logger using YAML logging configuration
     with open(config_path, "r") as f:
@@ -96,7 +98,9 @@ def get_logger(config: DictConfig, path: Optional[str] = None) -> logging.Logger
     return logging.getLogger("pipeline_logger")
 
 
-def load_config(file_name: str, env: str = "dev", folder: str = None) -> DictConfig | ListConfig:
+def load_config(
+    file_name: str, env: str = "dev", folder: str = None
+) -> DictConfig | ListConfig:
     """
     Load the configuration file
 

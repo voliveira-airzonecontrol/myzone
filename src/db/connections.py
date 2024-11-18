@@ -39,7 +39,7 @@ class SqlServerConnector(Connector):
         super().__init__(user, password, host, port)
 
     def query_data(
-            self, query: str, database: str, instance: str = None
+        self, query: str, database: str, instance: str = None
     ) -> Union[pd.DataFrame, None]:
         """
         Query the data from the SQL Server database

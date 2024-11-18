@@ -9,7 +9,9 @@ from src.utils import load_config, get_logger, load_data
 
 
 class Incidencias:
-    def __init__(self, translation_data_folder: str, raw_data_folder: str, config: DictConfig):
+    def __init__(
+        self, translation_data_folder: str, raw_data_folder: str, config: DictConfig
+    ):
 
         self.data = None
         self.config = config
@@ -31,7 +33,9 @@ class Incidencias:
 
     def get_incidencias(self, limit_date: str = "2024-05-09") -> "Incidencias":
 
-        self.__get_incidencia_data(limit_date=limit_date, raw_data_folder=self.raw_data_folder)
+        self.__get_incidencia_data(
+            limit_date=limit_date, raw_data_folder=self.raw_data_folder
+        )
 
         return self
 
@@ -52,7 +56,9 @@ class Incidencias:
 
         if save_to_disk:
             self.data[["cod_articulo", "CODART_A3", "Fuzzy_Score"]].to_csv(
-                os.path.join(self.translation_data_folder, "fuzzy_matches_w_scores.csv"),
+                os.path.join(
+                    self.translation_data_folder, "fuzzy_matches_w_scores.csv"
+                ),
                 quoting=1,
                 index=False,
             )
@@ -131,21 +137,23 @@ class Incidencias:
             )"""
             df = load_data(
                 data_path=os.path.join(data_folder, f"{trans}_translated.csv"),
-                step_config=self.config.processing[f"{trans}_translated"]
+                step_config=self.config.processing[f"{trans}_translated"],
             )
             # df = df[~df[trans].isin([trans])]
             cleaned_data[f"{trans}_translated"] = df
 
         return cleaned_data
 
-    def __get_incidencia_data(self, limit_date: str, raw_data_folder: str) -> "Incidencias":
+    def __get_incidencia_data(
+        self, limit_date: str, raw_data_folder: str
+    ) -> "Incidencias":
         """
         Get the incidencias data
         :return: Data from the incidencias table
         """
         # Get the data
-        incidencias, piezas, estados, incidencias_tipo = (
-            self.__load_incidencias_data(raw_data_folder=raw_data_folder)
+        incidencias, piezas, estados, incidencias_tipo = self.__load_incidencias_data(
+            raw_data_folder=raw_data_folder
         )
 
         # Merge the data

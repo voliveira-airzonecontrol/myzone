@@ -31,7 +31,9 @@ def get_pdf_files(path):
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith(".pdf"):
-                pdf_files.append(os.path.join(root, file).encode('utf-8').decode('utf-8'))
+                pdf_files.append(
+                    os.path.join(root, file).encode("utf-8").decode("utf-8")
+                )
     return pdf_files
 
 
@@ -72,11 +74,11 @@ def detect_language(text):
 
 
 def generate_corpus(
-        env: str,
-        documentation_path: str,
-        training_data_path: str,
-        preprocessed_data_path: str,
-        output_corpus: str
+    env: str,
+    documentation_path: str,
+    training_data_path: str,
+    preprocessed_data_path: str,
+    output_corpus: str,
 ) -> None:
 
     config = load_config(file_name="config", env=env)
@@ -114,7 +116,6 @@ def generate_corpus(
         # Concatenate results as they complete
         for result in results:
             product_documentation = pd.concat([product_documentation, result])
-    
 
     logger.info("Load product catalog data")
     catalogo_path = os.path.join(training_data_path, "catalogo.pdf")
@@ -139,26 +140,16 @@ if __name__ == "__main__":
         default="dev",
     )
     parser.add_argument(
-        "--input-documentation-path",
-        type=str,
-        help="Input articulos file"
+        "--input-documentation-path", type=str, help="Input articulos file"
     )
     parser.add_argument(
-        "--input-training-data-path",
-        type=str,
-        help="Input piezas file"
+        "--input-training-data-path", type=str, help="Input piezas file"
     )
 
     parser.add_argument(
-        "--input-preprocessed-data",
-        type=str,
-        help="Input preprocessed data file"
+        "--input-preprocessed-data", type=str, help="Input preprocessed data file"
     )
-    parser.add_argument(
-        "--output-corpus",
-        type=str,
-        help="Output best matches file"
-    )
+    parser.add_argument("--output-corpus", type=str, help="Output best matches file")
 
     args = parser.parse_args()
 

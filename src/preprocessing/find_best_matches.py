@@ -17,7 +17,9 @@ def find_best_match_wrapper(cod_articulo, articulos_codart):
     return find_best_match(cod_articulo, articulos_codart)
 
 
-def find_best_matches_parallel(piezas: pd.DataFrame, articulos: pd.Series) -> pd.DataFrame:
+def find_best_matches_parallel(
+    piezas: pd.DataFrame, articulos: pd.Series
+) -> pd.DataFrame:
     """
     Find the best match for each item in piezas in parallel.
     :param piezas: DataFrame with the data to "replace"
@@ -29,21 +31,24 @@ def find_best_matches_parallel(piezas: pd.DataFrame, articulos: pd.Series) -> pd
     # Run the find_best_match function in parallel with a progress bar
     with concurrent.futures.ProcessPoolExecutor() as executor:
         # Pass both arguments to executor.map
-        results = list(tqdm(
-            executor.map(find_best_match_wrapper, piezas["cod_articulo"], [articulos_codart] * len(piezas)),
-            total=len(piezas),
-            desc="Processing Matches"
-        ))
+        results = list(
+            tqdm(
+                executor.map(
+                    find_best_match_wrapper,
+                    piezas["cod_articulo"],
+                    [articulos_codart] * len(piezas),
+                ),
+                total=len(piezas),
+                desc="Processing Matches",
+            )
+        )
 
     # Convert results to DataFrame and assign columns
     return pd.DataFrame(results, columns=["CODART_A3", "Fuzzy_Score"])
 
 
 def find_best_matches(
-        env: str,
-        input_articulos: str,
-        input_piezas: str,
-        output_best_matches: str
+    env: str, input_articulos: str, input_piezas: str, output_best_matches: str
 ) -> None:
     config = load_config(file_name="config", env=env)
     data_config = load_config(file_name="data_config", env=env)
@@ -70,7 +75,7 @@ def find_best_matches(
     :param elements_list: List of elements to search
     :return:
     """
-    if piezas['cod_articulo'] is None:
+    if piezas["cod_articulo"] is None:
         raise ValueError("Data is empty")
 
     logger.info("Finding best matches")
@@ -78,7 +83,9 @@ def find_best_matches(
         lambda x: pd.Series(find_best_match(x, articulos['CODART']))
     )"""
     piezas.fillna("", inplace=True)
-    piezas[['CODART_A3', 'Fuzzy_Score']] = find_best_matches_parallel(piezas, articulos['CODART'])
+    piezas[["CODART_A3", "Fuzzy_Score"]] = find_best_matches_parallel(
+        piezas, articulos["CODART"]
+    )
 
     logger.info("Saving best matches to disk")
     piezas[["cod_articulo", "CODART_A3", "Fuzzy_Score"]].to_csv(
@@ -96,20 +103,10 @@ if __name__ == "__main__":
         help="Environment to preprocess the data from",
         default="dev",
     )
+    parser.add_argument("--input-articulos", type=str, help="Input articulos file")
+    parser.add_argument("--input-piezas", type=str, help="Input piezas file")
     parser.add_argument(
-        "--input-articulos",
-        type=str,
-        help="Input articulos file"
-    )
-    parser.add_argument(
-        "--input-piezas",
-        type=str,
-        help="Input piezas file"
-    )
-    parser.add_argument(
-        "--output-best-matches",
-        type=str,
-        help="Output best matches file"
+        "--output-best-matches", type=str, help="Output best matches file"
     )
 
     args = parser.parse_args()
@@ -118,5 +115,5 @@ if __name__ == "__main__":
         env=args.env,
         input_articulos=args.input_articulos,
         input_piezas=args.input_piezas,
-        output_best_matches=args.output_best_matches
+        output_best_matches=args.output_best_matches,
     )

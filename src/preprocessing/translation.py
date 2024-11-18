@@ -45,10 +45,8 @@ def detect_language_for_fields(text_to_translate, fields_to_translate, logger):
 
 
 def translate_in_batches(
-        df: pd.DataFrame,
-        column: str,
-        folder_path="./output_data/dev",
-        batch_size=10):
+    df: pd.DataFrame, column: str, folder_path="./output_data/dev", batch_size=10
+):
     """
     Function to translate the text in batches.
     It uses the Google Translator API to translate the text.
@@ -62,20 +60,22 @@ def translate_in_batches(
     total_rows = len(df)
     with tqdm(total=total_rows) as pbar:
         for i in range(0, total_rows, batch_size):
-            batch = df.iloc[i: i + batch_size][column].tolist()
+            batch = df.iloc[i : i + batch_size][column].tolist()
             try:
                 translations = GoogleTranslator(
                     source="auto", target="es"
                 ).translate_batch(batch)
                 # Test if csv file exists, if not created it and add the translated text to it
-                if not os.path.exists(os.path.join(folder_path, f"{column}_translated.csv")):
+                if not os.path.exists(
+                    os.path.join(folder_path, f"{column}_translated.csv")
+                ):
                     pd.DataFrame(
                         {column: batch, f"{column}_translated": translations}
                     ).to_csv(
                         os.path.join(folder_path, f"{column}_translated.csv"),
                         mode="a",
                         index=False,
-                        quoting=csv.QUOTE_NONNUMERIC
+                        quoting=csv.QUOTE_NONNUMERIC,
                     )
                 else:
                     pd.DataFrame(
@@ -85,7 +85,7 @@ def translate_in_batches(
                         mode="a",
                         header=False,
                         index=False,
-                        quoting=csv.QUOTE_NONNUMERIC
+                        quoting=csv.QUOTE_NONNUMERIC,
                     )
                 pbar.update(len(batch))
             except Exception as e:
@@ -93,12 +93,12 @@ def translate_in_batches(
 
 
 def translate(
-        env: str,
-        input_sav_incidencias: str,
-        input_sav_piezas: str,
-        input_sav_estados: str,
-        input_sav_incidencias_tipo: str,
-        output_path: str
+    env: str,
+    input_sav_incidencias: str,
+    input_sav_piezas: str,
+    input_sav_estados: str,
+    input_sav_incidencias_tipo: str,
+    output_path: str,
 ) -> None:
     config = load_config(file_name="config", env=env)
     data_config = load_config(file_name="data_config", env=env)
@@ -172,7 +172,9 @@ def translate(
     for text in text_to_translate.keys():
         translate_in_batches(
             df=text_to_translate[text][
-                ~text_to_translate[text][f"{text}_lg"].isin(["es", "Error", "Too short"])
+                ~text_to_translate[text][f"{text}_lg"].isin(
+                    ["es", "Error", "Too short"]
+                )
             ],
             column=text,
             folder_path=output_path,
@@ -222,5 +224,5 @@ if __name__ == "__main__":
         input_sav_piezas=args.input_piezas,
         input_sav_estados=args.input_estados,
         input_sav_incidencias_tipo=args.input_incidencias_tipo,
-        output_path=args.output_path
+        output_path=args.output_path,
     )

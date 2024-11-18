@@ -12,12 +12,12 @@ from src.utils import load_config, get_logger, load_data, save_data
 
 
 def sentence_transformer_encoding(
-        env: str,
+    env: str,
 ) -> None:
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Preprocess data")
     parser.add_argument(
         "--env",

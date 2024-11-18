@@ -1,5 +1,6 @@
 import argparse
 import pandas as pd
+
 # import spacy
 # import gensim.models.doc2vec
 # from gensim.models.doc2vec import Doc2Vec, TaggedDocument
@@ -36,12 +37,12 @@ def preprocess_text(docs):
 
 
 def preprocess(
-        env: str,
-        translation_data_folder: str,
-        raw_data_folder: str,
-        input_articulos: str,
-        input_best_matches: str,
-        output_path: str,
+    env: str,
+    translation_data_folder: str,
+    raw_data_folder: str,
+    input_articulos: str,
+    input_best_matches: str,
+    output_path: str,
 ) -> None:
     config = load_config(file_name="config", env=env)
     data_config = load_config(file_name="data_config", env=env)
@@ -76,7 +77,7 @@ def preprocess(
     logger.info("Preprocess text")
     clean_dataset["processed_text_to_analyse"] = pre_process_text_spacy(
         clean_dataset["text_to_analyse"].values,
-        **processing_config.processing['tokenizer']
+        **processing_config.processing["tokenizer"],
     )
 
     # Select only the columns to save

@@ -30,11 +30,11 @@ def fetch_data(env: str) -> None:
             logger.info(f"Start fetching {data_to_fetch} data")
             start_time = time.time()
             myzone_data = load_myzone_data(
-                conn=mysql_conn,
-                config=data_config,
-                data=data_to_fetch
+                conn=mysql_conn, config=data_config, data=data_to_fetch
             )
-            logger.info(f"{data_to_fetch} outputfile: {data_config.data[data_to_fetch].output_file}")
+            logger.info(
+                f"{data_to_fetch} outputfile: {data_config.data[data_to_fetch].output_file}"
+            )
             myzone_data.to_csv(data_config.data[data_to_fetch].output_file, index=False)
             logger.info(f"Time elapsed for {data_to_fetch}: {time.time() - start_time}")
         except Exception as e:
@@ -48,12 +48,10 @@ def fetch_data(env: str) -> None:
         try:
             logger.info(f"Start fetching {data_to_fetch} data")
             start_time = time.time()
-            a3_data = load_a3_data(
-                conn=a3_conn,
-                config=data_config,
-                data=data_to_fetch
+            a3_data = load_a3_data(conn=a3_conn, config=data_config, data=data_to_fetch)
+            logger.info(
+                f"{data_to_fetch} outputfile: {data_config.data[data_to_fetch].output_file}"
             )
-            logger.info(f"{data_to_fetch} outputfile: {data_config.data[data_to_fetch].output_file}")
             a3_data.to_csv(data_config.data[data_to_fetch].output_file, index=False)
             logger.info(f"Time elapsed for {data_to_fetch}: {time.time() - start_time}")
         except Exception as e:

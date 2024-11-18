@@ -5,9 +5,7 @@ from src.db.connections import SqlServerConnector
 
 
 def load_a3_data(
-        conn: SqlServerConnector,
-        config: DictConfig,
-        data: str
+    conn: SqlServerConnector, config: DictConfig, data: str
 ) -> pd.DataFrame:
     """
     Load data from SQLServer (a3) database
@@ -17,11 +15,10 @@ def load_a3_data(
     :return: DataFrame
     """
 
-    query = ', '.join(config.data[data].columns)
+    query = ", ".join(config.data[data].columns)
 
     return conn.query_data(
-        query= f"SELECT {query} "
-               f"FROM dbo.{config.data[data].table_name}",
+        query=f"SELECT {query} " f"FROM dbo.{config.data[data].table_name}",
         database=config.data[data].database,
-        instance=config.data[data].instance
+        instance=config.data[data].instance,
     )

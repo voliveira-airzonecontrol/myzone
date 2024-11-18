@@ -46,9 +46,7 @@ class Corpus:
 
         return self
 
-    def load_corpus(
-            self,
-            file_path: str) -> "Corpus":
+    def load_corpus(self, file_path: str) -> "Corpus":
         """
         Load the corpus from a file
         :param file_path: File path
@@ -58,9 +56,7 @@ class Corpus:
 
         return self
 
-    def save_corpus(
-            self,
-            file_path: str) -> None:
+    def save_corpus(self, file_path: str) -> None:
         """
         Save the corpus to a file
         :param file_path: File path
@@ -70,8 +66,6 @@ class Corpus:
             raise ValueError("No data to save")
 
         self.data.to_csv(file_path, index=False, quoting=1)
-
-
 
     def prepare_incidencias(self, translation_date: str = "2024-05-09") -> "Corpus":
         """

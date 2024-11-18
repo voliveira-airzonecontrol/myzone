@@ -12,14 +12,14 @@ import mlflow
 
 
 def custom_grid_search(
-        pipeline: Pipeline,
-        parameters: dict,
-        X: Any,
-        scoring: Any = None,
-        cv: int = 3,
-        n_jobs: int = -1,
-        verbose: int = 1,
-        random_state: int = 42
+    pipeline: Pipeline,
+    parameters: dict,
+    X: Any,
+    scoring: Any = None,
+    cv: int = 3,
+    n_jobs: int = -1,
+    verbose: int = 1,
+    random_state: int = 42,
 ):
 
     grid_search = GridSearchCV(
@@ -39,7 +39,6 @@ def silhouette_scorer(estimator, X):
     labels = estimator.fit_predict(X)
     score = silhouette_score(X, labels)
     return score
-
 
 
 def log_to_mlflow(
@@ -92,7 +91,9 @@ def log_to_mlflow(
             model_uri = f"runs:/{run.info.run_id}/{model_type}"
             model_version = mlflow.register_model(model_uri, name=model_name)
 
-            print(f"Model {model_version.name} registered with version: {model_version.version}")
+            print(
+                f"Model {model_version.name} registered with version: {model_version.version}"
+            )
 
         if artifacts:
             for key, value in artifacts.items():
@@ -100,14 +101,13 @@ def log_to_mlflow(
 
 
 def generate_unsupervised_report(
-        env: str,
-        data: pd.DataFrame,
-        model_name: str,
-        dim_reduction_model: list[str],
-        clustering: bool = False,
-        most_common_words: bool = False,
+    env: str,
+    data: pd.DataFrame,
+    model_name: str,
+    dim_reduction_model: list[str],
+    clustering: bool = False,
+    most_common_words: bool = False,
 ) -> None:
-
     """
     Generate an unsupervised report.
     :param env: Environment
@@ -125,7 +125,9 @@ def generate_unsupervised_report(
     if clustering:
         vector_df = data.drop(columns=["cluster", "codigo", "id_pieza"])
         if "PCA" in dim_reduction_model:
-            save_path = os.path.join(report_folder_path, f"{model_name}_clustering_PCA.png")
+            save_path = os.path.join(
+                report_folder_path, f"{model_name}_clustering_PCA.png"
+            )
             pca = PCA(n_components=3)
             pca_vector = pca.fit_transform(vector_df)
             pca_vector = pd.DataFrame(pca_vector, columns=["PC1", "PC2", "PC3"])
@@ -142,14 +144,19 @@ def generate_unsupervised_report(
             ax.set_xlabel("PC1")
             ax.set_ylabel("PC2")
             ax.set_zlabel("PC3")
-            plt.title(f"Clustering of the text data using {model_name} for encoding and PCA for dimensionality reduction")
+            plt.title(
+                f"Clustering of the text data using {model_name} for "
+                f"encoding and PCA for dimensionality reduction"
+            )
 
             # Save the plot to the specified path
             plt.savefig(save_path)
             plt.close()  # Close the figure to free memory
 
         if "TSNE" in dim_reduction_model:
-            save_path = os.path.join(report_folder_path, f"{model_name}_clustering_TSNE.png")
+            save_path = os.path.join(
+                report_folder_path, f"{model_name}_clustering_TSNE.png"
+            )
 
             tsne = TSNE(n_components=3)
             tsne_vector = tsne.fit_transform(vector_df)
@@ -167,7 +174,10 @@ def generate_unsupervised_report(
             ax.set_xlabel("TSNE1")
             ax.set_ylabel("TSNE2")
             ax.set_zlabel("TSNE3")
-            plt.title(f"Clustering of the text data using {model_name} for encoding and TSNE for dimensionality reduction")
+            plt.title(
+                f"Clustering of the text data using {model_name} for "
+                f"encoding and TSNE for dimensionality reduction"
+            )
 
             # Save the plot to the specified path
             plt.savefig(save_path)

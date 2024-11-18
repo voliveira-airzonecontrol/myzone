@@ -4,8 +4,14 @@ import subprocess
 def run_dvc_command(command):
     """Runs a DVC command and prints its output or error."""
     try:
-        result = subprocess.run(command, check=True, shell=True, text=True, stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
+        result = subprocess.run(
+            command,
+            check=True,
+            shell=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
         print(result.stdout)
     except subprocess.CalledProcessError as e:
         print(f"Error executing command: {command}\n{e.stderr}")
@@ -90,8 +96,8 @@ def create_dvc_pipeline(env="dev"):
         f"-o output_data/{env}/corpus.csv "
         f"python -m src.preprocessing.generate_corpus --env {env} "
         f"--input-preprocessed-data output_data/{env}/preprocessed_data.csv "
-        f"--input-documentation-path \"\\\\central4\\Publica\\Product_technical_documentation-Documentación_técnica_producto\" "
-        f"--input-training-data-path \"C:/Users/voliveira/OneDrive - Corporacion Empresarial Altra SL/00-Proyectos/Datos - Myzone/TrainningData\" "
+        f'--input-documentation-path "\\\\central4\\Publica\\Product_technical_documentation-Documentación_técnica_producto" '
+        f'--input-training-data-path "C:/Users/voliveira/OneDrive - Corporacion Empresarial Altra SL/00-Proyectos/Datos - Myzone/TrainningData" '
         f"--output-corpus output_data/{env}/corpus.csv"
     )
 

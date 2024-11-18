@@ -12,19 +12,25 @@ import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.cluster import KMeans
+
 # from sklearn.model_selection import GridSearchCV
 # from sklearn.metrics import silhouette_score
 import mlflow
 
 from src.encoding.encoders import TfIdfPreprocessor
-from src.encoding.utils import custom_grid_search, silhouette_scorer, log_to_mlflow, generate_unsupervised_report
+from src.encoding.utils import (
+    custom_grid_search,
+    silhouette_scorer,
+    log_to_mlflow,
+    generate_unsupervised_report,
+)
 from src.utils import load_config, get_logger, load_data, save_data
 
 
 def tfidf_encoding(
-        env: str,
-        input_data: str,
-        output_tfidf_encoded_data: str,
+    env: str,
+    input_data: str,
+    output_tfidf_encoded_data: str,
 ) -> None:
     config = load_config(file_name="config", env=env)
     processing_config = load_config(file_name="processing_config", env=env)
@@ -46,23 +52,26 @@ def tfidf_encoding(
     X = preprocessed_data["processed_text_to_analyse"].values
 
     # Create a pipeline to perform the TF-IDF encoding
-    pipeline = Pipeline([
-        (training_config.training.tfidf.processor, TfIdfPreprocessor()),
-        (training_config.training.tfidf.model, KMeans(random_state=training_config.training.random_state)),
-    ])
+    pipeline = Pipeline(
+        [
+            (training_config.training.tfidf.processor, TfIdfPreprocessor()),
+            (
+                training_config.training.tfidf.model,
+                KMeans(random_state=training_config.training.random_state),
+            ),
+        ]
+    )
 
     parameters = {
-        f'{training_config.training.tfidf.processor}__min_df': training_config.training.tfidf.min_df,
-        f'{training_config.training.tfidf.processor}__max_df': training_config.training.tfidf.max_df,
-        f'{training_config.training.tfidf.model}__n_clusters': training_config.training.tfidf.n_clusters,
+        f"{training_config.training.tfidf.processor}__min_df": training_config.training.tfidf.min_df,
+        f"{training_config.training.tfidf.processor}__max_df": training_config.training.tfidf.max_df,
+        f"{training_config.training.tfidf.model}__n_clusters": training_config.training.tfidf.n_clusters,
     }
 
     # Fit the pipeline
     logger.info("Fit the pipeline")
     best_params, best_score, best_estimator = custom_grid_search(
-        pipeline=pipeline,
-        parameters=parameters,
-        X=X
+        pipeline=pipeline, parameters=parameters, X=X
     )
 
     log_to_mlflow(
@@ -80,24 +89,25 @@ def tfidf_encoding(
     # Transform the data
     logger.info("Transform the data")
     # Add the cluster to the dataset
-    vector = best_estimator.named_steps[training_config.training.tfidf.processor].transform(
-        X
-    )
+    vector = best_estimator.named_steps[
+        training_config.training.tfidf.processor
+    ].transform(X)
     vector_df = pd.DataFrame(
-        vector.toarray(),
-        columns=[f'vector_{i}' for i in range(vector.shape[1])]
+        vector.toarray(), columns=[f"vector_{i}" for i in range(vector.shape[1])]
     )
 
     # Concatenate the vectors with the original data
     preprocessed_data = pd.concat(
         objs=[
             preprocessed_data[["codigo", "id_pieza"]].reset_index(drop=True),
-            vector_df.reset_index(drop=True)
+            vector_df.reset_index(drop=True),
         ],
-        axis=1
+        axis=1,
     )
 
-    preprocessed_data["cluster"] = best_estimator.named_steps[training_config.training.tfidf.model].predict(vector)
+    preprocessed_data["cluster"] = best_estimator.named_steps[
+        training_config.training.tfidf.model
+    ].predict(vector)
 
     logger.info(f"Generating results report")
     # Generate a report
@@ -118,7 +128,7 @@ def tfidf_encoding(
     )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Preprocess data")
     parser.add_argument(
         "--env",

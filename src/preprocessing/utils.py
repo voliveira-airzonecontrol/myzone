@@ -69,9 +69,10 @@ def pre_process_text_spacy(
 
     # Function to remove accents
     def remove_accents(text):
-        return ''.join(
-            char for char in unicodedata.normalize('NFD', text)
-            if unicodedata.category(char) != 'Mn'
+        return "".join(
+            char
+            for char in unicodedata.normalize("NFD", text)
+            if unicodedata.category(char) != "Mn"
         )
 
     nlp = spacy.load("es_core_news_md") if md else spacy.load("es_core_news_sm")
