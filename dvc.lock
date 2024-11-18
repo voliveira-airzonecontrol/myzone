@@ -163,8 +163,8 @@ stages:
       size: 10908505
     - path: src/encoding/tfidf_encoding.py
       hash: md5
-      md5: 741b2909a2dc321ce2bde438080a9276
-      size: 4297
+      md5: f36923b3407464c04e40cc54e7282fd3
+      size: 4630
     outs:
     - path: output_data/prod/tfidf_encoded_data.csv
       hash: md5

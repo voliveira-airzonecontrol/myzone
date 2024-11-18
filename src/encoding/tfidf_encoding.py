@@ -17,7 +17,7 @@ from sklearn.cluster import KMeans
 import mlflow
 
 from src.encoding.encoders import TfIdfPreprocessor
-from src.encoding.utils import custom_grid_search, silhouette_scorer, log_to_mlflow
+from src.encoding.utils import custom_grid_search, silhouette_scorer, log_to_mlflow, generate_unsupervised_report
 from src.utils import load_config, get_logger, load_data, save_data
 
 
@@ -98,6 +98,17 @@ def tfidf_encoding(
     )
 
     preprocessed_data["cluster"] = best_estimator.named_steps[training_config.training.tfidf.model].predict(vector)
+
+    logger.info(f"Generating results report")
+    # Generate a report
+    generate_unsupervised_report(
+        env=env,
+        data=preprocessed_data,
+        model_name="TF-IDF",
+        dim_reduction_model=["PCA", "TSNE"],
+        clustering=True,
+        most_common_words=False,
+    )
 
     # Save the data
     logger.info(f"Save the data")

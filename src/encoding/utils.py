@@ -1,8 +1,13 @@
+import os
 from typing import Any, Optional
 
+import pandas as pd
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import silhouette_score
 from sklearn.pipeline import Pipeline
+import matplotlib.pyplot as plt
 import mlflow
 
 
@@ -92,3 +97,78 @@ def log_to_mlflow(
         if artifacts:
             for key, value in artifacts.items():
                 mlflow.log_artifact(value, key)
+
+
+def generate_unsupervised_report(
+        env: str,
+        data: pd.DataFrame,
+        model_name: str,
+        dim_reduction_model: list[str],
+        clustering: bool = False,
+        most_common_words: bool = False,
+) -> None:
+
+    """
+    Generate an unsupervised report.
+    :param env: Environment
+    :param data: Data
+    :param model_name: Model name [TF-IDF, Word2Vec, SentenceTransformer]
+    :param dim_reduction_model: Dimensionality reduction model [PCA, TSNE]
+    :param clustering: Clustering flag
+    :param most_common_words: Most common words flag
+    :return: None
+    """
+
+    report_folder_path = f"reports/{env}/{model_name}"
+    os.makedirs(report_folder_path, exist_ok=True)
+
+    if clustering:
+        vector_df = data.drop(columns=["cluster", "codigo", "id_pieza"])
+        if "PCA" in dim_reduction_model:
+            save_path = os.path.join(report_folder_path, f"{model_name}_clustering_PCA.png")
+            pca = PCA(n_components=3)
+            pca_vector = pca.fit_transform(vector_df)
+            pca_vector = pd.DataFrame(pca_vector, columns=["PC1", "PC2", "PC3"])
+
+            fig = plt.figure(figsize=(20, 10))
+            ax = fig.add_subplot(111, projection="3d")
+            ax.scatter(
+                pca_vector["PC1"],
+                pca_vector["PC2"],
+                pca_vector["PC3"],
+                c=data["cluster"],
+                cmap="viridis",
+            )
+            ax.set_xlabel("PC1")
+            ax.set_ylabel("PC2")
+            ax.set_zlabel("PC3")
+            plt.title(f"Clustering of the text data using {model_name} for encoding and PCA for dimensionality reduction")
+
+            # Save the plot to the specified path
+            plt.savefig(save_path)
+            plt.close()  # Close the figure to free memory
+
+        if "TSNE" in dim_reduction_model:
+            save_path = os.path.join(report_folder_path, f"{model_name}_clustering_TSNE.png")
+
+            tsne = TSNE(n_components=3)
+            tsne_vector = tsne.fit_transform(vector_df)
+            tsne_vector = pd.DataFrame(tsne_vector, columns=["TSNE1", "TSNE2", "TSNE3"])
+
+            fig = plt.figure(figsize=(20, 10))
+            ax = fig.add_subplot(111, projection="3d")
+            ax.scatter(
+                tsne_vector["TSNE1"],
+                tsne_vector["TSNE2"],
+                tsne_vector["TSNE3"],
+                c=data["cluster"],
+                cmap="viridis",
+            )
+            ax.set_xlabel("TSNE1")
+            ax.set_ylabel("TSNE2")
+            ax.set_zlabel("TSNE3")
+            plt.title(f"Clustering of the text data using {model_name} for encoding and TSNE for dimensionality reduction")
+
+            # Save the plot to the specified path
+            plt.savefig(save_path)
+            plt.close()  # Close the figure to free memory
