@@ -12,9 +12,9 @@ class TfIdfPreprocessor:
     """
 
     def __init__(
-            self,
-            min_df=0.01,
-            max_df=0.99,
+        self,
+        min_df=0.01,
+        max_df=0.99,
     ):
         self.min_df = min_df
         self.max_df = max_df
@@ -69,17 +69,17 @@ class Doc2VecPreprocessor:
     """
 
     def __init__(
-            self,
-            dm=0,
-            vector_size=100,
-            epochs=10,
-            min_count=1,
-            workers=4,
-            sample=0,
-            negative=5,
-            seed=0,
-            hs=0,
-            custom_tokenizer=None,
+        self,
+        dm=0,
+        vector_size=100,
+        epochs=10,
+        min_count=1,
+        workers=4,
+        sample=0,
+        negative=5,
+        seed=0,
+        hs=0,
+        custom_tokenizer=None,
     ):
         self.dm = dm
         self.vector_size = vector_size

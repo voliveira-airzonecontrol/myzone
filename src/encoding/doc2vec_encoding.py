@@ -12,7 +12,11 @@ from sklearn.cluster import KMeans
 from sklearn.pipeline import Pipeline
 
 from src.encoding.encoders import Doc2VecPreprocessor
-from src.encoding.utils import custom_grid_search, log_to_mlflow, generate_unsupervised_report
+from src.encoding.utils import (
+    custom_grid_search,
+    log_to_mlflow,
+    generate_unsupervised_report,
+)
 from src.preprocessing.utils import pre_process_text_spacy
 from src.utils import load_config, get_logger, load_data, save_data
 
@@ -74,9 +78,13 @@ def doc2vec_encoding(
         f"{training_config.training.doc2vec.processor}__epochs": training_config.training.doc2vec.epochs,
         f"{training_config.training.doc2vec.processor}__min_count": training_config.training.doc2vec.min_count,
         f"{training_config.training.doc2vec.processor}__sample": training_config.training.doc2vec.sample,
-        f"{training_config.training.doc2vec.processor}__workers": [multiprocessing.cpu_count()],
+        f"{training_config.training.doc2vec.processor}__workers": [
+            multiprocessing.cpu_count()
+        ],
         f"{training_config.training.doc2vec.processor}__negative": training_config.training.doc2vec.negative,
-        f"{training_config.training.doc2vec.processor}__seed": [training_config.training.random_state],
+        f"{training_config.training.doc2vec.processor}__seed": [
+            training_config.training.random_state
+        ],
         f"{training_config.training.doc2vec.processor}__hs": training_config.training.doc2vec.hs,
         f"{training_config.training.doc2vec.model}__n_clusters": training_config.training.doc2vec.n_clusters,
     }
