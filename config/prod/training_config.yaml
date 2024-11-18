@@ -60,3 +60,16 @@ training:
       #- 350
       - 450
       - 550
+
+  sentence_transformer:
+    processor: SentenceTransformer
+    model: KMeans
+    # SentenceTransformer hyperparameters
+
+    # KMeans hyperparameters
+    n_clusters:
+      - 50
+      - 150
+      - 250
+      - 350
+      - 450
