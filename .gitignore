@@ -2,6 +2,8 @@
 raw_data/
 output_data/
 DATA/
+encode_models/
+EDA/
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template

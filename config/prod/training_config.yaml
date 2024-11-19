@@ -65,7 +65,7 @@ training:
     processor: SentenceTransformer
     model: KMeans
     # SentenceTransformer hyperparameters
-
+    transformer_name: all-mpnet-base-v2
     # KMeans hyperparameters
     n_clusters:
       - 50

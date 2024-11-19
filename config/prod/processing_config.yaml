@@ -112,6 +112,11 @@ processing:
       text_to_analyse: str
       language: str
 
+  encoded_data:
+    dtypes:
+      codigo: str
+      id_pieza: int
+
   words_to_remove:
     - "averia"
     - "averías"
@@ -137,5 +142,6 @@ processing:
     stemmer: False
     custom_stopwords:
     md: False
+
 
 

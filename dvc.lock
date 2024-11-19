@@ -155,7 +155,8 @@ stages:
       size: 26559624
   tfidf_encoding:
     cmd: python -m src.encoding.tfidf_encoding --env prod --input-data output_data/prod/preprocessed_data.csv
-      --output-tfidf-encoded-data output_data/prod/tfidf_encoded_data.csv
+      --output-tfidf-encoded-data output_data/prod/tfidf_encoded_data.csv --output-tfidf-model
+      encode_models/prod/tfidf_model.joblib
     deps:
     - path: output_data/prod/preprocessed_data.csv
       hash: md5
@@ -163,8 +164,8 @@ stages:
       size: 10908505
     - path: src/encoding/tfidf_encoding.py
       hash: md5
-      md5: 18b7b82993a3a8d583ad83905cf66a92
-      size: 4715
+      md5: c44953ea76a7c5db2255b731c80f8989
+      size: 5225
     outs:
     - path: output_data/prod/tfidf_encoded_data.csv
       hash: md5
@@ -173,6 +174,7 @@ stages:
   doc2vec_encoding:
     cmd: python -m src.encoding.doc2vec_encoding --env prod --input-data output_data/prod/preprocessed_data.csv
       --input-corpus output_data/prod/corpus.csv --output-doc2vec-encoded-data output_data/prod/doc2vec_encoded_data.csv
+      --output-doc2vec-model encode_models/prod/doc2vec_model.joblib
     deps:
     - path: output_data/prod/corpus.csv
       hash: md5
@@ -180,13 +182,13 @@ stages:
       size: 26559624
     - path: src/encoding/doc2vec_encoding.py
       hash: md5
-      md5: b4381388bfa35bd3576076779dd69558
-      size: 6027
+      md5: 03928210ec96aa2d0462be93e4c0bd5c
+      size: 6527
     outs:
     - path: output_data/prod/doc2vec_encoded_data.csv
       hash: md5
-      md5: f96726562526cd185226f898447389bc
-      size: 729454233
+      md5: 1b9e5a1a74a0df2b8d93913906a52916
+      size: 729544783
   sentence_transformer_encoding:
     cmd: python -m src.encoding.sentence_transformer_encoding --env prod --input-data
       output_data/prod/preprocessed_data.csv --output-sentence-transformer-encoded-data

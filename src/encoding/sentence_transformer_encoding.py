@@ -24,6 +24,7 @@ def sentence_transformer_encoding(
     env: str,
     input_data: str,
     output_sentence_transformer_encoded_data: str,
+    output_sentence_transformer_model: str,
 ) -> None:
     config = load_config(file_name="config", env=env)
     processing_config = load_config(file_name="processing_config", env=env)
@@ -45,7 +46,7 @@ def sentence_transformer_encoding(
     X = preprocessed_data["processed_text_to_analyse"].values
 
     # Load model
-    model = SentenceTransformer("all-mpnet-base-v2")
+    model = SentenceTransformer(training_config.training.sentence_transformer.transformer_name)
 
     logger.info(f"Encoding data")
     X_embeddings = model.encode(X)
@@ -119,6 +120,11 @@ def sentence_transformer_encoding(
         output_path=output_sentence_transformer_encoded_data,
     )
 
+    # Save model
+    logger.info(f"Save the model")
+    os.makedirs(os.path.dirname(output_sentence_transformer_model), exist_ok=True)
+    model.save(output_sentence_transformer_model)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Preprocess data")
@@ -138,6 +144,11 @@ if __name__ == "__main__":
         type=str,
         help="Path to save the output corpus",
     )
+    parser.add_argument(
+        "--output_sentence_transformer_model",
+        type=str,
+        help="Path to save the output model",
+    )
 
     args = parser.parse_args()
 
@@ -145,4 +156,5 @@ if __name__ == "__main__":
         env=args.env,
         input_data=args.input_data,
         output_sentence_transformer_encoded_data=args.output_sentence_transformer_encoded_data,
+        output_sentence_transformer_model=args.output_sentence_transformer_model,
     )

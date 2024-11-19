@@ -109,7 +109,8 @@ def create_dvc_pipeline(env="dev"):
         f"-o output_data/{env}/tfidf_encoded_data.csv "
         f"python -m src.encoding.tfidf_encoding --env {env} "
         f"--input-data output_data/{env}/preprocessed_data.csv "
-        f"--output-tfidf-encoded-data output_data/{env}/tfidf_encoded_data.csv"
+        f"--output-tfidf-encoded-data output_data/{env}/tfidf_encoded_data.csv "
+        f"--output-tfidf-model encode_models/{env}/tfidf_model.joblib"
     )
 
     # Step 7: Doc2Vec encoding
@@ -121,7 +122,8 @@ def create_dvc_pipeline(env="dev"):
         f"python -m src.encoding.doc2vec_encoding --env {env} "
         f"--input-data output_data/{env}/preprocessed_data.csv "
         f"--input-corpus output_data/{env}/corpus.csv "
-        f"--output-doc2vec-encoded-data output_data/{env}/doc2vec_encoded_data.csv"
+        f"--output-doc2vec-encoded-data output_data/{env}/doc2vec_encoded_data.csv "
+        f"--output-doc2vec-model encode_models/{env}/doc2vec_model.joblib"
     )
 
     # Step 8: SentenceTransformer encoding
@@ -142,6 +144,8 @@ def create_dvc_pipeline(env="dev"):
         f"-d output_data/{env}/doc2vec_encoded_data.csv "
         f"-d output_data/{env}/sentence_transformer_encoded_data.csv "
         f"-d output_data/{env}/preprocessed_data.csv "
+        f"-d encode_models/{env}/tfidf_model.joblib "
+        f"-d encode_models/{env}/doc2vec_model.joblib "
         f"-d src/encoding/generate_unsupervised_dataset.py "
         f"-o output_data/{env}/unsupervised_tfidf_dataset.csv "
         f"-o output_data/{env}/unsupervised_doc2vec_dataset.csv "
@@ -151,9 +155,11 @@ def create_dvc_pipeline(env="dev"):
         f"--input-doc2vec-encoded-data output_data/{env}/doc2vec_encoded_data.csv "
         f"--input-sentence-transformer-encoded-data output_data/{env}/sentence_transformer_encoded_data.csv "
         f"--input-preprocessed-data output_data/{env}/preprocessed_data.csv "
-        f"--output-unsupervised-dataset output_data/{env}/unsupervised_dataset.csv "
         f"--output-unsupervised-tfidf-dataset output_data/{env}/unsupervised_tfidf_dataset.csv "
-        f"--output-unsupervised-doc2vec-dataset output_data/{env}/unsupervised_doc2vec_dataset.csv"
+        f"--output-unsupervised-doc2vec-dataset output_data/{env}/unsupervised_doc2vec_dataset.csv "
+        f"--output-unsupervised-sentence-transformer-dataset output_data/{env}/unsupervised_sentence_transformer_dataset.csv"
+        f"--input-tfidf-model encode_models/{env}/tfidf_model.joblib "
+        f"--input-doc2vec-model encode_models/{env}/doc2vec_model.joblib"
     )
 
 

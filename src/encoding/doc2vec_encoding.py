@@ -5,6 +5,7 @@ import os
 import time
 import multiprocessing
 import concurrent.futures
+from joblib import dump
 
 import pandas as pd
 import mlflow
@@ -26,6 +27,7 @@ def doc2vec_encoding(
     input_data: str,
     input_corpus: str,
     output_doc2vec_encoded_data: str,
+    output_doc2vec_model: str,
 ) -> None:
     config = load_config(file_name="config", env=env)
     processing_config = load_config(file_name="processing_config", env=env)
@@ -148,6 +150,13 @@ def doc2vec_encoding(
         output_path=output_doc2vec_encoded_data,
     )
 
+    # Save model
+    logger.info(f"Save the model")
+    os.makedirs(os.path.dirname(output_doc2vec_model), exist_ok=True)
+    model = best_estimator.named_steps[training_config.training.doc2vec.processor]
+    dump(model, output_doc2vec_model)
+
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Preprocess data")
@@ -172,6 +181,11 @@ if __name__ == "__main__":
         type=str,
         help="Path to save the output corpus",
     )
+    parser.add_argument(
+        "--output-doc2vec-model",
+        type=str,
+        help="Path to save the output model",
+    )
 
     args = parser.parse_args()
 
@@ -180,4 +194,5 @@ if __name__ == "__main__":
         input_data=args.input_data,
         input_corpus=args.input_corpus,
         output_doc2vec_encoded_data=args.output_doc2vec_encoded_data,
+        output_doc2vec_model=args.output_doc2vec_model,
     )

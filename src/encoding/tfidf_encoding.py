@@ -6,6 +6,7 @@ import time
 import multiprocessing
 import concurrent.futures
 import string
+from joblib import dump
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -31,6 +32,7 @@ def tfidf_encoding(
     env: str,
     input_data: str,
     output_tfidf_encoded_data: str,
+    output_tfidf_model: str,
 ) -> None:
     config = load_config(file_name="config", env=env)
     processing_config = load_config(file_name="processing_config", env=env)
@@ -127,6 +129,12 @@ def tfidf_encoding(
         output_path=output_tfidf_encoded_data,
     )
 
+    # Save the KMeans model
+    logger.info(f"Save the model")
+    os.makedirs(os.path.dirname(output_tfidf_model), exist_ok=True)
+    model = best_estimator.named_steps[training_config.training.tfidf.processor]
+    dump(value=model, filename=output_tfidf_model)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Preprocess data")
@@ -146,6 +154,11 @@ if __name__ == "__main__":
         type=str,
         help="Path to save the output corpus",
     )
+    parser.add_argument(
+        "--output-tfidf-model",
+        type=str,
+        help="Path to save the output model",
+    )
 
     args = parser.parse_args()
 
@@ -153,4 +166,5 @@ if __name__ == "__main__":
         env=args.env,
         input_data=args.input_data,
         output_tfidf_encoded_data=args.output_tfidf_encoded_data,
+        output_tfidf_model=args.output_tfidf_model,
     )
