@@ -90,17 +90,39 @@ stages:
     cmd: python -m src.encoding.generate_unsupervised_dataset --env prod --input-tfidf-encoded-data
       output_data/prod/tfidf_encoded_data.csv --input-doc2vec-encoded-data output_data/prod/doc2vec_encoded_data.csv
       --input-sentence-transformer-encoded-data output_data/prod/sentence_transformer_encoded_data.csv
-      --input-preprocessed-data output_data/prod/preprocessed_data.csv --output-unsupervised-dataset
-      output_data/prod/unsupervised_dataset.csv --output-unsupervised-tfidf-dataset
+      --input-preprocessed-data output_data/prod/preprocessed_data.csv --output-unsupervised-tfidf-dataset
       output_data/prod/unsupervised_tfidf_dataset.csv --output-unsupervised-doc2vec-dataset
-      output_data/prod/unsupervised_doc2vec_dataset.csv
+      output_data/prod/unsupervised_doc2vec_dataset.csv --output-unsupervised-sentence-transformer-dataset
+      output_data/prod/unsupervised_sentence_transformer_dataset.csv --input-tfidf-model
+      encode_models/prod/tfidf_model.joblib --input-doc2vec-model encode_models/prod/doc2vec_model.joblib
+      --input-tipo-error raw_data/prod/TablaTipoErrorPostventa.csv
     deps:
+    - encode_models/prod/doc2vec_model.joblib
+    - encode_models/prod/tfidf_model.joblib
     - output_data/prod/doc2vec_encoded_data.csv
     - output_data/prod/preprocessed_data.csv
     - output_data/prod/sentence_transformer_encoded_data.csv
     - output_data/prod/tfidf_encoded_data.csv
+    - raw_data/prod/TablaTipoErrorPostventa.csv
     - src/encoding/generate_unsupervised_dataset.py
     outs:
     - output_data/prod/unsupervised_doc2vec_dataset.csv
     - output_data/prod/unsupervised_sentence_transformer_dataset.csv
     - output_data/prod/unsupervised_tfidf_dataset.csv
+  generate_supervised_dataset:
+    cmd: python -m src.encoding.generate_supervised_dataset --env prod --input-reviewed-data
+      raw_data/prod/reviewed_dataset.parquet --output-supervised-dataset output_data/prod/supervised_dataset.parquet
+    deps:
+    - output_data/prod/unsupervised_sentence_transformer_dataset.csv
+    - raw_data/prod/reviewed_dataset.parquet
+    - src/encoding/generate_supervised_dataset.py
+    outs:
+    - output_data/prod/supervised_dataset.parquet
+  training:
+    cmd: python -m src.training.training --env prod --input-dataset output_data/prod/supervised_dataset.parquet
+      --output-model output_models/prod/model.joblib
+    deps:
+    - output_data/prod/supervised_dataset.parquet
+    - src/training/training.py
+    outs:
+    - output_models/prod/model.joblib

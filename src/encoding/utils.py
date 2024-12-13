@@ -1,14 +1,66 @@
 import os
 from typing import Any, Optional
 
+import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import silhouette_score
+from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.pipeline import Pipeline
 import matplotlib.pyplot as plt
 import mlflow
+from tqdm import tqdm
+
+
+def calculate_mean_cosine_score(vector, vector_error):
+    # Ensure both inputs are NumPy arrays
+    vector = np.array(vector)
+    vector_error = np.array(vector_error)
+
+    if vector.size == 0 or vector_error.size == 0:
+        return np.nan  # Return NaN if there's no vector to compare
+
+    return cosine_similarity(vector.reshape(1, -1), vector_error.reshape(1, -1))[0][0]
+
+
+def calculate_most_likely_error(
+    dataset: pd.DataFrame,
+    errors: pd.DataFrame,
+    dataset_vector_name: str,
+    error_vector_name: str,
+) -> pd.DataFrame:
+
+    # Calculate the cosine similarity between the text_to_analyse and the errors
+    for index, row in tqdm(
+        errors.iterrows(), total=errors.shape[0], desc="Calculating cosine similarity"
+    ):
+        # Create a condition for filtering
+        condition = dataset["CAR3"] == row["CODCAR3"]
+        if row["CODCAR2"] != "0":
+            condition &= dataset["CAR2"] == row["CODCAR2"]
+
+        if not dataset.loc[condition, dataset_vector_name].empty:
+            dataset.loc[condition, f'cosine_similarity_{row["ID_ERROR"]}'] = (
+                dataset.loc[condition, dataset_vector_name].apply(
+                    lambda x: calculate_mean_cosine_score(x, row[error_vector_name])
+                )
+            )
+
+    # Get the most likely error
+    # Get the columns with the cosine similarity
+    cosine_columns = [col for col in dataset.columns if "cosine_similarity_" in col]
+
+    dataset[cosine_columns] = dataset[cosine_columns].fillna(0)  # Fill NA with 0
+
+    # Get the highest score and the error with the highest score
+    dataset.loc[:, "highest_score"] = dataset[cosine_columns].max(axis=1)
+    dataset.loc[:, "highest_score_error"] = (
+        dataset[cosine_columns].idxmax(axis=1).apply(lambda x: x.split("_")[-1])
+    )
+
+    return dataset
 
 
 def custom_grid_search(
@@ -39,67 +91,6 @@ def silhouette_scorer(estimator, X):
     labels = estimator.fit_predict(X)
     score = silhouette_score(X, labels)
     return score
-
-
-def log_to_mlflow(
-    run_name: str,
-    params: dict,
-    metrics: dict,
-    model_name: str,
-    model: Any,
-    model_type: str,
-    artifacts: Optional[dict] = None,
-    experiment_name: str = "Default Experiment",
-    tracking_uri: str = "http://192.168.2.241:5000",
-    nested: bool = False,
-) -> None:
-    """
-    Log the model to MLflow.
-    :param model_type: Model type (sklearn, keras, pytorch, xgboost)
-    :param run_name: Run name
-    :param model_name: Model name
-    :param params: Parameters
-    :param metrics: Metrics
-    :param model: Model
-    :param experiment_name:
-    :param tracking_uri:
-    :param nested:
-    :return: None
-    """
-
-    # Set the tracking URI to the specified MLflow server
-    mlflow.set_tracking_uri(tracking_uri)
-
-    # Create or set the experiment
-    mlflow.set_experiment(experiment_name)
-
-    with mlflow.start_run(run_name=run_name, nested=nested) as run:
-        mlflow.log_params(params)
-        mlflow.log_metrics(metrics)
-
-        if model:
-            if model_type == "sklearn":
-                mlflow.sklearn.log_model(model, artifact_path=model_type)
-            elif model_type == "keras":
-                mlflow.keras.log_model(model, artifact_path=model_type)
-            elif model_type == "pytorch":
-                mlflow.pytorch.log_model(model, artifact_path=model_type)
-            elif model_type == "xgboost":
-                mlflow.xgboost.log_model(model, artifact_path=model_type)
-            else:
-                raise ValueError(f"Model type {model_type} not supported")
-
-            # Register the model in the Model Registry with a specific name
-            model_uri = f"runs:/{run.info.run_id}/{model_type}"
-            model_version = mlflow.register_model(model_uri, name=model_name)
-
-            print(
-                f"Model {model_version.name} registered with version: {model_version.version}"
-            )
-
-        if artifacts:
-            for key, value in artifacts.items():
-                mlflow.log_artifact(value, key)
 
 
 def generate_unsupervised_report(

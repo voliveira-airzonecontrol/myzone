@@ -1,6 +1,7 @@
 
 raw_data/
 output_data/
+output_models/
 DATA/
 encode_models/
 EDA/

@@ -46,7 +46,9 @@ def sentence_transformer_encoding(
     X = preprocessed_data["processed_text_to_analyse"].values
 
     # Load model
-    model = SentenceTransformer(training_config.training.sentence_transformer.transformer_name)
+    model = SentenceTransformer(
+        training_config.training.sentence_transformer.transformer_name
+    )
 
     logger.info(f"Encoding data")
     X_embeddings = model.encode(X)
@@ -120,10 +122,11 @@ def sentence_transformer_encoding(
         output_path=output_sentence_transformer_encoded_data,
     )
 
-    # Save model
+    """# Save model
     logger.info(f"Save the model")
     os.makedirs(os.path.dirname(output_sentence_transformer_model), exist_ok=True)
     model.save(output_sentence_transformer_model)
+"""
 
 
 if __name__ == "__main__":

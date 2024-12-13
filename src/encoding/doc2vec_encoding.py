@@ -157,7 +157,6 @@ def doc2vec_encoding(
     dump(model, output_doc2vec_model)
 
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Preprocess data")
     parser.add_argument(

@@ -147,6 +147,7 @@ def create_dvc_pipeline(env="dev"):
         f"-d encode_models/{env}/tfidf_model.joblib "
         f"-d encode_models/{env}/doc2vec_model.joblib "
         f"-d src/encoding/generate_unsupervised_dataset.py "
+        f"-d raw_data/{env}/TablaTipoErrorPostventa.csv "
         f"-o output_data/{env}/unsupervised_tfidf_dataset.csv "
         f"-o output_data/{env}/unsupervised_doc2vec_dataset.csv "
         f"-o output_data/{env}/unsupervised_sentence_transformer_dataset.csv "
@@ -157,10 +158,39 @@ def create_dvc_pipeline(env="dev"):
         f"--input-preprocessed-data output_data/{env}/preprocessed_data.csv "
         f"--output-unsupervised-tfidf-dataset output_data/{env}/unsupervised_tfidf_dataset.csv "
         f"--output-unsupervised-doc2vec-dataset output_data/{env}/unsupervised_doc2vec_dataset.csv "
-        f"--output-unsupervised-sentence-transformer-dataset output_data/{env}/unsupervised_sentence_transformer_dataset.csv"
+        f"--output-unsupervised-sentence-transformer-dataset output_data/{env}/unsupervised_sentence_transformer_dataset.csv "
         f"--input-tfidf-model encode_models/{env}/tfidf_model.joblib "
-        f"--input-doc2vec-model encode_models/{env}/doc2vec_model.joblib"
+        f"--input-doc2vec-model encode_models/{env}/doc2vec_model.joblib "
+        f"--input-tipo-error raw_data/{env}/TablaTipoErrorPostventa.csv"
     )
+
+    # Step 10: Generate supervised dataset
+    run_dvc_command(
+        f"dvc stage add --force -n generate_supervised_dataset "
+        f"-d output_data/{env}/unsupervised_sentence_transformer_dataset.csv "
+        f"-d raw_data/{env}/reviewed_dataset.parquet "
+        f"-d src/encoding/generate_supervised_dataset.py "
+        f"-o output_data/{env}/supervised_dataset.parquet "
+        f"python -m src.encoding.generate_supervised_dataset --env {env} "
+        f"--input-reviewed-data raw_data/{env}/reviewed_dataset.parquet "
+        f"--output-supervised-dataset output_data/{env}/supervised_dataset.parquet"
+    )
+
+    # Step 11: Train model
+    run_dvc_command(
+        f"dvc stage add --force -n training "
+        f"-d output_data/{env}/supervised_dataset.parquet "
+        f"-d src/training/training.py "
+        f"-o output_models/{env}/model.joblib "
+        f"python -m src.training.training --env {env} "
+        f"--input-dataset output_data/{env}/supervised_dataset.parquet "
+        f"--output-model output_models/{env}/model.joblib"
+    )
+
+    # Step 12: Train conformal prediction model
+    run_dvc_command(f"dvc stage add --force -n conformal_prediction ")
+
+    # Step 13: Evaluate model
 
 
 if __name__ == "__main__":

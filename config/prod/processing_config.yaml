@@ -107,6 +107,15 @@ processing:
       text_to_analyse: str
       processed_text_to_analyse: str
 
+  tipo_error:
+    dtypes:
+      ID_ERROR: str
+      CODCAR3: str
+      CODCAR2: str
+      DESCFAM: str
+      MOTIVO: str
+      DESCRIPCION: str
+
   corpus:
     dtypes:
       text_to_analyse: str

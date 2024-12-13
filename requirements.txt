@@ -30,9 +30,10 @@ PyQt6 # GUI
 # folium # Interactive maps
 
 # Machine learning
-scikit-learn # General machine learning
-# xgboost # Gradient boosting on decision trees
+scikit-learn < 1.5.0 # General machine learning
+xgboost <= 2.1.0 # Gradient boosting on decision trees
 gensim # Topic modeling
+mapie # Model agnostic prediction intervals
 # statsmodels
 # statsmodels # Time series analysis
 
@@ -47,7 +48,7 @@ thefuzz # Fuzzy string matching
 deep-translator
 langdetect
 wordcloud # Word cloud visualization
-spacy
+spacy < 3.8.0 # NLP library
 sentence-transformers
 gensim # Topic modeling
 # googletrans # Google Translate API
