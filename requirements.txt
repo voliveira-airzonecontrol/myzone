@@ -6,6 +6,9 @@ testfixtures
 gradio
 black
 omegaconf
+pydantic
+ydata-profiling
+
 
 # Data handling
 pandas

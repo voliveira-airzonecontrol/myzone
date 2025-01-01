@@ -5,6 +5,7 @@ output_models/
 DATA/
 encode_models/
 EDA/
+src/notebooks/temp*.ipynb
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
