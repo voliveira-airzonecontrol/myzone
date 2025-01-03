@@ -10,7 +10,7 @@ from src.utils import load_config, get_logger, load_data, save_data
 
 
 def classifier_training(
-    env: str, input_dataset: str, output_model: str, model_type: str = "XGBoost"
+    env: str, input_dataset: str, output_model: str, model_type: str = "SVC"
 ) -> None:
     config = load_config(file_name="config", env=env)
     processing_config = load_config(file_name="processing_config", env=env)

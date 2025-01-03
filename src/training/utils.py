@@ -127,6 +127,11 @@ def train_model(
         y = y.values
         X_test = np.vstack(X_test.values)
         y_test = y_test.values
+    else:
+        X = pd.DataFrame(X.tolist())
+        y = y.values
+        X_test = pd.DataFrame(X_test.tolist())
+        y_test = y_test.values
 
     # Initialize the best metrics and model
     best_metrics = {
@@ -172,9 +177,9 @@ def train_model(
 
         # Predict
         y_pred = model.predict(X_test)
-        y_pred_proba = model.predict_proba(X_test)[
+        """y_pred_proba = model.predict_proba(X_test)[
             :, 1
-        ]  # Probabilistic predictions for ROC AUC
+        ]  # Probabilistic predictions for ROC AUC"""
 
         # Evaluate
         accuracy = accuracy_score(y_test, y_pred)
@@ -200,7 +205,7 @@ def train_model(
         # Log to MLflow
         log_to_mlflow(
             run_name=model_type + "_" + str(i),
-            params=params,
+            params=current_params,
             metrics=metrics,
             model=None,
             model_type="xgboost",

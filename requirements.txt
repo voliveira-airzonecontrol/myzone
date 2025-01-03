@@ -6,7 +6,7 @@ testfixtures
 gradio
 black
 omegaconf
-pydantic
+#pydantic
 ydata-profiling
 
 
@@ -53,25 +53,11 @@ langdetect
 wordcloud # Word cloud visualization
 spacy < 3.8.0 # NLP library
 sentence-transformers
+transformers # Hugging Face's transformer models
 gensim # Topic modeling
-# googletrans # Google Translate API
-# translate # Translate API
-# multilingual-translation # Multilingual translation using Facebook's LLM
-# TextBlob # Simplified text processing
-# pyLDAvis # Topic modeling visualization
 
 # PDF processing
 PyPDF2 # simple PDF processing
-# PFMiner # complex PDF processing
 
 # Web scraping
 beautifulsoup4
-# selenium
-
-# Image processing
-# opencv-python # Computer vision
-
-# Geospatial data
-# geopandas   # Geospatial data
-
-

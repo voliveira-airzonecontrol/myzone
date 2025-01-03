@@ -129,3 +129,39 @@ training:
     random_state:
       - ${training.random_state}
 
+  SVC:
+    test_size: 0.3
+    cp_size: 0.5
+    model: SVC
+    features: embedding
+    target: label
+    params_list:
+      - C
+      - kernel
+      - gamma
+      - random_state
+
+    cv: 3
+    n_jobs: -1
+    scoring: f1_micro
+
+    # SVC hyperparameters
+    C:
+      - 0.01
+      - 0.1
+      - 1
+      - 10
+      - 100
+      - 1000
+    kernel:
+      #- "linear"
+      - "rbf"
+    gamma:
+      #- "scale"
+      - "auto"
+      - 0.1
+      - 1
+      - 10
+      - 100
+    random_state:
+      - ${training.random_state}

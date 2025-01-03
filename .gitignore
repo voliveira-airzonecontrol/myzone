@@ -3,9 +3,12 @@ raw_data/
 output_data/
 output_models/
 DATA/
+EXPERIMENTS/
 encode_models/
 EDA/
 src/notebooks/temp*.ipynb
+src/notebooks/results
+src/notebooks/mlruns
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
