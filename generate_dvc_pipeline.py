@@ -173,7 +173,8 @@ def create_dvc_pipeline(env="dev"):
         f"-o output_data/{env}/supervised_dataset.parquet "
         f"python -m src.encoding.generate_supervised_dataset --env {env} "
         f"--input-reviewed-data raw_data/{env}/reviewed_dataset.parquet "
-        f"--output-supervised-dataset output_data/{env}/supervised_dataset.parquet"
+        f"--output-supervised-dataset output_data/{env}/supervised_dataset.parquet "
+        f"--output-supervised-dataset-phase2 output_data/{env}/supervised_dataset_phase2.parquet"
     )
 
     # Step 11: Train model
@@ -181,14 +182,44 @@ def create_dvc_pipeline(env="dev"):
         f"dvc stage add --force -n training "
         f"-d output_data/{env}/supervised_dataset.parquet "
         f"-d src/training/training.py "
-        f"-o output_models/{env}/model.joblib "
+        f"-o output_models/{env}/trained_model "
         f"python -m src.training.training --env {env} "
         f"--input-dataset output_data/{env}/supervised_dataset.parquet "
-        f"--output-model output_models/{env}/model.joblib"
+        f"--output-model output_models/{env}/trained_model"
     )
 
-    # Step 12: Train conformal prediction model
-    run_dvc_command(f"dvc stage add --force -n conformal_prediction ")
+    # Step12: Evaluate model
+    run_dvc_command(
+        f"dvc stage add --force -n evaluate_model "
+        f"-d output_data/{env}/supervised_dataset.parquet "
+        f"-d output_models/{env}/trained_model "
+        f"-d src/evaluating/evaluate.py "
+        f"-o output_reports/{env}/classification_report.txt "
+        f"-o output_reports/{env}/confusion_matrix.png "
+        f"-o output_reports/{env}/roc_curve.png "
+        f"python -m src.evaluating.evaluate --env {env} "
+        f"--input-dataset output_data/{env}/supervised_dataset.parquet "
+        f"--input-model output_models/{env}/trained_model "
+        f"--output-reports output_reports/{env}"
+    )
+
+    # Step 13: Outlier detection
+    run_dvc_command(
+        f"dvc stage add --force -n detect_outliers "
+        f"-d output_data/{env}/supervised_dataset.parquet "
+        f"-d output_models/{env}/trained_model "
+        f"-d src/conformal_prediction/outlier_detection.py "
+        f"-o output_reports/{env}/outlier_detection/detected_outliers.parquet "
+        f"-o output_reports/{env}/outlier_detection/conformal_set_size_distribution.png "
+        f"-o output_reports/{env}/outlier_detection/outliers_by_class.png "
+        f"-o output_reports/{env}/outlier_detection/outlier_detection_class_report.txt "
+        f"python -m src.conformal_prediction.outlier_detection --env {env} "
+        f"--input-dataset output_data/{env}/supervised_dataset.parquet "
+        f"--input-model output_models/{env}/trained_model "
+        f"--input-outliers output_data/{env}/supervised_dataset_phase2.parquet "
+        f"--output-reports output_reports/{env}/outlier_detection "
+        f"--alpha 0.15"
+    )
 
     # Step 13: Evaluate model
 

@@ -273,17 +273,17 @@ stages:
       size: 320214493
     - path: raw_data/prod/reviewed_dataset.parquet
       hash: md5
-      md5: 1bbe10a58360f476bc08997eefa749ce
-      size: 150381349
+      md5: 3d0d2d7f64a763be261638562d8a8443
+      size: 123274094
     - path: src/encoding/generate_supervised_dataset.py
       hash: md5
-      md5: f68c7727b208bf75b666d1ddaa0aa819
-      size: 1941
+      md5: 3ed73229eff8b4615d409f426fbf9f73
+      size: 3013
     outs:
     - path: output_data/prod/supervised_dataset.parquet
       hash: md5
-      md5: a50b5ac8ef9c65c248f69e18e500303f
-      size: 150381218
+      md5: 23bfda27d7e66947db7316500e96198a
+      size: 133390
   training:
     cmd: python -m src.training.training --env prod --input-dataset output_data/prod/supervised_dataset.parquet
       --output-model output_models/prod/model.joblib
@@ -301,3 +301,33 @@ stages:
       hash: md5
       md5: 5c28d602feb1c64bff69e81d99e1448c
       size: 35816423
+  evaluate_model:
+    cmd: python -m src.evaluating.evaluate --env prod --input-dataset output_data/prod/supervised_dataset.parquet
+      --input-model output_models/prod/trained_model --output-reports output_reports/prod
+    deps:
+    - path: output_data/prod/supervised_dataset.parquet
+      hash: md5
+      md5: ba355ae0773e073c674f33b0264d09ba
+      size: 193425
+    - path: output_models/prod/trained_model
+      hash: md5
+      md5: 409aba1f84696ebcd764361564e4502f.dir
+      size: 440407610
+      nfiles: 6
+    - path: src/evaluating/evaluate.py
+      hash: md5
+      md5: 36d90f516b93a9e9fa9c046998f394dd
+      size: 9307
+    outs:
+    - path: output_reports/prod/classification_report.txt
+      hash: md5
+      md5: 21f0d6c6fe55d6100aea99a110fe51dc
+      size: 435
+    - path: output_reports/prod/confusion_matrix.png
+      hash: md5
+      md5: f4012abc8a0713199e19997888153994
+      size: 17544
+    - path: output_reports/prod/roc_curve.png
+      hash: md5
+      md5: 634a8633c83ecf870c0a21f2c44fd5b8
+      size: 30516

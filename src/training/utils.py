@@ -15,6 +15,7 @@ from sklearn.metrics import (
 )
 from sklearn.model_selection import cross_validate
 from sklearn.svm import SVC
+from sklearn.utils import resample
 from xgboost import XGBClassifier
 from omegaconf import OmegaConf
 from omegaconf.dictconfig import DictConfig
@@ -221,3 +222,34 @@ def train_model(
             best_model = model
 
     return best_model
+
+
+def upsample_dataset(X_train, y_train, training_config, model_type):
+    # Upsample the minority class
+    X_upsampled = X_train.copy().to_frame()
+    X_upsampled[training_config.training[model_type].target] = y_train
+
+    # Separate majority and minority classes
+    df_majority = X_upsampled[
+        X_upsampled[training_config.training[model_type].target] == 0
+    ]
+    df_minority = X_upsampled[
+        X_upsampled[training_config.training[model_type].target] == 1
+    ]
+
+    # Upsample minority class
+    df_minority_upsampled = resample(
+        df_minority,
+        replace=True,
+        n_samples=df_majority.shape[0],
+        random_state=42,
+    )
+
+    # Combine majority class with upsampled minority class
+    df_upsampled = pd.concat([df_majority, df_minority_upsampled])
+
+    # Display new class counts
+    X_train = df_upsampled[training_config.training[model_type].features]
+    y_train = df_upsampled[training_config.training[model_type].target]
+
+    return X_train, y_train

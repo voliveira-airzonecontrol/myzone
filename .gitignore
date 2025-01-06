@@ -2,6 +2,7 @@
 raw_data/
 output_data/
 output_models/
+output_reports/
 DATA/
 EXPERIMENTS/
 encode_models/

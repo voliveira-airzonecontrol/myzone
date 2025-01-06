@@ -120,9 +120,34 @@ stages:
     - output_data/prod/supervised_dataset.parquet
   training:
     cmd: python -m src.training.training --env prod --input-dataset output_data/prod/supervised_dataset.parquet
-      --output-model output_models/prod/model.joblib
+      --output-model output_models/prod/trained_model
     deps:
     - output_data/prod/supervised_dataset.parquet
     - src/training/training.py
     outs:
-    - output_models/prod/model.joblib
+    - output_models/prod/trained_model
+  evaluate_model:
+    cmd: python -m src.evaluating.evaluate --env prod --input-dataset output_data/prod/supervised_dataset.parquet
+      --input-model output_models/prod/trained_model --output-reports output_reports/prod
+    deps:
+    - output_data/prod/supervised_dataset.parquet
+    - output_models/prod/trained_model
+    - src/evaluating/evaluate.py
+    outs:
+    - output_reports/prod/classification_report.txt
+    - output_reports/prod/confusion_matrix.png
+    - output_reports/prod/roc_curve.png
+  detect_outliers:
+    cmd: python -m src.conformal_prediction.outlier_detection --env prod --input-dataset
+      output_data/prod/supervised_dataset.parquet --input-model output_models/prod/trained_model
+      --input-outliers output_data/prod/supervised_dataset_phase2.parquet --output-reports
+      output_reports/prod/outlier_detection --alpha 0.15
+    deps:
+    - output_data/prod/supervised_dataset.parquet
+    - output_models/prod/trained_model
+    - src/conformal_prediction/outlier_detection.py
+    outs:
+    - output_reports/prod/outlier_detection/conformal_set_size_distribution.png
+    - output_reports/prod/outlier_detection/detected_outliers.parquet
+    - output_reports/prod/outlier_detection/outlier_detection_class_report.txt
+    - output_reports/prod/outlier_detection/outliers_by_class.png

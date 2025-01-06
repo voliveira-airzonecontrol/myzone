@@ -74,6 +74,16 @@ training:
       - 350
       - 450
 
+  BERT:
+    test_size: 0.25
+    cp_size: 0.5
+    val_size: 0.15
+    model: dtorber/bert-base-spanish-wwm-cased_K4
+    features: processed_text_to_analyse
+    target: label
+    random_state:
+      - ${training.random_state}
+
   XGBoost:
     test_size: 0.3
     cp_size: 0.5
