@@ -87,7 +87,7 @@ def classifier_evaluation(
     try:
         # For binary classification, y_test must be {0,1}, so we handle numeric encoding
         # For multi-class, we do a macro-average
-        average_type = "macro" if num_labels > 2 else "binary"
+        average_type = "macro" if num_labels > 2 else None
         auc_value = roc_auc_score(
             y_test,
             y_prob[:, 1] if num_labels == 2 else y_prob,

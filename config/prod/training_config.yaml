@@ -61,6 +61,12 @@ training:
       - 450
       - 550
 
+  conformal_prediction:
+    alpha:
+      - 0.2
+      - 0.15
+      - 0.1
+
   sentence_transformer:
     processor: SentenceTransformer
     model: KMeans

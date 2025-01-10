@@ -225,31 +225,62 @@ def train_model(
 
 
 def upsample_dataset(X_train, y_train, training_config, model_type):
-    # Upsample the minority class
-    X_upsampled = X_train.copy().to_frame()
+    """
+    Upsample all minority classes to match the size of the majority class.
+
+    Parameters:
+        X_train (pd.DataFrame or pd.Series): Features of the training dataset.
+        y_train (pd.Series): Target variable of the training dataset.
+        training_config: Configuration object containing feature and target names.
+        model_type (str): Model type key to access the target column.
+
+    Returns:
+        X_train (pd.DataFrame): Upsampled feature dataset.
+        y_train (pd.Series): Upsampled target dataset.
+    """
+    # Combine X_train and y_train into a single DataFrame
+    if isinstance(X_train, pd.DataFrame):
+        X_upsampled = X_train.copy()
+    else:
+        X_upsampled = X_train.to_frame()
+
     X_upsampled[training_config.training[model_type].target] = y_train
 
-    # Separate majority and minority classes
-    df_majority = X_upsampled[
-        X_upsampled[training_config.training[model_type].target] == 0
-    ]
-    df_minority = X_upsampled[
-        X_upsampled[training_config.training[model_type].target] == 1
-    ]
+    # Find the majority class and its count
+    target_column = training_config.training[model_type].target
+    class_counts = X_upsampled[target_column].value_counts()
 
-    # Upsample minority class
-    df_minority_upsampled = resample(
-        df_minority,
-        replace=True,
-        n_samples=df_majority.shape[0],
-        random_state=42,
-    )
+    if class_counts.empty:
+        raise ValueError("Target variable contains no classes.")
 
-    # Combine majority class with upsampled minority class
-    df_upsampled = pd.concat([df_majority, df_minority_upsampled])
+    majority_count = class_counts.max()
 
-    # Display new class counts
+    # Upsample each minority class
+    upsampled_parts = []
+    for class_label, count in class_counts.items():
+        class_subset = X_upsampled[X_upsampled[target_column] == class_label]
+        if not class_subset.empty and count < majority_count:
+            class_subset_upsampled = resample(
+                class_subset,
+                replace=True,
+                n_samples=majority_count,
+                random_state=42,
+            )
+            upsampled_parts.append(class_subset_upsampled)
+        else:
+            upsampled_parts.append(class_subset)
+
+    if not upsampled_parts:
+        raise ValueError("No classes available for upsampling.")
+
+    # Combine all upsampled parts
+    df_upsampled = pd.concat(upsampled_parts)
+
+    # Shuffle the dataset to avoid order bias
+    df_upsampled = df_upsampled.sample(frac=1, random_state=42).reset_index(drop=True)
+
+    # Split the upsampled dataset into features and target
     X_train = df_upsampled[training_config.training[model_type].features]
-    y_train = df_upsampled[training_config.training[model_type].target]
+    y_train = df_upsampled[target_column]
 
     return X_train, y_train

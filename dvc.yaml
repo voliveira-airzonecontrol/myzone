@@ -111,7 +111,8 @@ stages:
     - output_data/prod/unsupervised_tfidf_dataset.csv
   generate_supervised_dataset:
     cmd: python -m src.encoding.generate_supervised_dataset --env prod --input-reviewed-data
-      raw_data/prod/reviewed_dataset.parquet --output-supervised-dataset output_data/prod/supervised_dataset.parquet
+      raw_data/prod/reviewed_dataset.csv --output-supervised-dataset output_data/prod/supervised_dataset.parquet
+      --output-supervised-dataset-phase2 output_data/prod/supervised_dataset_phase2.parquet
     deps:
     - output_data/prod/unsupervised_sentence_transformer_dataset.csv
     - raw_data/prod/reviewed_dataset.parquet
@@ -141,13 +142,46 @@ stages:
     cmd: python -m src.conformal_prediction.outlier_detection --env prod --input-dataset
       output_data/prod/supervised_dataset.parquet --input-model output_models/prod/trained_model
       --input-outliers output_data/prod/supervised_dataset_phase2.parquet --output-reports
-      output_reports/prod/outlier_detection --alpha 0.15
+      output_reports/prod/outlier_detection
     deps:
     - output_data/prod/supervised_dataset.parquet
+    - output_data/prod/supervised_dataset_phase2.parquet
     - output_models/prod/trained_model
     - src/conformal_prediction/outlier_detection.py
     outs:
     - output_reports/prod/outlier_detection/conformal_set_size_distribution.png
     - output_reports/prod/outlier_detection/detected_outliers.parquet
-    - output_reports/prod/outlier_detection/outlier_detection_class_report.txt
+    - output_reports/prod/outlier_detection/outlier_detection_confusion_matrix.png
+    - output_reports/prod/outlier_detection/outlier_evaluation_report.txt
     - output_reports/prod/outlier_detection/outliers_by_class.png
+  clustering:
+    cmd: python -m src.clustering.clustering --env prod --input-dataset output_data/prod/supervised_dataset.parquet
+      --input-outliers output_reports/prod/outlier_detection/detected_outliers.parquet
+      --input-model output_models/prod/trained_model --output-new-class output_reports/prod/clustering/new_class.parquet
+      --output-reports output_reports/prod/clustering
+    deps:
+    - output_data/prod/supervised_dataset.parquet
+    - output_models/prod/trained_model
+    - output_reports/prod/outlier_detection/detected_outliers.parquet
+    - src/clustering/clustering.py
+    outs:
+    - output_reports/prod/clustering/cluster_sizes.png
+    - output_reports/prod/clustering/cluster_summary.csv
+    - output_reports/prod/clustering/cluster_visualization.png
+    - output_reports/prod/clustering/distance_heatmap.png
+    - output_reports/prod/clustering/distance_to_centroids.csv
+    - output_reports/prod/clustering/new_class.parquet
+    - output_reports/prod/clustering/silhouette_analysis.png
+  incremental_training:
+    cmd: python -m src.incremental_training.incremental_training --env prod --input-dataset
+      output_data/prod/supervised_dataset.parquet --input-new-class output_reports/prod/clustering/new_class.parquet
+      --input-true-new-class output_data/prod/supervised_dataset_phase2.parquet --input-model
+      output_models/prod/trained_model --output-model output_models/prod/temp_incremented_model
+    deps:
+    - output_data/prod/supervised_dataset.parquet
+    - output_data/prod/supervised_dataset_phase2.parquet
+    - output_models/prod/trained_model
+    - output_reports/prod/clustering/new_class.parquet
+    - src/incremental_training/incremental_training.py
+    outs:
+    - output_models/prod/temp_incremented_model

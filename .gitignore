@@ -203,5 +203,6 @@ EDA/teste.ipynb
 DATA/text_to_analyse.csv
 MODELS
 mlruns
+results
 mlartifacts
 /DATA/

@@ -10,9 +10,26 @@ import matplotlib.pyplot as plt
 from mapie.classification import MapieClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import classification_report
+from sklearn.metrics import (
+    classification_report,
+    confusion_matrix,
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+)
 
-from src.conformal_prediction.utils import chunked_mapie_predict
+from src.conformal_prediction.utils import (
+    chunked_mapie_predict,
+    generate_hist,
+    generate_barplot,
+    generate_classification_report,
+    generate_confusion_matrix,
+    generate_plot_scores,
+    generate_cp_results,
+    reduce_dimensions,
+)
+
 # For loading your trained TransformerClassifier
 from src.training.model import TransformerClassifier
 from src.utils import load_config, get_logger
@@ -24,7 +41,6 @@ def detect_outliers(
     input_model: str,
     input_outliers: str,
     output_reports: str,
-    alpha: float = 0.15,
     model_type: str = "BERT",
 ) -> None:
     """
@@ -46,8 +62,10 @@ def detect_outliers(
     y = df[training_config.training[model_type].target]
     num_labels = y.nunique()
 
+    # -----------------------------------------------------------------------------
     # Perform train-val-test split exactly as in training
     # (We only need the final test set to evaluate, but we replicate the same approach)
+    # -----------------------------------------------------------------------------
     logger.info("Splitting dataset for evaluation...")
     X_train, X_test, y_train, y_test = train_test_split(
         X,
@@ -71,7 +89,9 @@ def detect_outliers(
         stratify=y_test,
     )
 
+    # -----------------------------------------------------------------------------
     # Load outliers and concat with X_test and y_test
+    # -----------------------------------------------------------------------------
     logger.info(f"Loading outliers from: {input_outliers}")
     outliers = pd.read_parquet(input_outliers)
     X_outliers = outliers[training_config.training[model_type].features]
@@ -79,15 +99,15 @@ def detect_outliers(
     X_test = pd.concat([X_test, X_outliers], ignore_index=True)
     y_test = pd.concat([y_test, y_outliers], ignore_index=True)
 
-    # Sample X_test and y_test
-    # X_test = X_test.sample(frac=0.05, random_state=training_config.training.random_state).reset_index(drop=True)
-    # y_test = y_test.sample(frac=0.05, random_state=training_config.training.random_state).reset_index(drop=True)
-
+    # -----------------------------------------------------------------------------
     # Load the trained model
+    # -----------------------------------------------------------------------------
     logger.info(f"Loading pre-trained model from: {input_model}")
     clf = TransformerClassifier(local_model_path=input_model, num_labels=num_labels)
 
+    # -----------------------------------------------------------------------------
     # Prepare the model for conformal prediction
+    # -----------------------------------------------------------------------------
     logger.info("Calibrating model for conformal prediction...")
     mapie_clf = MapieClassifier(
         estimator=clf,
@@ -98,21 +118,32 @@ def detect_outliers(
     # Fit on the calibration set
     mapie_clf.fit(X_cp, y_cp)
 
-    logger.info("Generating conformal prediction sets with alpha=0.15")
+    alpha = training_config.training["conformal_prediction"].alpha
+
+    logger.info(f"Generating conformal prediction sets with alpha={alpha}")
     # point_preds, conf_sets = mapie_clf.predict(X_test, alpha=alpha)
     point_preds, conf_sets = chunked_mapie_predict(mapie_clf, X_test, alpha=alpha)
 
+    # -----------------------------------------------------------------------------
+    # Detect outliers
+    # -----------------------------------------------------------------------------
     logger.info("Detecting outliers...")
     outlier_test = pd.concat([X_test, y_test], axis=1)
+    outlier_test["true_outlier"] = y_test.apply(lambda x: 0 if x in [0, 1] else 1)
     outlier_test["outlier"] = False
     if conf_sets is not None:
         for i in range(outlier_test.shape[0]):
-            label_boolean = conf_sets[i, 0, :]
+            label_boolean = conf_sets[
+                i, :, 0
+            ]  # The first value of Alpha is used to classify outliers
             set_size = np.sum(label_boolean)
-            if set_size > 1:
+            # If the set size is larger than 1 or equal to 0, we label it as an outlier
+            if set_size != 1:
                 outlier_test.loc[outlier_test.index[i], "outlier"] = True
 
+    # -----------------------------------------------------------------------------
     # Save outliers to a parquet file
+    # -----------------------------------------------------------------------------
     outliers_df = outlier_test[outlier_test["outlier"]]
     logger.info(f"Number of outliers detected: {len(outliers_df)}")
     os.makedirs(output_reports, exist_ok=True)
@@ -120,54 +151,73 @@ def detect_outliers(
     outliers_df.to_parquet(outliers_file, index=False)
     logger.info(f"Outliers saved to: {outliers_file}")
 
-    # 9) Create some analytical plots:
-    #    a) Distribution of set sizes (for those who want a deeper analysis)
+    # -----------------------------------------------------------------------------
+    # Distribution of scores
+    # -----------------------------------------------------------------------------
+    if conf_sets is not None:
+        logger.info("Generating distribution of scores plot.")
+        conformity_scores = mapie_clf.conformity_scores_
+        quantiles = mapie_clf.conformity_score_function_.quantiles_
+        n = len(mapie_clf.conformity_scores_)
+        scores_plot_path = generate_plot_scores(
+            n, alpha, conformity_scores, quantiles, output_reports
+        )
+        logger.info(f"Distribution of scores plot saved to {scores_plot_path}")
+
+    # -----------------------------------------------------------------------------
+    # Conformal prediction results
+    # -----------------------------------------------------------------------------
+    """if conf_sets is not None:
+        logger.info("Saving conformal prediction results.")
+        X_train_reduced = reduce_dimensions(X_cp[training_config.training[model_type].features], method="pca")
+        X_test_reduced = reduce_dimensions(outlier_test[training_config.training[model_type].features], method="pca")
+
+        results_plot_path = generate_cp_results(
+            X_train=X_train_reduced,
+            y_train=y_cp,
+            X_test=X_test_reduced,
+            alphas=alpha,
+            y_pred_mapie=point_preds,
+            y_ps_mapie=conf_sets,
+            output_reports=output_reports,
+        )
+        logger.info(f"Conformal prediction results saved to: {results_plot_path}")"""
+
+    # -----------------------------------------------------------------------------
+    # Distribution of set sizes (for those who want a deeper analysis)
+    # -----------------------------------------------------------------------------
     if conf_sets is not None:
         logger.info("Generating distribution of conformal set sizes.")
-        set_sizes = []
-        for i in range(outlier_test.shape[0]):
-            if outlier_test["outlier"].iloc[i] is not None:
-                # measure how big the set is
-                label_boolean = conf_sets[i, :, 0]
-                set_size = np.sum(label_boolean)
-                set_sizes.append(set_size)
-
-        plt.figure(figsize=(8, 6))
-        plt.hist(
-            set_sizes,
-            bins=range(1, max(set_sizes) + 2),
-            color="skyblue",
-            edgecolor="black",
-        )
-        plt.title("Distribution of Conformal Set Sizes (alpha=0.15)")
-        plt.xlabel("Set size")
-        plt.ylabel("Frequency")
-        plt.xticks(range(1, max(set_sizes) + 2))
-        dist_plot_path = os.path.join(
-            output_reports, "conformal_set_size_distribution.png"
-        )
-        plt.savefig(dist_plot_path)
-        plt.close()
+        dist_plot_path = generate_hist(outlier_test, conf_sets, output_reports)
         logger.info(f"Distribution of set sizes plot saved to {dist_plot_path}")
 
-    #    b) Bar chart: number of outliers per (predicted) label
-    #       If we have actual labels or predicted labels, we can show how outliers are distributed.
-    #       For demonstration, let's show how many outliers exist for each *ground-truth* label.
+    # -----------------------------------------------------------------------------
+    # Bar chart: number of outliers per (predicted) label
+    # -----------------------------------------------------------------------------
     if outliers_df.shape[0] > 0:
-        outliers_by_class = (
-            outliers_df.groupby(training_config.training[model_type].target)
-            .size()
-            .sort_values(ascending=False)
+        logger.info("Generating outliers by class plot.")
+        outliers_bar_path = generate_barplot(
+            outliers_df, training_config, model_type, output_reports
         )
-        plt.figure(figsize=(10, 6))
-        outliers_by_class.plot(kind="bar", color="tomato")
-        plt.title("Number of Outliers by True Label")
-        plt.xlabel("Label")
-        plt.ylabel("Count of Outliers")
-        outliers_bar_path = os.path.join(output_reports, "outliers_by_class.png")
-        plt.savefig(outliers_bar_path)
-        plt.close()
         logger.info(f"Outliers by class plot saved to {outliers_bar_path}")
+
+    # -----------------------------------------------------------------------------
+    # EVALUATE OUTLIER DETECTION AS BINARY CLASSIFICATION
+    # -----------------------------------------------------------------------------
+    if "true_outlier" in outlier_test.columns:
+
+        # Generate classification report
+        eval_report_file = generate_classification_report(outlier_test, output_reports)
+        logger.info(f"Outlier evaluation report saved to {eval_report_file}")
+
+        # Generate Confusion Matrix
+        cm_path = generate_confusion_matrix(outlier_test, output_reports)
+        logger.info(f"Outlier detection confusion matrix saved to {cm_path}")
+
+    else:
+        logger.warning(
+            "No 'true_outlier' column found in data. Skipping binary classification evaluation."
+        )
 
 
 if __name__ == "__main__":
@@ -201,12 +251,6 @@ if __name__ == "__main__":
         required=True,
         help="Folder to store outliers and reports.",
     )
-    parser.add_argument(
-        "--alpha",
-        type=float,
-        default=0.15,
-        help="Alpha for conformal prediction sets. Default=0.15",
-    )
 
     args = parser.parse_args()
 
@@ -216,5 +260,4 @@ if __name__ == "__main__":
         input_model=args.input_model,
         input_outliers=args.input_outliers,
         output_reports=args.output_reports,
-        alpha=args.alpha,
     )

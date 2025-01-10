@@ -172,7 +172,7 @@ def create_dvc_pipeline(env="dev"):
         f"-d src/encoding/generate_supervised_dataset.py "
         f"-o output_data/{env}/supervised_dataset.parquet "
         f"python -m src.encoding.generate_supervised_dataset --env {env} "
-        f"--input-reviewed-data raw_data/{env}/reviewed_dataset.parquet "
+        f"--input-reviewed-data raw_data/{env}/reviewed_dataset.csv "
         f"--output-supervised-dataset output_data/{env}/supervised_dataset.parquet "
         f"--output-supervised-dataset-phase2 output_data/{env}/supervised_dataset_phase2.parquet"
     )
@@ -209,19 +209,57 @@ def create_dvc_pipeline(env="dev"):
         f"-d output_data/{env}/supervised_dataset.parquet "
         f"-d output_models/{env}/trained_model "
         f"-d src/conformal_prediction/outlier_detection.py "
+        f"-d output_data/{env}/supervised_dataset_phase2.parquet "
         f"-o output_reports/{env}/outlier_detection/detected_outliers.parquet "
         f"-o output_reports/{env}/outlier_detection/conformal_set_size_distribution.png "
         f"-o output_reports/{env}/outlier_detection/outliers_by_class.png "
-        f"-o output_reports/{env}/outlier_detection/outlier_detection_class_report.txt "
+        f"-o output_reports/{env}/outlier_detection/outlier_detection_confusion_matrix.png "
+        f"-o output_reports/{env}/outlier_detection/outlier_evaluation_report.txt "
         f"python -m src.conformal_prediction.outlier_detection --env {env} "
         f"--input-dataset output_data/{env}/supervised_dataset.parquet "
         f"--input-model output_models/{env}/trained_model "
         f"--input-outliers output_data/{env}/supervised_dataset_phase2.parquet "
-        f"--output-reports output_reports/{env}/outlier_detection "
-        f"--alpha 0.15"
+        f"--output-reports output_reports/{env}/outlier_detection"
     )
 
-    # Step 13: Evaluate model
+    # Step 14: Clustering
+    run_dvc_command(
+        f"dvc stage add --force -n clustering "
+        f"-d output_data/{env}/supervised_dataset.parquet "
+        f"-d output_reports/{env}/outlier_detection/detected_outliers.parquet "
+        f"-d output_models/{env}/trained_model "
+        f"-d src/clustering/clustering.py "
+        f"-o output_reports/{env}/clustering/new_class.parquet "
+        f"-o output_reports/{env}/clustering/cluster_visualization.png "
+        f"-o output_reports/{env}/clustering/silhouette_analysis.png "
+        f"-o output_reports/{env}/clustering/cluster_sizes.png "
+        f"-o output_reports/{env}/clustering/distance_to_centroids.csv "
+        f"-o output_reports/{env}/clustering/cluster_summary.csv "
+        f"-o output_reports/{env}/clustering/distance_heatmap.png "
+        f"python -m src.clustering.clustering --env {env} "
+        f"--input-dataset output_data/{env}/supervised_dataset.parquet "
+        f"--input-outliers output_reports/{env}/outlier_detection/detected_outliers.parquet "
+        f"--input-model output_models/{env}/trained_model "
+        f"--output-new-class output_reports/{env}/clustering/new_class.parquet "
+        f"--output-reports output_reports/{env}/clustering"
+    )
+
+    # Step15: Incremental-learning
+    run_dvc_command(
+        f"dvc stage add --force -n incremental_training "
+        f"-d output_data/{env}/supervised_dataset.parquet "
+        f"-d output_reports/{env}/clustering/new_class.parquet "
+        f"-d output_data/{env}/supervised_dataset_phase2.parquet "
+        f"-d output_models/{env}/trained_model "
+        f"-d src/incremental_training/incremental_training.py "
+        f"-o output_models/{env}/temp_incremented_model "
+        f"python -m src.incremental_training.incremental_training --env {env} "
+        f"--input-dataset output_data/{env}/supervised_dataset.parquet "
+        f"--input-new-class output_reports/{env}/clustering/new_class.parquet "
+        f"--input-true-new-class output_data/{env}/supervised_dataset_phase2.parquet "
+        f"--input-model output_models/{env}/trained_model "
+        f"--output-model output_models/{env}/temp_incremented_model"
+    )
 
 
 if __name__ == "__main__":
