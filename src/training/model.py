@@ -33,7 +33,7 @@ class TransformerClassifier(BaseEstimator, ClassifierMixin):
             # Load from Hugging Face hub
             self.tokenizer = AutoTokenizer.from_pretrained(model_name)
             self.model = AutoModelForSequenceClassification.from_pretrained(
-                model_name, num_labels=num_labels
+                model_name, num_labels=num_labels, ignore_mismatched_sizes=True
             )
         else:
             raise ValueError("Either model_name or local_model_path must be provided.")
@@ -64,9 +64,6 @@ class TransformerClassifier(BaseEstimator, ClassifierMixin):
         eval_X=None,
         eval_y=None,
         freeze_layers_prefix=None,
-        epochs=20,
-        lr=2e-5,
-        batch_size=16,
         **kwargs,
     ):
         """
@@ -95,24 +92,26 @@ class TransformerClassifier(BaseEstimator, ClassifierMixin):
                     param.requires_grad = True
 
         # Define optimizer and scheduler
+        lr = kwargs.get("learning_rate", 2e-5)
         optimizer = torch.optim.AdamW(self.model.parameters(), lr=lr)
-        scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5, verbose=True)
+        scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5, verbose=True)
 
         # Setup Trainer
         training_args = TrainingArguments(
-            output_dir="./results",
-            eval_strategy="epoch" if eval_dataset else "no",
-            save_strategy="epoch" if eval_dataset else "no",
+            output_dir=kwargs.get("output_dir", "./results"),
+            eval_strategy=kwargs.get("eval_strategy", "epoch" if eval_dataset else "no"),
+            save_strategy=kwargs.get("save_strategy", "epoch" if eval_dataset else "no"),
             learning_rate=lr,
-            per_device_train_batch_size=batch_size,
-            num_train_epochs=epochs,
-            weight_decay=0.01,
-            load_best_model_at_end=True if eval_dataset else False,
-            metric_for_best_model="eval_loss",
-            greater_is_better=False,
-            save_total_limit=2,
-            logging_dir="./logs",
-            logging_steps=10,
+            per_device_train_batch_size=kwargs.get("per_device_train_batch_size", 16),
+            per_device_eval_batch_size=kwargs.get("per_device_eval_batch_size", 16),
+            num_train_epochs=kwargs.get("num_train_epochs", 20),
+            weight_decay=kwargs.get("weight_decay", 0.01),
+            load_best_model_at_end=kwargs.get("load_best_model_at_end", True if eval_dataset else False),
+            metric_for_best_model=kwargs.get("metric_for_best_model", "eval_loss"),
+            greater_is_better=kwargs.get("greater_is_better", False),
+            save_total_limit=kwargs.get("save_total_limit", 2),
+            logging_dir=kwargs.get("logging_dir", "./logs"),
+            logging_steps=kwargs.get("logging_steps", 10),
         )
 
         trainer = Trainer(
