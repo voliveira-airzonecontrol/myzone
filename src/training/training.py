@@ -24,13 +24,12 @@ def classifier_training(
     # Load dataset
     logger.info("Loading dataset...")
     df = pd.read_parquet(input_dataset)
-    X = df[["processed_text_to_analyse", "label"]]
-    num_labels = X["label"].nunique()
+    X = df[[training_config.training[model_type].features, training_config.training[model_type].target]]
+    num_labels = X[training_config.training[model_type].target].nunique()
 
     # Split dataset into train and test sets
     logger.info("Splitting dataset...")
     X_train, X_test, y_train, y_test = train_test_split(
-        # X.drop(columns=[training_config.training[model_type].target]),
         X[training_config.training[model_type].features],
         X[training_config.training[model_type].target],
         test_size=training_config.training[model_type].test_size,
@@ -64,12 +63,18 @@ def classifier_training(
 
     # Train the model
     logger.info("Training TransformerClassifier...")
-    clf.fit(
+    clf = clf.fit(
         X=X_train,
         y=y_train,
         eval_X=X_val,
         eval_y=y_val,
-        freeze_layers_prefix=["bert.embeddings", "bert.encoder"],
+        learning_rate=2e-5,
+        num_train_epochs=10,
+        per_device_train_batch_size=16,
+        per_device_eval_batch_size=16,
+        early_stopping_patience=2,
+        # freeze_layers_prefix=["bert.embeddings", "bert.encoder"],
+        # freeze_layers_prefix=["bert.embeddings"] + [f"bert.encoder.layer.{i}" for i in range(1, 9)],
     )
 
     # Save the trained model

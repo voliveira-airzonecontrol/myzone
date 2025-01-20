@@ -111,8 +111,8 @@ def cluster_outliers(
     results, best_model = perform_dbscan_grid_search(embeddings, param_grid)
 
     # Display results
-    logger.info(f"Best Parameters: {results["best_params"]}")
-    logger.info(f"Best Silhouette Score: {results["best_score"]}")
+    logger.info(f"Best Parameters: {results['best_params']}")
+    logger.info(f"Best Silhouette Score: {results['best_score']}")
 
     # Retrieve cluster labels from the best model
     cluster_labels = best_model.labels_
@@ -135,7 +135,7 @@ def cluster_outliers(
 
     new_class = cluster_and_find_new_class(outliers_found, known_classes_info, logger)
     logger.info(
-        f"Total new classes found:  {len(new_class[new_class["new_class"]]["cluster"].unique())}"
+        f"Total new classes found:  {len(new_class[new_class['new_class']]['cluster'].unique())}"
     )
 
     # ---------------------------------------------------------------------

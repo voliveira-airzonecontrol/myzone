@@ -295,12 +295,12 @@ stages:
       size: 193359
     - path: src/training/training.py
       hash: md5
-      md5: 2fc90a82fcbef4ea18ec70e7ab919ade
-      size: 3564
+      md5: f68e09c8b38ac0bda0e09e793757515d
+      size: 3868
     outs:
     - path: output_models/prod/trained_model
       hash: md5
-      md5: 07a0b3f87a408cb91e1b7ae57fe7cb44.dir
+      md5: 8b2a903c170d8354ecbf620702f098c6.dir
       size: 440407610
       nfiles: 6
   evaluate_model:
@@ -313,7 +313,7 @@ stages:
       size: 193359
     - path: output_models/prod/trained_model
       hash: md5
-      md5: 07a0b3f87a408cb91e1b7ae57fe7cb44.dir
+      md5: 8b2a903c170d8354ecbf620702f098c6.dir
       size: 440407610
       nfiles: 6
     - path: src/evaluating/evaluate.py
@@ -323,16 +323,16 @@ stages:
     outs:
     - path: output_reports/prod/classification_report.txt
       hash: md5
-      md5: f5acd2a1b196bd30725b86196756f338
+      md5: e256155a97b1746acb90587e7f306070
       size: 463
     - path: output_reports/prod/confusion_matrix.png
       hash: md5
-      md5: 2db3965967f86a3014380bb45fc91ce6
-      size: 17122
+      md5: c4b2ecdcb6583e0d6ca171c2565f1f5c
+      size: 18377
     - path: output_reports/prod/roc_curve.png
       hash: md5
-      md5: 11ff01002e414e63339c643082764962
-      size: 27720
+      md5: 0e963d91fd144d76d56b687e1329f385
+      size: 30568
   detect_outliers:
     cmd: python -m src.conformal_prediction.outlier_detection --env prod --input-dataset
       output_data/prod/supervised_dataset.parquet --input-model output_models/prod/trained_model
@@ -349,7 +349,7 @@ stages:
       size: 59178
     - path: output_models/prod/trained_model
       hash: md5
-      md5: 07a0b3f87a408cb91e1b7ae57fe7cb44.dir
+      md5: 8b2a903c170d8354ecbf620702f098c6.dir
       size: 440407610
       nfiles: 6
     - path: src/conformal_prediction/outlier_detection.py
@@ -359,24 +359,24 @@ stages:
     outs:
     - path: output_reports/prod/outlier_detection/conformal_set_size_distribution.png
       hash: md5
-      md5: 04142f92938f9f30ec8f01d099f844ee
-      size: 15371
+      md5: a7fe784b3c1a2bd958ab73f030ac0ad0
+      size: 17848
     - path: output_reports/prod/outlier_detection/detected_outliers.parquet
       hash: md5
-      md5: 453a875f51a9507c751f2fc9426f6284
-      size: 7503
+      md5: 2772ceb5894f394d7f802124c7d8ad11
+      size: 8079
     - path: output_reports/prod/outlier_detection/outlier_detection_confusion_matrix.png
       hash: md5
-      md5: 0ad3ead6202cdd1f7880e16c5982d6c0
-      size: 21561
+      md5: 58c205d25ac7a29cfb5771849bd49ed3
+      size: 24089
     - path: output_reports/prod/outlier_detection/outlier_evaluation_report.txt
       hash: md5
-      md5: 62af545eae23406f7327c48fac75821d
+      md5: bfc3b341cb85b1cabee62dee87a59849
       size: 550
     - path: output_reports/prod/outlier_detection/outliers_by_class.png
       hash: md5
-      md5: ed30e3de4de0a44b879c053a01b1c839
-      size: 15293
+      md5: 3880423707c7d7587f2af9d142c0c929
+      size: 16663
   clustering:
     cmd: python -m src.clustering.clustering --env prod --input-dataset output_data/prod/supervised_dataset.parquet
       --input-outliers output_reports/prod/outlier_detection/detected_outliers.parquet
@@ -389,46 +389,46 @@ stages:
       size: 193359
     - path: output_models/prod/trained_model
       hash: md5
-      md5: 07a0b3f87a408cb91e1b7ae57fe7cb44.dir
+      md5: 8b2a903c170d8354ecbf620702f098c6.dir
       size: 440407610
       nfiles: 6
     - path: output_reports/prod/outlier_detection/detected_outliers.parquet
       hash: md5
-      md5: 453a875f51a9507c751f2fc9426f6284
-      size: 7503
+      md5: 2772ceb5894f394d7f802124c7d8ad11
+      size: 8079
     - path: src/clustering/clustering.py
       hash: md5
-      md5: 919392f061862d2b59fcd7f05d8e3a3c
+      md5: b728cf1f9f46c17fc6e32409aaffdd9e
       size: 7494
     outs:
     - path: output_reports/prod/clustering/cluster_sizes.png
       hash: md5
-      md5: 8e5d86789901ab51a80fc6d895ec4cf7
-      size: 21293
+      md5: 940604507e10a415ea0a12364b6b7a87
+      size: 25135
     - path: output_reports/prod/clustering/cluster_summary.csv
       hash: md5
-      md5: 1ec9c38ff34967b19bacdcbbd79094bb
-      size: 37509
+      md5: d3434aa3966822683b3f3d2fea0fa109
+      size: 74980
     - path: output_reports/prod/clustering/cluster_visualization.png
       hash: md5
-      md5: 5bb1657ad18aac39bd1a27ee6af37f91
-      size: 56592
+      md5: 688587bfd9d94b00fe6251f108faf56d
+      size: 69451
     - path: output_reports/prod/clustering/distance_heatmap.png
       hash: md5
-      md5: 81ee291d89b0a4b2d3e4b1da08653204
-      size: 38521
+      md5: aaa5d6645fade23d6150d8ea5102e980
+      size: 63048
     - path: output_reports/prod/clustering/distance_to_centroids.csv
       hash: md5
-      md5: ceaf0ae4fbf591d5721c35f0639cbdeb
-      size: 1303
+      md5: 8604cfe511816fa5d3b25b1c41a0f325
+      size: 1645
     - path: output_reports/prod/clustering/new_class.parquet
       hash: md5
-      md5: 3b0db27aa5ad108394590f787a665bc8
-      size: 391101
+      md5: f00b9292cdb2cfc55aa42e463f5d09ba
+      size: 503121
     - path: output_reports/prod/clustering/silhouette_analysis.png
       hash: md5
-      md5: c5b714645cdb61abf0976307c5802afe
-      size: 41102
+      md5: 2ffba6521610d2705d9fcdcc8817ca7f
+      size: 50473
   incremental_training:
     cmd: python -m src.incremental_training.incremental_training --env prod --input-dataset
       output_data/prod/supervised_dataset.parquet --input-new-class output_reports/prod/clustering/new_class.parquet
@@ -445,13 +445,13 @@ stages:
       size: 59178
     - path: output_models/prod/trained_model
       hash: md5
-      md5: 07a0b3f87a408cb91e1b7ae57fe7cb44.dir
+      md5: 8b2a903c170d8354ecbf620702f098c6.dir
       size: 440407610
       nfiles: 6
     - path: output_reports/prod/clustering/new_class.parquet
       hash: md5
-      md5: 3b0db27aa5ad108394590f787a665bc8
-      size: 391101
+      md5: f00b9292cdb2cfc55aa42e463f5d09ba
+      size: 503121
     - path: src/incremental_training/incremental_training.py
       hash: md5
       md5: 81043788ebc10b299846ecba63bbe428
@@ -459,6 +459,6 @@ stages:
     outs:
     - path: output_models/prod/temp_incremented_model
       hash: md5
-      md5: 727fb1d95e2aea2f1cac201b92c639f0.dir
+      md5: 60540f190e51f703b2e4a7388470d25a.dir
       size: 439437241
       nfiles: 2
