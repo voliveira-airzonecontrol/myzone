@@ -148,7 +148,7 @@ def plot_roc_curves(y_true, y_probs, classes, output_path):
         plt.ylim([0.0, 1.05])
         plt.xlabel("False Positive Rate")
         plt.ylabel("True Positive Rate")
-        plt.title("Some extension of ROC to multi-class")
+        plt.title("Multi-class ROC")
         plt.legend(loc="lower right")
         plt.savefig(output_path)
         plt.close()

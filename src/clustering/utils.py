@@ -133,7 +133,7 @@ def cluster_and_find_new_class(
         # Find the minimum distance
         min_distance = np.min(distances)
         min_distance_class = known_class_info.index[np.argmin(distances)]
-        distance_threshold = known_class_info.loc[min_distance_class, "mean_distance"]
+        distance_threshold = known_class_info.loc[min_distance_class, "threshold"]
 
         logger.info(
             f"Cluster {cl_id}: Min distance = {min_distance:.4f} to class {min_distance_class} and threshold = {distance_threshold:.4f}"

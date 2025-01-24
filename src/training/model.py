@@ -194,9 +194,7 @@ class TransformerClassifier(BaseEstimator, ClassifierMixin):
             eval_X=None,
             eval_y=None,
             freeze_layers_prefix=None,
-            epochs=20,
-            lr=2e-5,
-            batch_size=16,
+            **kwargs,
     ):
         """
         Incrementally train the model on (new_X, new_y), expanding
@@ -222,10 +220,7 @@ class TransformerClassifier(BaseEstimator, ClassifierMixin):
             eval_X=eval_X,
             eval_y=eval_y,
             freeze_layers_prefix=freeze_layers_prefix,
-            epochs=epochs,
-            lr=lr,
-            batch_size=batch_size,
-            early_stopping_patience=10,
+            **kwargs,
         )
 
     def predict(self, X):

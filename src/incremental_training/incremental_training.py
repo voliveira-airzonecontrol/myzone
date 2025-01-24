@@ -109,7 +109,7 @@ def incremental_training(
     df_test = pd.concat([original_df, true_new_class])
 
     X_train, X_val, y_train, y_val = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=y
+        X, y, test_size=0.2, random_state=training_config.training.random_state, stratify=y
     )
 
     X_train, y_train = upsample_dataset(X_train, y_train, training_config, model_type)
@@ -131,13 +131,17 @@ def incremental_training(
         new_num_labels,
         eval_X=X_val,
         eval_y=y_val,
-        freeze_layers_prefix=["bert.embeddings", "bert.encoder"],
-        epochs=2,
+        learning_rate=2e-5,
+        num_train_epochs=10,
+        per_device_train_batch_size=16,
+        per_device_eval_batch_size=16,
+        early_stopping_patience=2,
+        # freeze_layers_prefix=["bert.embeddings", "bert.encoder"],
     )
 
     # Save the trained model
     logger.info("Saving the trained model...")
-    clf_incremented.model.save_pretrained(output_model)
+    clf_incremented.save_model(output_model)
 
 
 if __name__ == "__main__":

@@ -252,13 +252,32 @@ def create_dvc_pipeline(env="dev"):
         f"-d output_data/{env}/supervised_dataset_phase2.parquet "
         f"-d output_models/{env}/trained_model "
         f"-d src/incremental_training/incremental_training.py "
-        f"-o output_models/{env}/temp_incremented_model "
+        f"-o output_models/{env}/incremented_model "
         f"python -m src.incremental_training.incremental_training --env {env} "
         f"--input-dataset output_data/{env}/supervised_dataset.parquet "
         f"--input-new-class output_reports/{env}/clustering/new_class.parquet "
         f"--input-true-new-class output_data/{env}/supervised_dataset_phase2.parquet "
         f"--input-model output_models/{env}/trained_model "
-        f"--output-model output_models/{env}/temp_incremented_model"
+        f"--output-model output_models/{env}/incremented_model"
+    )
+
+    # Step16: Evaluate incremental model
+    run_dvc_command(
+        f"dvc stage add --force -n evaluate_incremental_model "
+        f"-d output_data/{env}/supervised_dataset.parquet "
+        f"-d output_reports/{env}/clustering/new_class.parquet "
+        f"-d output_data/{env}/supervised_dataset_phase2.parquet "
+        f"-d output_models/{env}/incremented_model "
+        f"-d src/evaluating/evaluate_incremental_model.py "
+        f"-o output_reports/{env}/incremental/incremental_classification_report.txt "
+        f"-o output_reports/{env}/incremental/incremental_confusion_matrix.png "
+        f"-o output_reports/{env}/incremental/incremental_roc_curve.png "
+        f"python -m src.evaluating.evaluate_incremental_model --env {env} "
+        f"--input-dataset output_data/{env}/supervised_dataset.parquet "
+        f"--input-new-class output_reports/{env}/clustering/new_class.parquet "
+        f"--input-true-new-class output_data/{env}/supervised_dataset_phase2.parquet "
+        f"--input-model output_models/{env}/incremented_model "
+        f"--output-reports output_reports/{env}/incremental"
     )
 
 

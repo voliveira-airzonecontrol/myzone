@@ -176,7 +176,7 @@ stages:
     cmd: python -m src.incremental_training.incremental_training --env prod --input-dataset
       output_data/prod/supervised_dataset.parquet --input-new-class output_reports/prod/clustering/new_class.parquet
       --input-true-new-class output_data/prod/supervised_dataset_phase2.parquet --input-model
-      output_models/prod/trained_model --output-model output_models/prod/temp_incremented_model
+      output_models/prod/trained_model --output-model output_models/prod/incremented_model
     deps:
     - output_data/prod/supervised_dataset.parquet
     - output_data/prod/supervised_dataset_phase2.parquet
@@ -184,4 +184,19 @@ stages:
     - output_reports/prod/clustering/new_class.parquet
     - src/incremental_training/incremental_training.py
     outs:
-    - output_models/prod/temp_incremented_model
+    - output_models/prod/incremented_model
+  evaluate_incremental_model:
+    cmd: python -m src.evaluating.evaluate_incremental_model --env prod --input-dataset
+      output_data/prod/supervised_dataset.parquet --input-new-class output_reports/prod/clustering/new_class.parquet
+      --input-true-new-class output_data/prod/supervised_dataset_phase2.parquet --input-model
+      output_models/prod/incremented_model --output-reports output_reports/prod/incremental
+    deps:
+    - output_data/prod/supervised_dataset.parquet
+    - output_data/prod/supervised_dataset_phase2.parquet
+    - output_models/prod/incremented_model
+    - output_reports/prod/clustering/new_class.parquet
+    - src/evaluating/evaluate_incremental_model.py
+    outs:
+    - output_reports/prod/incremental/incremental_classification_report.txt
+    - output_reports/prod/incremental/incremental_confusion_matrix.png
+    - output_reports/prod/incremental/incremental_roc_curve.png

@@ -88,9 +88,19 @@ def cluster_outliers(
     )
     # Calculate mean distance from centroids of each known classes
     mean_distance = known_classes.groupby(target)["distance_to_centroids"].mean()
+    # Calculate standard deviation of mean distance from centroids of each known classes
+    std_distance = known_classes.groupby(target)["distance_to_centroids"].std()
     # Join the centroids and mean distance of known classes
     known_classes_info = centroids.to_frame("centroid").join(
         mean_distance.to_frame("mean_distance")
+    )
+    # Join the standard deviation of mean distance of known classes
+    known_classes_info = known_classes_info.join(
+        std_distance.to_frame("std_distance")
+    )
+    # Calculate threshold for each known classes
+    known_classes_info["threshold"] = (
+        known_classes_info["mean_distance"] + known_classes_info["std_distance"]
     )
 
     # ---------------------------------------------------------------------
@@ -102,9 +112,9 @@ def cluster_outliers(
 
     # Define a parameter grid for DBSCAN
     param_grid = {
-        "eps": np.arange(0.1, 20, 0.1),
-        "min_samples": range(2, 20, 1),
-        "metric": ["cosine", "euclidean"],
+        "eps": np.arange(0.1, 30, 0.1),
+        "min_samples": range(10, 20, 1),
+        "metric": ["cosine"],
     }
 
     # Perform grid search
