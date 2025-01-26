@@ -27,7 +27,9 @@ class TransformerClassifier(BaseEstimator, ClassifierMixin):
             self.model = AutoModelForSequenceClassification.from_pretrained(
                 local_model_path, num_labels=num_labels, ignore_mismatched_sizes=True
             )
-            self.classes_ = [i for i in range(num_labels)]  # Set classes_ for sklearn compatibility
+            self.classes_ = [
+                i for i in range(num_labels)
+            ]  # Set classes_ for sklearn compatibility
 
         elif model_name:
             # Load from Hugging Face hub
@@ -40,7 +42,11 @@ class TransformerClassifier(BaseEstimator, ClassifierMixin):
 
     def tokenize(self, X):
         return self.tokenizer(
-            list(X), truncation=True, padding="max_length", max_length=512, return_token_type_ids=False
+            list(X),
+            truncation=True,
+            padding="max_length",
+            max_length=512,
+            return_token_type_ids=False,
         )
 
     class TextDataset(torch.utils.data.Dataset):
@@ -94,19 +100,27 @@ class TransformerClassifier(BaseEstimator, ClassifierMixin):
         # Define optimizer and scheduler
         lr = kwargs.get("learning_rate", 2e-5)
         optimizer = torch.optim.AdamW(self.model.parameters(), lr=lr)
-        scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5, verbose=True)
+        scheduler = ReduceLROnPlateau(
+            optimizer, mode="min", factor=0.5, patience=5, verbose=True
+        )
 
         # Setup Trainer
         training_args = TrainingArguments(
             output_dir=kwargs.get("output_dir", "./results"),
-            eval_strategy=kwargs.get("eval_strategy", "epoch" if eval_dataset else "no"),
-            save_strategy=kwargs.get("save_strategy", "epoch" if eval_dataset else "no"),
+            eval_strategy=kwargs.get(
+                "eval_strategy", "epoch" if eval_dataset else "no"
+            ),
+            save_strategy=kwargs.get(
+                "save_strategy", "epoch" if eval_dataset else "no"
+            ),
             learning_rate=lr,
             per_device_train_batch_size=kwargs.get("per_device_train_batch_size", 16),
             per_device_eval_batch_size=kwargs.get("per_device_eval_batch_size", 16),
             num_train_epochs=kwargs.get("num_train_epochs", 20),
             weight_decay=kwargs.get("weight_decay", 0.01),
-            load_best_model_at_end=kwargs.get("load_best_model_at_end", True if eval_dataset else False),
+            load_best_model_at_end=kwargs.get(
+                "load_best_model_at_end", True if eval_dataset else False
+            ),
             metric_for_best_model=kwargs.get("metric_for_best_model", "eval_loss"),
             greater_is_better=kwargs.get("greater_is_better", False),
             save_total_limit=kwargs.get("save_total_limit", 2),
@@ -122,8 +136,12 @@ class TransformerClassifier(BaseEstimator, ClassifierMixin):
             data_collator=DataCollatorWithPadding(
                 tokenizer=self.tokenizer, padding="max_length", max_length=512
             ),
-            callbacks=[EarlyStoppingCallback(early_stopping_patience=kwargs.get("early_stopping_patience", 2))],
-            optimizers=(optimizer, scheduler)
+            callbacks=[
+                EarlyStoppingCallback(
+                    early_stopping_patience=kwargs.get("early_stopping_patience", 2)
+                )
+            ],
+            optimizers=(optimizer, scheduler),
         )
 
         trainer.train()
@@ -140,7 +158,9 @@ class TransformerClassifier(BaseEstimator, ClassifierMixin):
         print(f"Expanding classifier from {self.num_labels} to {new_num_labels}...")
 
         if new_num_labels <= self.num_labels:
-            raise ValueError("New number of labels must be larger than current num_labels.")
+            raise ValueError(
+                "New number of labels must be larger than current num_labels."
+            )
 
         # Save references to old model & config
         old_model = self.model
@@ -185,16 +205,16 @@ class TransformerClassifier(BaseEstimator, ClassifierMixin):
         self.model.config.num_labels = new_num_labels
 
     def incremental_fit(
-            self,
-            new_X,
-            new_y,
-            new_num_labels,
-            replay_X=None,
-            replay_y=None,
-            eval_X=None,
-            eval_y=None,
-            freeze_layers_prefix=None,
-            **kwargs,
+        self,
+        new_X,
+        new_y,
+        new_num_labels,
+        replay_X=None,
+        replay_y=None,
+        eval_X=None,
+        eval_y=None,
+        freeze_layers_prefix=None,
+        **kwargs,
     ):
         """
         Incrementally train the model on (new_X, new_y), expanding

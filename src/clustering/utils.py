@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.metrics.pairwise import cosine_distances
+from sklearn.metrics.pairwise import cosine_distances, euclidean_distances
 from sklearn.cluster import DBSCAN
 from sklearn.metrics import silhouette_score
 from sklearn.model_selection import ParameterGrid
@@ -20,7 +20,7 @@ def find_centroids(df, target_column):
 
 
 def find_distance_to_centroids(
-    df, centroids, target_column="label", embedding_column="embeddings"
+    df, centroids, target_column="label", embedding_column="embeddings", distance_type="cosine"
 ):
     """
     Find the cosine distance of each row's embedding to the centroid of its class.
@@ -37,11 +37,17 @@ def find_distance_to_centroids(
     # Convert centroids to a dictionary for efficient lookup
     centroids_dict = centroids.to_dict()
 
+    # Define the distance computation function
+    if distance_type == "cosine":
+        distance_function = cosine_distances
+    else:  # distance_type == "euclidean"
+        distance_function = euclidean_distances
+
     def compute_distance(row):
         # Retrieve the centroid for the row's class
         centroid = centroids_dict[row[target_column]]
         # Compute cosine similarity
-        distance = cosine_distances([row[embedding_column]], [centroid])[0][0]
+        distance = distance_function([row[embedding_column]], [centroid])[0][0]
         return distance
 
     # Apply the distance computation for each row
@@ -86,7 +92,10 @@ def perform_dbscan_grid_search(embeddings, param_grid):
 
 
 def cluster_and_find_new_class(
-    df_outliers: pd.DataFrame, known_class_info: pd.DataFrame, logger
+    df_outliers: pd.DataFrame,
+    known_class_info: pd.DataFrame,
+    logger,
+    distance_type: str = "cosine",
 ):
     """
     Cluster the outliers and find new classes based on the distance to known class centroids.
@@ -95,8 +104,14 @@ def cluster_and_find_new_class(
                         Must contain a column 'embeddings' with embeddings as numpy arrays.
     :param known_class_info: DataFrame containing known class centroids.
                              Must contain columns 'centroid' with centroids as numpy arrays.
+    :param logger: Logger object for logging information.
+    :param distance_type: The type of distance metric to use. Either 'cosine' or 'euclidean'.
     :return: Updated DataFrame with new columns 'new_class' and 'special_case'.
     """
+
+    # Validate distance_type parameter
+    if distance_type not in ["cosine", "euclidean"]:
+        raise ValueError("distance_type must be either 'cosine' or 'euclidean'")
 
     # Extract embeddings from the outlier DataFrame
     emb_outliers = np.stack(df_outliers["embeddings"].values, axis=0)
@@ -109,6 +124,12 @@ def cluster_and_find_new_class(
     known_centroids = np.stack(
         known_class_info["centroid"].values, axis=0
     )  # shape (num_classes, embedding_dim)
+
+    # Define distance function based on the selected distance type
+    if distance_type == "cosine":
+        distance_function = cosine_distances
+    else:  # distance_type == "euclidean"
+        distance_function = euclidean_distances
 
     # Iterate over unique clusters in the outliers DataFrame
     unique_clusters = df_outliers["cluster"].unique()
@@ -125,8 +146,8 @@ def cluster_and_find_new_class(
         # Compute the centroid of the cluster
         centroid = cluster_emb.mean(axis=0, keepdims=True)  # shape (1, embedding_dim)
 
-        # Compute cosine distances to known class centroids
-        distances = cosine_distances(centroid, known_centroids)[
+        # Compute distances to known class centroids
+        distances = distance_function(centroid, known_centroids)[
             0
         ]  # shape (num_classes,)
 

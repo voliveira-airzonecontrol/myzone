@@ -11,13 +11,13 @@ from src.training import model
 
 
 def incremental_training(
-        env: str,
-        input_dataset: str,
-        input_new_class: str,
-        input_true_new_class: str,
-        input_model: str,
-        output_model: str,
-        model_type: str = "BERT"
+    env: str,
+    input_dataset: str,
+    input_new_class: str,
+    input_true_new_class: str,
+    input_model: str,
+    output_model: str,
+    model_type: str = "BERT",
 ) -> None:
 
     config = load_config(file_name="config", env=env)
@@ -45,13 +45,15 @@ def incremental_training(
     # Split the dataset into train and test sets
     logger.info("Splitting dataset...")
     X = known_classes
-    original_X_train, original_X_test, original_y_train, original_y_test = train_test_split(
-        # X.drop(columns=[training_config.training[model_type].target]),
-        X[training_config.training[model_type].features],
-        X[training_config.training[model_type].target],
-        test_size=training_config.training[model_type].test_size,
-        random_state=training_config.training.random_state,
-        stratify=X[training_config.training[model_type].target],
+    original_X_train, original_X_test, original_y_train, original_y_test = (
+        train_test_split(
+            # X.drop(columns=[training_config.training[model_type].target]),
+            X[training_config.training[model_type].features],
+            X[training_config.training[model_type].target],
+            test_size=training_config.training[model_type].test_size,
+            random_state=training_config.training.random_state,
+            stratify=X[training_config.training[model_type].target],
+        )
     )
     original_X_test, original_X_cp, original_y_test, original_y_cp = train_test_split(
         original_X_test,
@@ -68,8 +70,12 @@ def incremental_training(
     X_upsampled[training_config.training[model_type].target] = original_y_train
 
     # Separate majority and minority classes
-    df_majority = X_upsampled[X_upsampled[training_config.training[model_type].target] == 0]
-    df_minority = X_upsampled[X_upsampled[training_config.training[model_type].target] == 1]
+    df_majority = X_upsampled[
+        X_upsampled[training_config.training[model_type].target] == 0
+    ]
+    df_minority = X_upsampled[
+        X_upsampled[training_config.training[model_type].target] == 1
+    ]
 
     # Upsample minority class
     df_minority_upsampled = resample(
@@ -105,11 +111,17 @@ def incremental_training(
     true_new_class = true_new_class[~true_new_class[features].isin(df_train[features])]
 
     # Concatenate the original test set and the true new class
-    original_df = pd.DataFrame({features: original_X_test.values, target: original_y_test.values})
+    original_df = pd.DataFrame(
+        {features: original_X_test.values, target: original_y_test.values}
+    )
     df_test = pd.concat([original_df, true_new_class])
 
     X_train, X_val, y_train, y_val = train_test_split(
-        X, y, test_size=0.2, random_state=training_config.training.random_state, stratify=y
+        X,
+        y,
+        test_size=0.2,
+        random_state=training_config.training.random_state,
+        stratify=y,
     )
 
     X_train, y_train = upsample_dataset(X_train, y_train, training_config, model_type)
@@ -121,7 +133,8 @@ def incremental_training(
     new_num_labels = len(y_train.unique())
 
     clf = model.TransformerClassifier(
-        model_name=None, num_labels=num_labels,
+        model_name=None,
+        num_labels=num_labels,
         local_model_path=input_model,
     )
 
@@ -145,9 +158,7 @@ def incremental_training(
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Incremental training of a classifier"
-    )
+    parser = argparse.ArgumentParser(description="Incremental training of a classifier")
     parser.add_argument(
         "--env", type=str, help="Environment (e.g., dev, prod)", default="dev"
     )

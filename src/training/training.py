@@ -24,7 +24,12 @@ def classifier_training(
     # Load dataset
     logger.info("Loading dataset...")
     df = pd.read_parquet(input_dataset)
-    X = df[[training_config.training[model_type].features, training_config.training[model_type].target]]
+    X = df[
+        [
+            training_config.training[model_type].features,
+            training_config.training[model_type].target,
+        ]
+    ]
     num_labels = X[training_config.training[model_type].target].nunique()
 
     # Split dataset into train and test sets

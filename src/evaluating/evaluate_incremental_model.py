@@ -20,16 +20,16 @@ from src.utils import load_config, get_logger
 
 
 def incremented_classifier_evaluation(
-        env: str,
-        input_dataset: str,
-        input_new_class: str,
-        input_true_new_class: str,
-        input_model: str,
-        output_reports: str,
-        model_type: str = "BERT",
+    env: str,
+    input_dataset: str,
+    input_new_class: str,
+    input_true_new_class: str,
+    input_model: str,
+    output_reports: str,
+    model_type: str = "BERT",
 ):
     """
-        Evaluate a trained classifier on a test set and save metrics/reports/plots.
+    Evaluate a trained classifier on a test set and save metrics/reports/plots.
     """
 
     # Load configs
@@ -67,13 +67,15 @@ def incremented_classifier_evaluation(
 
     X = known_classes
 
-    original_X_train, original_X_test, original_y_train, original_y_test = train_test_split(
-        # X.drop(columns=[training_config.training[model_type].target]),
-        X[training_config.training[model_type].features],
-        X[training_config.training[model_type].target],
-        test_size=training_config.training[model_type].test_size,
-        random_state=training_config.training.random_state,
-        stratify=X[training_config.training[model_type].target],
+    original_X_train, original_X_test, original_y_train, original_y_test = (
+        train_test_split(
+            # X.drop(columns=[training_config.training[model_type].target]),
+            X[training_config.training[model_type].features],
+            X[training_config.training[model_type].target],
+            test_size=training_config.training[model_type].test_size,
+            random_state=training_config.training.random_state,
+            stratify=X[training_config.training[model_type].target],
+        )
     )
     original_X_test, original_X_cp, original_y_test, original_y_cp = train_test_split(
         original_X_test,
@@ -88,8 +90,12 @@ def incremented_classifier_evaluation(
     X_upsampled[training_config.training[model_type].target] = original_y_train
 
     # Separate majority and minority classes
-    df_majority = X_upsampled[X_upsampled[training_config.training[model_type].target] == 0]
-    df_minority = X_upsampled[X_upsampled[training_config.training[model_type].target] == 1]
+    df_majority = X_upsampled[
+        X_upsampled[training_config.training[model_type].target] == 0
+    ]
+    df_minority = X_upsampled[
+        X_upsampled[training_config.training[model_type].target] == 1
+    ]
 
     # Upsample minority class
     df_minority_upsampled = resample(
@@ -126,7 +132,9 @@ def incremented_classifier_evaluation(
     true_new_class = true_new_class[~true_new_class[features].isin(df_train[features])]
 
     # Concatenate the original test set and the true new class
-    original_df = pd.DataFrame({features: original_X_test.values, target: original_y_test.values})
+    original_df = pd.DataFrame(
+        {features: original_X_test.values, target: original_y_test.values}
+    )
     df_test = pd.concat([original_df, true_new_class])
 
     # -----------------------------------------------------------------------------------------------------------------
@@ -135,7 +143,8 @@ def incremented_classifier_evaluation(
     logger.info(f"Loading model from: {input_model}")
     new_num_labels = len(y.unique())
     clf_incremented = TransformerClassifier(
-        model_name=None, num_labels=new_num_labels,
+        model_name=None,
+        num_labels=new_num_labels,
         local_model_path=input_model,
     )
 
@@ -202,7 +211,12 @@ def incremented_classifier_evaluation(
     # Plot ROC curves and save
     # -----------------------------------------------------------------------------------------------------------------
     roc_path = os.path.join(output_reports, "incremental_roc_curve.png")
-    plot_roc_curves(df_test[target], y_prob, classes=np.unique(df_test[target]), output_path=roc_path)
+    plot_roc_curves(
+        df_test[target],
+        y_prob,
+        classes=np.unique(df_test[target]),
+        output_path=roc_path,
+    )
     logger.info(f"ROC Curve saved to {roc_path}")
 
 
