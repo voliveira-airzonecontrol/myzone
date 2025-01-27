@@ -127,16 +127,19 @@ def cluster_outliers(
     # Join the standard deviation of mean distance of known classes
     known_classes_info = known_classes_info.join(std_distance.to_frame("std_distance"))
     # Calculate threshold for each known classes
-    known_classes_info["threshold"] = known_classes_info[
-        "mean_distance"
-    ] + known_classes_info["std_distance"]
+    known_classes_info["threshold"] = (
+        known_classes_info["mean_distance"] + known_classes_info["std_distance"]
+    )
 
     # ---------------------------------------------------------------------
     # Find new classes
     # ---------------------------------------------------------------------
     outliers_centroids = find_centroids(outliers_found, "cluster")
     outliers_found["distance_to_centroids"] = find_distance_to_centroids(
-        outliers_found, outliers_centroids, target_column="cluster", distance_type=best_metric
+        outliers_found,
+        outliers_centroids,
+        target_column="cluster",
+        distance_type=best_metric,
     )
     outliers_info = outliers_centroids.to_frame("centroid").join(
         outliers_found.groupby("cluster")["distance_to_centroids"]

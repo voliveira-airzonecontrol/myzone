@@ -20,7 +20,11 @@ def find_centroids(df, target_column):
 
 
 def find_distance_to_centroids(
-    df, centroids, target_column="label", embedding_column="embeddings", distance_type="cosine"
+    df,
+    centroids,
+    target_column="label",
+    embedding_column="embeddings",
+    distance_type="cosine",
 ):
     """
     Find the cosine distance of each row's embedding to the centroid of its class.
