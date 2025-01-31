@@ -37,6 +37,7 @@ scikit-learn < 1.5.0 # General machine learning
 xgboost <= 2.1.0 # Gradient boosting on decision trees
 gensim # Topic modeling
 mapie # Model agnostic prediction intervals
+nlpaug # Data augmentation for NLP
 # statsmodels
 # statsmodels # Time series analysis
 
